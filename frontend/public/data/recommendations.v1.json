@@ -1,0 +1,200 @@
+{
+  "schema_version": "1.0",
+  "generated_at_utc": "2026-11-07T23:40:43.914634+00:00",
+  "source": {
+    "dataset": "Supplied Mississauga UNHEARD challenge pack; 2021 census aggregates",
+    "attribution": "City of Mississauga; supplied corrected derived census and coverage tables",
+    "license": "Pack declares City open-data terms; dataset-specific redistribution terms unresolved; local use only pending T-019",
+    "license_reference": "https://data.mississauga.ca; see docs/DATA_SOURCES.md",
+    "ward_row_count": "11",
+    "tracked_language_count": "14",
+    "missing_request_language_count": "8",
+    "coverage_row_count": "15",
+    "crosswalk_row_count": "15",
+    "tracked_home_speakers": "153480",
+    "gap_home_speakers": "79940",
+    "denominator_policy": "population_language_base; blank/zero/negative base becomes null",
+    "scope": "Sum of supplied tracked categories; not city population, unique-person inference or geographic ASR performance",
+    "ward10_corrected": "True; Urdu=4520; population_language_base=73830",
+    "script_sha256": "c0aac974dc8a94bdfda132e98778465d041393adc8e60fc917f053495a897dec",
+    "language_map_sha256": "51ff2821cb84bd35eec438aab594d772bd8575bfa8b6b43ebc87351b33839f81",
+    "language_crosswalk.csv:sha256": "0f23d538843bcd9f2993c842bcb08201134aaf89c0bfeba059e0fad5c136aad9",
+    "01_people_census/derived/language_coverage.csv:sha256": "6f372c5ff5994d7907c166356d9cce41e27f7e29f94b88403f34b4aa75377de4",
+    "01_people_census/derived/ward_language_profile_2021_corrected.csv:sha256": "69ad3fc72a1887fec8917a4cb99970e51f2ad54faa391d7fe1b623722c5dd0fc",
+    "coverage_script_sha256": "425dce5149a6928fc83af6d50f519d3566a3f3a42127f11720650d15d5dca26c",
+    "wards_artifact_sha256": "605ff1aa611d4c1ff602e4ef4ae76948defefe7db7b4984677f2cd7b5706fa1a",
+    "recommendation_count": "8",
+    "pilot_language_count": "6",
+    "ranking_policy": "Missing supplied task audio only; city_home_speakers descending, language_id ascending for ties",
+    "ward_selection_policy": "Top 3 by count; independently top 3 by count/population_language_base; ward_id ascending for ties; null-base shares excluded",
+    "ward_export_policy": "suggested_ward_ids follows count ranking; suggested_action labels both independent rankings and values",
+    "task_dataset_attribution": "MInDS-14: PolyAI / Gerz et al. (2021); Speech-MASSIVE: FBK; supplied coverage counts only",
+    "task_dataset_licenses": "MInDS-14 CC BY 4.0, https://huggingface.co/datasets/PolyAI/minds14; Speech-MASSIVE CC BY-NC-SA 4.0, https://mt.fbk.eu/speech-massive/; no audio/transcripts exported",
+    "experiment_status": "not_tested; this pipeline performs no experiments and emits no CER/WER metrics"
+  },
+  "is_fixture": false,
+  "fixture_label": null,
+  "method": "missing_task_audio_then_city_home_speakers_desc",
+  "items": [
+    {
+      "language_id": "urdu",
+      "reason": "No labelled spoken-request audio in the supplied MInDS-14 and Speech-MASSIVE subsets",
+      "city_home_speakers": 22535,
+      "rank": 1,
+      "suggested_action": "Plan consented, realistic municipal-request evaluation in Urdu. Top wards by home-speaker count (recruitment volume): Ward 10: 4,520; Ward 6: 3,590; Ward 11: 2,560. Independently, top wards by home-language share of population_language_base (concentration): Ward 10: 6.12%; Ward 6: 4.75%; Ward 11: 4.29%. Suggested ward IDs follow the count ranking. Work with community partners to recruit willing participants; evaluate outcomes before claiming improvement.",
+      "suggested_ward_ids": [
+        10,
+        6,
+        11
+      ],
+      "limitations": [
+        "Missing audio refers only to supplied task-dataset subsets, not all recordings worldwide or provider support.",
+        "2021 home-language categories do not establish English ability, service demand or individual need.",
+        "Ward counts and shares guide future recruitment; no ward-specific recognition rates were measured.",
+        "FLEURS speakers are not identified Mississauga residents; pilot outcomes must remain separate.",
+        "Top three wards are descriptive, with ascending ward ID breaking ties; shares with unavailable bases are excluded.",
+        "Share text is rounded to two decimals for display; ranking uses unrounded count/base ratios."
+      ]
+    },
+    {
+      "language_id": "punjabi",
+      "reason": "No labelled spoken-request audio in the supplied MInDS-14 and Speech-MASSIVE subsets",
+      "city_home_speakers": 15025,
+      "rank": 2,
+      "suggested_action": "Plan consented, realistic municipal-request evaluation in Punjabi. Top wards by home-speaker count (recruitment volume): Ward 5: 8,095; Ward 11: 1,905; Ward 6: 1,690. Independently, top wards by home-language share of population_language_base (concentration): Ward 5: 10.41%; Ward 11: 3.19%; Ward 6: 2.24%. Suggested ward IDs follow the count ranking. Work with community partners to recruit willing participants; evaluate outcomes before claiming improvement.",
+      "suggested_ward_ids": [
+        5,
+        11,
+        6
+      ],
+      "limitations": [
+        "Missing audio refers only to supplied task-dataset subsets, not all recordings worldwide or provider support.",
+        "2021 home-language categories do not establish English ability, service demand or individual need.",
+        "Ward counts and shares guide future recruitment; no ward-specific recognition rates were measured.",
+        "FLEURS speakers are not identified Mississauga residents; pilot outcomes must remain separate.",
+        "Top three wards are descriptive, with ascending ward ID breaking ties; shares with unavailable bases are excluded.",
+        "Share text is rounded to two decimals for display; ranking uses unrounded count/base ratios."
+      ]
+    },
+    {
+      "language_id": "cantonese",
+      "reason": "No labelled spoken-request audio in the supplied MInDS-14 and Speech-MASSIVE subsets",
+      "city_home_speakers": 10765,
+      "rank": 3,
+      "suggested_action": "Plan consented, realistic municipal-request evaluation in Cantonese. Top wards by home-speaker count (recruitment volume): Ward 6: 2,520; Ward 5: 1,270; Ward 4: 1,125. Independently, top wards by home-language share of population_language_base (concentration): Ward 6: 3.34%; Ward 11: 1.84%; Ward 5: 1.63%. Suggested ward IDs follow the count ranking. Work with community partners to recruit willing participants; evaluate outcomes before claiming improvement.",
+      "suggested_ward_ids": [
+        6,
+        5,
+        4
+      ],
+      "limitations": [
+        "Missing audio refers only to supplied task-dataset subsets, not all recordings worldwide or provider support.",
+        "2021 home-language categories do not establish English ability, service demand or individual need.",
+        "Ward counts and shares guide future recruitment; no ward-specific recognition rates were measured.",
+        "FLEURS speakers are not identified Mississauga residents; pilot outcomes must remain separate.",
+        "Top three wards are descriptive, with ascending ward ID breaking ties; shares with unavailable bases are excluded.",
+        "Share text is rounded to two decimals for display; ranking uses unrounded count/base ratios."
+      ]
+    },
+    {
+      "language_id": "tagalog",
+      "reason": "No labelled spoken-request audio in the supplied MInDS-14 and Speech-MASSIVE subsets",
+      "city_home_speakers": 10695,
+      "rank": 4,
+      "suggested_action": "Plan consented, realistic municipal-request evaluation in Tagalog. Top wards by home-speaker count (recruitment volume): Ward 7: 2,010; Ward 6: 1,625; Ward 4: 1,385. Independently, top wards by home-language share of population_language_base (concentration): Ward 7: 2.52%; Ward 6: 2.15%; Ward 4: 1.87%. Suggested ward IDs follow the count ranking. Work with community partners to recruit willing participants; evaluate outcomes before claiming improvement.",
+      "suggested_ward_ids": [
+        7,
+        6,
+        4
+      ],
+      "limitations": [
+        "Missing audio refers only to supplied task-dataset subsets, not all recordings worldwide or provider support.",
+        "2021 home-language categories do not establish English ability, service demand or individual need.",
+        "Ward counts and shares guide future recruitment; no ward-specific recognition rates were measured.",
+        "FLEURS speakers are not identified Mississauga residents; pilot outcomes must remain separate.",
+        "Top three wards are descriptive, with ascending ward ID breaking ties; shares with unavailable bases are excluded.",
+        "Share text is rounded to two decimals for display; ranking uses unrounded count/base ratios."
+      ]
+    },
+    {
+      "language_id": "tamil",
+      "reason": "No labelled spoken-request audio in the supplied MInDS-14 and Speech-MASSIVE subsets",
+      "city_home_speakers": 7420,
+      "rank": 5,
+      "suggested_action": "Plan consented, realistic municipal-request evaluation in Tamil. Top wards by home-speaker count (recruitment volume): Ward 7: 1,135; Ward 6: 1,100; Ward 4: 1,005. Independently, top wards by home-language share of population_language_base (concentration): Ward 11: 1.64%; Ward 6: 1.46%; Ward 7: 1.42%. Suggested ward IDs follow the count ranking. Work with community partners to recruit willing participants; evaluate outcomes before claiming improvement.",
+      "suggested_ward_ids": [
+        7,
+        6,
+        4
+      ],
+      "limitations": [
+        "Missing audio refers only to supplied task-dataset subsets, not all recordings worldwide or provider support.",
+        "2021 home-language categories do not establish English ability, service demand or individual need.",
+        "Ward counts and shares guide future recruitment; no ward-specific recognition rates were measured.",
+        "FLEURS speakers are not identified Mississauga residents; pilot outcomes must remain separate.",
+        "Top three wards are descriptive, with ascending ward ID breaking ties; shares with unavailable bases are excluded.",
+        "Share text is rounded to two decimals for display; ranking uses unrounded count/base ratios."
+      ]
+    },
+    {
+      "language_id": "hindi",
+      "reason": "No labelled spoken-request audio in the supplied MInDS-14 and Speech-MASSIVE subsets",
+      "city_home_speakers": 6640,
+      "rank": 6,
+      "suggested_action": "Plan consented, realistic municipal-request evaluation in Hindi. Top wards by home-speaker count (recruitment volume): Ward 5: 1,315; Ward 4: 1,030; Ward 7: 930. Independently, top wards by home-language share of population_language_base (concentration): Ward 5: 1.69%; Ward 11: 1.42%; Ward 4: 1.39%. Suggested ward IDs follow the count ranking. Work with community partners to recruit willing participants; evaluate outcomes before claiming improvement.",
+      "suggested_ward_ids": [
+        5,
+        4,
+        7
+      ],
+      "limitations": [
+        "Missing audio refers only to supplied task-dataset subsets, not all recordings worldwide or provider support.",
+        "2021 home-language categories do not establish English ability, service demand or individual need.",
+        "Ward counts and shares guide future recruitment; no ward-specific recognition rates were measured.",
+        "FLEURS speakers are not identified Mississauga residents; pilot outcomes must remain separate.",
+        "Top three wards are descriptive, with ascending ward ID breaking ties; shares with unavailable bases are excluded.",
+        "Share text is rounded to two decimals for display; ranking uses unrounded count/base ratios."
+      ]
+    },
+    {
+      "language_id": "gujarati",
+      "reason": "No labelled spoken-request audio in the supplied MInDS-14 and Speech-MASSIVE subsets",
+      "city_home_speakers": 4345,
+      "rank": 7,
+      "suggested_action": "Plan consented, realistic municipal-request evaluation in Gujarati. Top wards by home-speaker count (recruitment volume): Ward 5: 1,115; Ward 6: 645; Ward 11: 565. Independently, top wards by home-language share of population_language_base (concentration): Ward 5: 1.43%; Ward 11: 0.95%; Ward 6: 0.85%. Suggested ward IDs follow the count ranking. Work with community partners to recruit willing participants; evaluate outcomes before claiming improvement.",
+      "suggested_ward_ids": [
+        5,
+        6,
+        11
+      ],
+      "limitations": [
+        "Missing audio refers only to supplied task-dataset subsets, not all recordings worldwide or provider support.",
+        "2021 home-language categories do not establish English ability, service demand or individual need.",
+        "Ward counts and shares guide future recruitment; no ward-specific recognition rates were measured.",
+        "FLEURS speakers are not identified Mississauga residents; pilot outcomes must remain separate.",
+        "Top three wards are descriptive, with ascending ward ID breaking ties; shares with unavailable bases are excluded.",
+        "Share text is rounded to two decimals for display; ranking uses unrounded count/base ratios."
+      ]
+    },
+    {
+      "language_id": "bengali",
+      "reason": "No labelled spoken-request audio in the supplied MInDS-14 and Speech-MASSIVE subsets",
+      "city_home_speakers": 2515,
+      "rank": 8,
+      "suggested_action": "Plan consented, realistic municipal-request evaluation in Bengali. Top wards by home-speaker count (recruitment volume): Ward 7: 495; Ward 4: 445; Ward 5: 335. Independently, top wards by home-language share of population_language_base (concentration): Ward 7: 0.62%; Ward 4: 0.60%; Ward 5: 0.43%. Suggested ward IDs follow the count ranking. Work with community partners to recruit willing participants; evaluate outcomes before claiming improvement.",
+      "suggested_ward_ids": [
+        7,
+        4,
+        5
+      ],
+      "limitations": [
+        "Missing audio refers only to supplied task-dataset subsets, not all recordings worldwide or provider support.",
+        "2021 home-language categories do not establish English ability, service demand or individual need.",
+        "Ward counts and shares guide future recruitment; no ward-specific recognition rates were measured.",
+        "FLEURS speakers are not identified Mississauga residents; pilot outcomes must remain separate.",
+        "Top three wards are descriptive, with ascending ward ID breaking ties; shares with unavailable bases are excluded.",
+        "Share text is rounded to two decimals for display; ranking uses unrounded count/base ratios."
+      ]
+    }
+  ]
+}

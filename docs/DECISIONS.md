@@ -56,3 +56,15 @@ error. The audit accepts an explicit ZIP or exact extracted root, reads without
 extraction and makes no API requests. In the observed pack MInDS-14 FLAC headers
 are 16 kHz, despite the upstream card's 8 kHz description; conversion history is
 unknown. See `DATA_SOURCES.md` for evidence and unresolved publication gates.
+
+
+## Implementation clarification — T-007 (2026-11-07)
+
+No public-contract or product-scope amendment. The ignored local
+`sampling_manifest.json` (`schema_version: "1.0"`) freezes all 48 sample records,
+source hashes and selected audio path/size/checksum provenance before experiments.
+Its content digest excludes generation time; matching reruns retain the original
+timestamp. Changed frozen inputs are rejected without a reselection override.
+The public export uses the existing `Samples` contract. Curated FLEURS assets
+retain attribution, source/license links and modification notice; no other source
+audio is approved and no provider outcomes are generated. T-019 remains open.

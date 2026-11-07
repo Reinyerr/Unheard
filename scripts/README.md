@@ -1,7 +1,8 @@
 # Reproducible processing scripts
 
-T-002 supplies the read-only source audit. Schema implementation, sampling and
-public data exports belong to later tickets. No experiment results are generated.
+T-002 supplies the read-only source audit. T-004 exports corrected ward aggregates
+and T-005 exports language coverage and recruitment priorities using the T-003
+schemas. T-007 freezes attributed FLEURS samples; experiments belong to later tickets.
 
 From the repository root (Python 3.12, no additional runtime dependencies):
 
@@ -41,3 +42,137 @@ Tests generate explicitly synthetic CSV and header-only audio fixtures in tempor
 directories. They do not require the real archive or network. The separate command
 against the actual archive is the live local integration preflight. See
 `docs/DATA_SOURCES.md` for the observed audit and unresolved provenance limits.
+
+## Corrected census export (T-004)
+
+Use Python 3.12+ with the existing backend requirements installed. From the root:
+
+```sh
+python3 scripts/prepare_census.py --source '/Users/rainierjorgejorda/Downloads/Mississuaga File/Mississauga_Unheard_ElevenLabs_Track'
+# Alternatively, read the original ZIP without extraction:
+python3 scripts/prepare_census.py --source '/Users/rainierjorgejorda/Downloads/Mississauga_Unheard_ElevenLabs_Track.zip'
+```
+
+Replace these machine-local paths as needed. `UNHEARD_DATA_ROOT` is also supported;
+`.env` is not loaded automatically. Only the corrected ward table, coverage table,
+and crosswalk are read. Their SHA-256 hashes, row/category counts, provider
+attribution, correction status and limitations are included in `source` metadata.
+No source CSVs or audio are copied; the explicitly MOCK fixture directory is untouched.
+
+Output: `frontend/public/data/wards.v1.json`, ordered by numeric ward ID, with all
+14 mapped home-language counts, eight coverage-derived gap IDs, ward gap totals,
+and unrounded percentages using `population_language_base`. English is excluded
+from the tracked census counts. Blank/zero/negative denominators become null;
+malformed values, duplicate wards, incorrect Ward 10 flags, unmapped categories,
+changed crosswalk identity and city/ward total discrepancies fail explicitly.
+The known corrected Ward 10 baseline remains mandatory. Census category sums
+describe the supplied categories, not unique people or ASR failure rates.
+
+The script validates with the existing Pydantic `Wards` schema before atomically
+replacing output. Exit 0 means generation succeeded; exit 1 means an input/export
+failure, leaving any previous file unchanged. A previous export is historical
+output, not evidence that a later failed run succeeded; inspect exit status and
+generation time. CLI argument errors exit 2. No network or API calls are made.
+
+This artifact is for the local prototype. Dataset-specific municipal
+redistribution terms remain unresolved in `docs/DATA_SOURCES.md`; this export
+does not grant public redistribution approval.
+
+**Integration limit:** the T-003 Vite build guard requires all five artifacts as
+soon as any root-level artifact exists. The current census/coverage checkout consequently
+has an incomplete bundle and cannot pass that guard until later tickets supply
+the other real artifacts. Do not fill them with fixtures or invented results.
+No frontend logic or build guard is changed here. Acceptance tests were neither
+created nor run at user request; production generation is not full sign-off.
+
+## Coverage and recruitment priorities (T-005)
+
+Run after the T-004 census export, with the same source and Python environment:
+
+```sh
+python3 scripts/prepare_coverage.py --source '/Users/rainierjorgejorda/Downloads/Mississuaga File/Mississauga_Unheard_ElevenLabs_Track'
+```
+
+An explicit ZIP or exported `UNHEARD_DATA_ROOT` also works. This command reuses
+T-004's real-source guards and requires the existing ward export's values and
+three input hashes to match. Missing/stale/fixture ward artifacts fail explicitly;
+rerun `prepare_census.py` first. It does not rewrite ward output.
+
+Outputs are `frontend/public/data/languages.v1.json` (all 15 source languages,
+including English with null census population and six selected pilot languages)
+and `recommendations.v1.json` (only the eight missing-task-audio categories).
+Rank is descending city home-speaker count, then ascending canonical language ID
+for ties. Covered languages remain explorable in the language artifact and have
+no unmeasured-category recommendation. The 79,940/153,480 subtotal excludes English.
+
+For each recommended language, `suggested_action` labels two independently
+calculated top-three lists with values: count for recruitment volume and share
+for concentration. Share is 100 × language count / `population_language_base`;
+unavailable denominators are excluded, and ties use ascending ward ID. Ranking
+uses unrounded ratios; displayed shares use two decimals. `suggested_ward_ids`
+contains the count-ranked list. The existing shared schema has one ward-ID list,
+so the share list is supplied as labelled text without adding contract fields.
+No combined score, experiment metrics or claim of geographic ASR failure is made.
+
+Provenance includes input/script/ward-export hashes, row/category counts,
+selection policies, provider attribution, license restrictions and `not_tested`
+experiment status. No audio/transcripts or new dependencies are added. Both
+schema-validated outputs are staged before replacement; each replacement is
+atomic, but the pair is not a filesystem transaction. If a write fails, fix the
+error and rerun before consuming the pair. Exit codes: 0 success, 1 processing
+failure, 2 argument error. No tests were created or run for this implementation.
+
+Manual review: inspect the two JSON files, confirm Urdu is first of eight with
+22,535 home speakers, sum recommendation populations to 79,940, check English's
+null population, and independently compare count/share ward ordering against
+`wards.v1.json`. Confirm recruitment language and limitations are preserved.
+The partial-bundle frontend guard and public municipal licensing limits above
+remain unresolved; no frontend logic is changed.
+
+
+## Frozen FLEURS samples (T-007)
+
+Use the same Python environment and explicit source configuration:
+
+```sh
+python3 scripts/sample_fleurs.py --source '/Users/rainierjorgejorda/Downloads/Mississuaga File/Mississauga_Unheard_ElevenLabs_Track'
+```
+
+ZIP input and `UNHEARD_DATA_ROOT` also work. No full extraction, network requests,
+new dependencies or API credentials are needed. The script validates all 560
+metadata rows, identities, 40 IDs per supplied language, verbatim references and
+referenced FLAC headers/durations. Eight numeric IDs are drawn from the sorted
+six-pilot intersection with `random.Random(2026)`.
+
+Outputs:
+
+- Ignored `data/processed/sampling_manifest.json`: frozen inputs, selection,
+  48 records, selected audio paths/sizes/hashes and selection-content digest.
+- `frontend/public/data/samples.v1.json`: existing T-003 schema, 48 actual records
+  with reference texts, gender, duration and attributed provenance.
+- 48 local `frontend/public/audio/<config>/<config>_<id>.flac` files copied
+  byte-for-byte after FLEURS-only license/selection review, plus
+  `frontend/public/audio/FLEURS_ATTRIBUTION.txt`. Audio remains Git-ignored;
+  regenerate on each machine or review deliberate packaging under T-019.
+
+Matching reruns preserve the first generation timestamp and content digest,
+allowing byte-stable manifest/public JSON. Changed frozen source/selection/audio
+is rejected. Do not delete the manifest or reselect after observing outcomes.
+No reselection override is provided. Generation exits 0 on success, 1 for input/
+export failure, 2 for argument errors. Exports are individually atomic, not one
+transaction; fix any interrupted-copy failure and rerun the same frozen selection.
+
+Manual reproducibility commands (not run as tests here):
+
+```sh
+shasum -a 256 data/processed/sampling_manifest.json frontend/public/data/samples.v1.json
+python3 scripts/sample_fleurs.py --source '/Users/rainierjorgejorda/Downloads/Mississuaga File/Mississauga_Unheard_ElevenLabs_Track'
+shasum -a 256 data/processed/sampling_manifest.json frontend/public/data/samples.v1.json
+```
+
+Compare digests, inspect eight shared IDs across all six languages and 48 unique
+sample IDs, compare source references and manifest audio hashes, and listen to
+clips. Header validation is not full decoding/acoustic review. n=8 and script/
+gender differences limit generalization; no ward residence inference is allowed.
+No outcomes/metrics are generated. T-008 is next; the frontend build guard still
+needs the real experiment artifact. No automated tests were created or run.

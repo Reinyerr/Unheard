@@ -21,7 +21,7 @@
 
 **Corrected math:** 8 categories have `has_service_request_audio=False`: Urdu 22,535; Punjabi 15,025; Cantonese 10,765; Tagalog 10,695; Tamil 7,420; Hindi 6,640; Gujarati 4,345; Bengali 2,515. Sum = **79,940**. Sum of all 14 *tracked non-official* category counts = **153,480**. Ratio = **52.08496% ≈52.1%**. None of these are a citywide count of persons who cannot use English or a predictive failure count.
 
-**Pilot input availability:** six selected languages (`English`, `Urdu`, `Punjabi`, `Cantonese`, `Arabic`, `Mandarin Chinese`) have 40 FLEURS clips each and share the same 40 IDs. Sampling manifest is **not yet generated**. Urdu, Punjabi and Arabic are recorded by female speakers only within this pack, making any demographic generalization inappropriate.
+**Pilot input availability:** six selected languages (`English`, `Urdu`, `Punjabi`, `Cantonese`, `Arabic`, `Mandarin Chinese`) have 40 FLEURS clips each and share the same 40 IDs. T-007 now freezes eight common IDs (48 samples); see the note below. Urdu, Punjabi and Arabic are recorded by female speakers only within this pack, making any demographic generalization inappropriate.
 
 ## Geographic caution
 
@@ -194,3 +194,27 @@ preserve English/Bengali missing fields, distinguish Cantonese/Mandarin, and kee
 local source-manifest schema separate from public research contracts. Public
 asset licensing, geometry acquisition, sampling and speech API validation retain
 their later-ticket gates. No T-003 implementation was included here.
+
+
+## T-007 curated FLEURS selection — 2026-11-07
+
+The sampler selected eight common IDs with seed 2026 across English, Urdu,
+Punjabi, Cantonese, Arabic and Mandarin Chinese. The 48 reference records are in
+`frontend/public/data/samples.v1.json`; full frozen asset provenance is local in
+ignored `data/processed/sampling_manifest.json`. Selected IDs are
+1533, 1537, 1566, 1587, 1608, 1632, 1635 and 1651.
+
+Narrow asset review used the unchanged supplied LICENSES.md hash and T-002's
+upstream corroboration of FLEURS CC BY 4.0. These 48 clips were copied locally,
+byte-for-byte, to their metadata-relative audio paths, with authors/source/license
+and modification notice in the public JSON and `audio/FLEURS_ATTRIBUTION.txt`.
+References retain the supplied strings verbatim; original pack conversion history
+remains unknown. No other dataset audio/transcripts were exported. Prior T-002
+statements about zero copied/approved assets describe that audit's historical
+state; this review covers only the T-007 selection. The later T-019 package audit
+remains open. Audio and local manifest are still Git-ignored.
+
+Production generation checked all metadata audio references/header durations and
+selected file hashes. Full decoding/listening, independent reproducibility checks
+and acceptance tests remain unperformed; no API experiment was run. T-007 is In
+review and the pilot remains exploratory with the documented script/gender limits.

@@ -1,16 +1,16 @@
 # Ticket index — source of truth for implementation
 
-**T-001 and T-002 are Done (verified 2026-11-07).** T-003 is implemented and In review; tests were explicitly skipped at user request. Other tickets remain TODO with their listed dependencies. Research export pipelines and speech experiments are not implemented.
+**T-001 and T-002 are Done (verified 2026-11-07).** T-003, T-004, T-005 and T-007 are implemented and In review; tests were explicitly skipped at user request. T-004/T-005 generated real corrected ward, language and recommendation JSON with production schema validation; acceptance and integration sign-off remain pending. T-007 also generated the frozen 48-record FLEURS selection and selected local audio. Other tickets remain TODO with their listed dependencies; speech experiments are not implemented.
 
 | Ticket | Feature | Priority | Owner | Depends on | Status |
 |---|---|---|---|---|---|
 | [T-001](T-001-project-bootstrap.md) | Initialize repo, local Vite/FastAPI and safe defaults | P0 | Shared | — | Done |
 | [T-002](T-002-source-and-license-audit.md) | Audit source archive, licenses and provenance | P0 | Dev 1 | T-001 | Done |
 | [T-003](T-003-data-schema-and-fixtures.md) | Implement v1 schemas, identity mapping and fixtures | P0 | Shared | T-001, T-002 | In review |
-| [T-004](T-004-corrected-census-processing.md) | Generate corrected ward language metrics | P0 | Dev 1 | T-002, T-003 | TODO |
-| [T-005](T-005-coverage-and-recommendation-ranking.md) | Build coverage model and language-first ranks | P0 | Dev 1 | T-002, T-003, T-004 | TODO |
+| [T-004](T-004-corrected-census-processing.md) | Generate corrected ward language metrics | P0 | Dev 1 | T-002, T-003 | In review |
+| [T-005](T-005-coverage-and-recommendation-ranking.md) | Build coverage model and language-first ranks | P0 | Dev 1 | T-002, T-003, T-004 | In review |
 | [T-006](T-006-ward-geometry-validation.md) | Source and validate real Mississauga ward polygons | P0 | Dev 2 | T-002, T-003 | TODO |
-| [T-007](T-007-reproducible-fleurs-sampling.md) | Generate 48-record FLEURS sample manifest | P0 | Dev 1 | T-002, T-003 | TODO |
+| [T-007](T-007-reproducible-fleurs-sampling.md) | Generate 48-record FLEURS sample manifest | P0 | Dev 1 | T-002, T-003 | In review |
 | [T-008](T-008-elevenlabs-scribe-preflight.md) | Validate real Scribe requests, language hints and credits | P0 | Dev 1 | T-001, T-003, T-007 | TODO |
 | [T-009](T-009-paired-transcription-runner.md) | Run cached paired ElevenLabs pilot and track failures | P0 | Dev 1 | T-007, T-008, T-010 | TODO |
 | [T-010](T-010-cer-wer-and-paired-analysis.md) | Calculate multilingual CER/WER and paired summaries | P0 | Dev 1 | T-003, T-007, T-008 | TODO |
@@ -38,3 +38,11 @@
 Start T-001 → T-002 → T-003, then data branch T-004/T-005 and speech branch T-007/T-008 with geographic branch T-006. Build one Urdu vertical slice (T-011/T-013) **before** expanding experimentation. Continue via dependency graph in `../ROADMAP.md`.
 
 **Do not mark T-008 or T-009 Done** until at least one real verified ElevenLabs call and correct exception/status handling are recorded. T-017 automated tests do not replace real API preflight.
+
+T-005 now provides all 15 language identities/coverage rows and eight missing-audio
+priorities, with independent count/share recruitment guidance. T-003/T-004/T-005
+review gates remain open. T-007 supplies frozen sample inputs and retains its review gate. T-008 is the
+next ready Dev 1 implementation ticket (T-001 exists, T-003/T-007 implemented); T-012's implementation inputs are also
+available for Dev 2. T-011 still requires T-006; T-016 still requires T-011/T-012.
+The T-003 build guard rejects the partial root artifact bundle until the real
+experiment export arrives through its assigned ticket. None were fabricated.

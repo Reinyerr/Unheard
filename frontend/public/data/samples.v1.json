@@ -1,0 +1,526 @@
+{
+  "schema_version": "1.0",
+  "generated_at_utc": "2026-11-07T23:50:10.556805+00:00",
+  "source": {
+    "dataset": "FLEURS, supplied UNHEARD challenge subset",
+    "attribution": "Google; Conneau et al. (2022), FLEURS: Few-shot Learning Evaluation of Universal Representations of Speech",
+    "source_url": "https://huggingface.co/datasets/google/fleurs",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "modifications": "Selected 48 supplied FLAC files copied byte-for-byte; references preserved verbatim; no resampling, translation or normalization. Pack conversion history unknown.",
+    "asset_review": "Curated FLEURS only; pack declaration and T-002 upstream review support CC BY 4.0; source/license/attribution/modification notice included",
+    "metadata_file": "02_speech_home_languages_FLEURS/metadata.csv",
+    "metadata_sha256": "af9e839657ff16029fde74cf131e46dc46461b26e7f1b6a10e435f341d4926c7",
+    "crosswalk_sha256": "0f23d538843bcd9f2993c842bcb08201134aaf89c0bfeba059e0fad5c136aad9",
+    "pack_license_sha256": "6e6c79efdb5f2710e8570d30054745a6b3c19585efcea4e83348e0bb8981eea5",
+    "language_map_sha256": "51ff2821cb84bd35eec438aab594d772bd8575bfa8b6b43ebc87351b33839f81",
+    "metadata_row_count": "560",
+    "pilot_language_count": "6",
+    "common_id_count": "40",
+    "selected_id_count": "8",
+    "selected_sample_count": "48",
+    "sampling_algorithm": "sorted(random.Random(2026).sample(sorted(common_integer_ids), 8)); language_id then numeric fleurs_id order",
+    "gender_counts": "{\"arabic\": {\"female\": 8}, \"cantonese\": {\"female\": 4, \"male\": 4}, \"english\": {\"female\": 5, \"male\": 3}, \"mandarin_chinese\": {\"female\": 3, \"male\": 5}, \"punjabi\": {\"female\": 8}, \"urdu\": {\"female\": 8}}",
+    "limitations": "Exploratory n=8 per language; scripts and gender distributions differ; Urdu/Punjabi/Arabic are female-labelled only in this pack; no ward residence or recognition-performance inference",
+    "experiment_status": "not_tested; no provider requests or outcome-dependent resampling",
+    "selection_sha256": "59f8c23640f271eefa5787fdedd3833e0091af14e40e448e1f4c8a58584d886c"
+  },
+  "is_fixture": false,
+  "fixture_label": null,
+  "selection": {
+    "seed": 2026,
+    "strategy": "common_fleurs_ids_random_sample",
+    "ids": [
+      1533,
+      1537,
+      1566,
+      1587,
+      1608,
+      1632,
+      1635,
+      1651
+    ]
+  },
+  "samples": [
+    {
+      "sample_id": "arabic-1533",
+      "language_id": "arabic",
+      "fleurs_id": 1533,
+      "audio_path": "audio/ar_eg/ar_eg_1533.flac",
+      "raw_reference_transcript": "تساوي أو تقارب العديد من الصيغ الشائعة (مجموعة صيغ نظام الصور المتقدم، على سبيل المثال) نسبةَ العرض إلى الارتفاع هذه.",
+      "reference_transcript": "تساوي أو تقارب العديد من الصيغ الشائعة مجموعة صيغ نظام الصور المتقدم، على سبيل المثال نسبةَ العرض إلى الارتفاع هذه",
+      "gender": "female",
+      "duration_sec": 12.16
+    },
+    {
+      "sample_id": "arabic-1537",
+      "language_id": "arabic",
+      "fleurs_id": 1537,
+      "audio_path": "audio/ar_eg/ar_eg_1537.flac",
+      "raw_reference_transcript": "بإمكانك أن ترى الأهرام في الظلام وفي صمت قبل أن يبدأ العرض.",
+      "reference_transcript": "بإمكانك أن ترى الأهرام في الظلام وفي صمت قبل أن يبدأ العرض",
+      "gender": "female",
+      "duration_sec": 5.94
+    },
+    {
+      "sample_id": "arabic-1566",
+      "language_id": "arabic",
+      "fleurs_id": 1566,
+      "audio_path": "audio/ar_eg/ar_eg_1566.flac",
+      "raw_reference_transcript": "وبالرغم من ذلك، تُفرض ضرائب على ثمانين في المئة من صادرتنا من البضائع عبر تعريفات جمركية في دول أمريكا الوسطى، كما نعاملكم.",
+      "reference_transcript": "وبالرغم من ذلك تُفرض ضرائب على ثمانين في المئة من صادرتنا من البضائع عبر تعريفات جمركية في دول أمريكا الوسطى كما نعاملكم",
+      "gender": "female",
+      "duration_sec": 12.32
+    },
+    {
+      "sample_id": "arabic-1587",
+      "language_id": "arabic",
+      "fleurs_id": 1587,
+      "audio_path": "audio/ar_eg/ar_eg_1587.flac",
+      "raw_reference_transcript": "تم الإعلان عن أول حالات المرض هذا الموسم في نهاية شهر تموز.",
+      "reference_transcript": "تم الإعلان عن أول حالات المرض هذا الموسم في نهاية شهر تموز",
+      "gender": "female",
+      "duration_sec": 10.2
+    },
+    {
+      "sample_id": "arabic-1608",
+      "language_id": "arabic",
+      "fleurs_id": 1608,
+      "audio_path": "audio/ar_eg/ar_eg_1608.flac",
+      "raw_reference_transcript": "قال أرماند فرساتشي:\"لقد فقدت أختي وصديقتها، وفي طريقي كان هناك شخصان قعيدان على كرسي متحرك، كان الناس يقفزون ويدفعونهم،\"",
+      "reference_transcript": "قال أرماند فرساتشي:\"لقد فقدت أختي وصديقتها، وفي طريقي كان هناك شخصان قعيدان على كرسي متحرك، كان الناس يقفزون ويدفعونهم،",
+      "gender": "female",
+      "duration_sec": 12.96
+    },
+    {
+      "sample_id": "arabic-1632",
+      "language_id": "arabic",
+      "fleurs_id": 1632,
+      "audio_path": "audio/ar_eg/ar_eg_1632.flac",
+      "raw_reference_transcript": "يجب أن تدرك النساء أن الاختلافات الثقافية قد تؤدي إلى ما قد يعتبرونه تحرشاً وأنه من المعتاد ترصدهم، والإمساك بهم من خلال الذراع، إلخ.",
+      "reference_transcript": "يجب أن تدرك النساء أن الاختلافات الثقافية قد تؤدي إلى ما قد يعتبرونه تحرشاً وأنه من المعتاد ترصدهم والإمساك بهم من خلال الذراع إلخ",
+      "gender": "female",
+      "duration_sec": 11.28
+    },
+    {
+      "sample_id": "arabic-1635",
+      "language_id": "arabic",
+      "fleurs_id": 1635,
+      "audio_path": "audio/ar_eg/ar_eg_1635.flac",
+      "raw_reference_transcript": "يمكننا أن نبدأ في العيش بشكل أكثر تناسباً مع البيئة، ويمكننا الانضمام إلى الحركة البيئية، ويمكننا حتى أن نكون نشطاء من أجل تقليل المعاناة المستقبلية بدرجة ما.",
+      "reference_transcript": "يمكننا أن نبدأ في العيش بشكل أكثر تناسباً مع البيئة ويمكننا الانضمام إلى الحركة البيئية ويمكننا حتى أن نكون نشطاء من أجل تقليل المعاناة المستقبلية بدرجة ما",
+      "gender": "female",
+      "duration_sec": 13.68
+    },
+    {
+      "sample_id": "arabic-1651",
+      "language_id": "arabic",
+      "fleurs_id": 1651,
+      "audio_path": "audio/ar_eg/ar_eg_1651.flac",
+      "raw_reference_transcript": "يعد السفر والتعلم خياراً أكثر شيوعاً لأولئك الذين يخططون لسنة الاستراحة.",
+      "reference_transcript": "يعد السفر والتعلم خياراً أكثر شيوعاً لأولئك الذين يخططون لسنة الاستراحة",
+      "gender": "female",
+      "duration_sec": 9.0
+    },
+    {
+      "sample_id": "cantonese-1533",
+      "language_id": "cantonese",
+      "fleurs_id": 1533,
+      "audio_path": "audio/yue_hant_hk/yue_hant_hk_1533.flac",
+      "raw_reference_transcript": "許多常見格式（比方 APS 先進攝影系統格式）都等同或接近這個長寬比。",
+      "reference_transcript": "許 多 常 見 格 式 比 方 aps 先 進 攝 影 系 統 格 式 都 等 同 或 接 近 這 個 長 寬 比",
+      "gender": "male",
+      "duration_sec": 8.22
+    },
+    {
+      "sample_id": "cantonese-1537",
+      "language_id": "cantonese",
+      "fleurs_id": 1537,
+      "audio_path": "audio/yue_hant_hk/yue_hant_hk_1537.flac",
+      "raw_reference_transcript": "你可以在黑夜中看到金字塔，並能在表演開始前靜靜地觀賞。",
+      "reference_transcript": "你 可 以 在 黑 夜 中 看 到 金 字 塔 並 能 在 表 演 開 始 前 靜 靜 地 觀 賞",
+      "gender": "female",
+      "duration_sec": 9.6
+    },
+    {
+      "sample_id": "cantonese-1566",
+      "language_id": "cantonese",
+      "fleurs_id": 1566,
+      "audio_path": "audio/yue_hant_hk/yue_hant_hk_1566.flac",
+      "raw_reference_transcript": "但我們有 80% 的商品被中美洲國家徵稅。我們對待你。",
+      "reference_transcript": "但 我 們 有 80% 的 商 品 被 中 美 洲 國 家 徵 稅 我 們 對 待 你",
+      "gender": "female",
+      "duration_sec": 9.36
+    },
+    {
+      "sample_id": "cantonese-1587",
+      "language_id": "cantonese",
+      "fleurs_id": 1587,
+      "audio_path": "audio/yue_hant_hk/yue_hant_hk_1587.flac",
+      "raw_reference_transcript": "本季該疾病的首個案例是在七月底上報的。",
+      "reference_transcript": "本 季 該 疾 病 的 首 個 案 例 是 在 七 月 底 上 報 的",
+      "gender": "male",
+      "duration_sec": 4.74
+    },
+    {
+      "sample_id": "cantonese-1608",
+      "language_id": "cantonese",
+      "fleurs_id": 1608,
+      "audio_path": "audio/yue_hant_hk/yue_hant_hk_1608.flac",
+      "raw_reference_transcript": "我失去了我的姊妹和她的朋友，而我在逃跑途中，有兩名坐輪椅的身障人士，大家直接跳過他們和推擠他們。」阿曼．維薩切 (Armand Versace) 說。",
+      "reference_transcript": "我 失 去 了 我 的 姊 妹 和 她 的 朋 友 而 我 在 逃 跑 途 中 有 兩 名 坐 輪 椅 的 身 障 人 士 大 家 直 接 跳 過 他 們 和 推 擠 他 們 」阿 曼 ．維 薩 切 armand versace 說",
+      "gender": "male",
+      "duration_sec": 17.7
+    },
+    {
+      "sample_id": "cantonese-1632",
+      "language_id": "cantonese",
+      "fleurs_id": 1632,
+      "audio_path": "audio/yue_hant_hk/yue_hant_hk_1632.flac",
+      "raw_reference_transcript": "女性朋友也應該明白，文化差異可能會導致某些她們視為騷擾的情況，被人跟蹤、手臂被人抓住等狀況並不少見。",
+      "reference_transcript": "女 性 朋 友 也 應 該 明 白 文 化 差 異 可 能 會 導 致 某 些 她 們 視 為 騷 擾 的 情 況 被 人 跟 蹤 、手 臂 被 人 抓 住 等 狀 況 並 不 少 見",
+      "gender": "female",
+      "duration_sec": 15.78
+    },
+    {
+      "sample_id": "cantonese-1635",
+      "language_id": "cantonese",
+      "fleurs_id": 1635,
+      "audio_path": "audio/yue_hant_hk/yue_hant_hk_1635.flac",
+      "raw_reference_transcript": "我們可以開始過對環境更友善的生活，我們可以投身環保運動，甚至可以成為社運人士，以盡量減少未來的痛苦。",
+      "reference_transcript": "我 們 可 以 開 始 過 對 環 境 更 友 善 的 生 活 我 們 可 以 投 身 環 保 運 動 甚 至 可 以 成 為 社 運 人 士 以 盡 量 減 少 未 來 的 痛 苦",
+      "gender": "male",
+      "duration_sec": 12.96
+    },
+    {
+      "sample_id": "cantonese-1651",
+      "language_id": "cantonese",
+      "fleurs_id": 1651,
+      "audio_path": "audio/yue_hant_hk/yue_hant_hk_1651.flac",
+      "raw_reference_transcript": "對於那些規劃空檔年的人，越來越熱門的選擇是去旅行和學習。",
+      "reference_transcript": "對 於 那 些 規 劃 空 檔 年 的 人 越 來 越 熱 門 的 選 擇 是 去 旅 行 和 學 習",
+      "gender": "female",
+      "duration_sec": 10.5
+    },
+    {
+      "sample_id": "english-1533",
+      "language_id": "english",
+      "fleurs_id": 1533,
+      "audio_path": "audio/en_us/en_us_1533.flac",
+      "raw_reference_transcript": "Many common formats (APS family of formats, for example) are equal to or closely approximate this aspect ratio.",
+      "reference_transcript": "many common formats aps family of formats for example are equal to or closely approximate this aspect ratio",
+      "gender": "male",
+      "duration_sec": 10.2
+    },
+    {
+      "sample_id": "english-1537",
+      "language_id": "english",
+      "fleurs_id": 1537,
+      "audio_path": "audio/en_us/en_us_1537.flac",
+      "raw_reference_transcript": "You can see the pyramids in the dark and you can see them in silence before the show begins.",
+      "reference_transcript": "you can see the pyramids in the dark and you can see them in silence before the show begins",
+      "gender": "male",
+      "duration_sec": 7.64
+    },
+    {
+      "sample_id": "english-1566",
+      "language_id": "english",
+      "fleurs_id": 1566,
+      "audio_path": "audio/en_us/en_us_1566.flac",
+      "raw_reference_transcript": "Yet eighty percent of our goods were taxed through tariffs in Central American countries. we treat you.",
+      "reference_transcript": "yet eighty percent of our goods were taxed through tariffs in central american countries we treat you",
+      "gender": "female",
+      "duration_sec": 6.48
+    },
+    {
+      "sample_id": "english-1587",
+      "language_id": "english",
+      "fleurs_id": 1587,
+      "audio_path": "audio/en_us/en_us_1587.flac",
+      "raw_reference_transcript": "The first cases of the disease this season were reported in late July.",
+      "reference_transcript": "the first cases of the disease this season were reported in late july",
+      "gender": "female",
+      "duration_sec": 5.52
+    },
+    {
+      "sample_id": "english-1608",
+      "language_id": "english",
+      "fleurs_id": 1608,
+      "audio_path": "audio/en_us/en_us_1608.flac",
+      "raw_reference_transcript": "I lost my sister and her friend, and on my way there were two disabled people in wheelchairs, people just jumping over and pushing them,\" Armand Versace said.",
+      "reference_transcript": "i lost my sister and her friend and on my way there were two disabled people in wheelchairs people just jumping over and pushing them armand versace said",
+      "gender": "female",
+      "duration_sec": 9.24
+    },
+    {
+      "sample_id": "english-1632",
+      "language_id": "english",
+      "fleurs_id": 1632,
+      "audio_path": "audio/en_us/en_us_1632.flac",
+      "raw_reference_transcript": "Women should realize that cultural differences may result in what they would consider harassment and it is not uncommon to be followed, grabbed by the arm, etc.",
+      "reference_transcript": "women should realize that cultural differences may result in what they would consider harassment and it is not uncommon to be followed grabbed by the arm etc",
+      "gender": "female",
+      "duration_sec": 9.3
+    },
+    {
+      "sample_id": "english-1635",
+      "language_id": "english",
+      "fleurs_id": 1635,
+      "audio_path": "audio/en_us/en_us_1635.flac",
+      "raw_reference_transcript": "We can start living more friendly to the environment, we can join to the environmental movement, and we can even be activists in order to reduce the future suffering in some degree.",
+      "reference_transcript": "we can start living more friendly to the environment we can join to the environmental movement and we can even be activists in order to reduce the future suffering in some degree",
+      "gender": "female",
+      "duration_sec": 8.76
+    },
+    {
+      "sample_id": "english-1651",
+      "language_id": "english",
+      "fleurs_id": 1651,
+      "audio_path": "audio/en_us/en_us_1651.flac",
+      "raw_reference_transcript": "An increasingly more popular option for those planning a gap-year is to travel and learn.",
+      "reference_transcript": "an increasingly more popular option for those planning a gap-year is to travel and learn",
+      "gender": "male",
+      "duration_sec": 8.8
+    },
+    {
+      "sample_id": "mandarin_chinese-1533",
+      "language_id": "mandarin_chinese",
+      "fleurs_id": 1533,
+      "audio_path": "audio/cmn_hans_cn/cmn_hans_cn_1533.flac",
+      "raw_reference_transcript": "许多常见格式（例如 APS 格式系列）都与这个长宽比相同或相当接近。",
+      "reference_transcript": "许 多 常 见 格 式 例 如 aps 格 式 系 列 都 与 这 个 长 宽 比 相 同 或 相 当 接 近",
+      "gender": "male",
+      "duration_sec": 14.92
+    },
+    {
+      "sample_id": "mandarin_chinese-1537",
+      "language_id": "mandarin_chinese",
+      "fleurs_id": 1537,
+      "audio_path": "audio/cmn_hans_cn/cmn_hans_cn_1537.flac",
+      "raw_reference_transcript": "你可以在黑暗中看到金字塔，在节目开始前你可以看到它们默默地在那里。",
+      "reference_transcript": "你 可 以 在 黑 暗 中 看 到 金 字 塔 在 节 目 开 始 前 你 可 以 看 到 它 们 默 默 地 在 那 里",
+      "gender": "female",
+      "duration_sec": 7.14
+    },
+    {
+      "sample_id": "mandarin_chinese-1566",
+      "language_id": "mandarin_chinese",
+      "fleurs_id": 1566,
+      "audio_path": "audio/cmn_hans_cn/cmn_hans_cn_1566.flac",
+      "raw_reference_transcript": "然而，我们百分之八十的商品在中美洲国家被征收关税。……我们对待你。",
+      "reference_transcript": "然 而 我 们 百 分 之 八 十 的 商 品 在 中 美 洲 国 家 被 征 收 关 税 我 们 对 待 你",
+      "gender": "male",
+      "duration_sec": 11.34
+    },
+    {
+      "sample_id": "mandarin_chinese-1587",
+      "language_id": "mandarin_chinese",
+      "fleurs_id": 1587,
+      "audio_path": "audio/cmn_hans_cn/cmn_hans_cn_1587.flac",
+      "raw_reference_transcript": "7 月下旬报告了本季节的第一批病例。",
+      "reference_transcript": "7 月 下 旬 报 告 了 本 季 节 的 第 一 批 病 例",
+      "gender": "male",
+      "duration_sec": 5.82
+    },
+    {
+      "sample_id": "mandarin_chinese-1608",
+      "language_id": "mandarin_chinese",
+      "fleurs_id": 1608,
+      "audio_path": "audio/cmn_hans_cn/cmn_hans_cn_1608.flac",
+      "raw_reference_transcript": "“我姐姐和她的朋友不见了，路上有两个残疾人坐着轮椅，有人跳过去帮他们推轮椅”，阿尔芒·范思哲说道。",
+      "reference_transcript": "我 姐 姐 和 她 的 朋 友 不 见 了 路 上 有 两 个 残 疾 人 坐 着 轮 椅 有 人 跳 过 去 帮 他 们 推 轮 椅 阿 尔 芒 范 思 哲 说 道",
+      "gender": "male",
+      "duration_sec": 12.72
+    },
+    {
+      "sample_id": "mandarin_chinese-1632",
+      "language_id": "mandarin_chinese",
+      "fleurs_id": 1632,
+      "audio_path": "audio/cmn_hans_cn/cmn_hans_cn_1632.flac",
+      "raw_reference_transcript": "女性应该意识到文化差异可能会导致她们所认为的骚扰行为；而且被人尾随、抓胳膊等情况并不少见。",
+      "reference_transcript": "女 性 应 该 意 识 到 文 化 差 异 可 能 会 导 致 她 们 所 认 为 的 骚 扰 行 为 而 且 被 人 尾 随 抓 胳 膊 等 情 况 并 不 少 见",
+      "gender": "male",
+      "duration_sec": 16.94
+    },
+    {
+      "sample_id": "mandarin_chinese-1635",
+      "language_id": "mandarin_chinese",
+      "fleurs_id": 1635,
+      "audio_path": "audio/cmn_hans_cn/cmn_hans_cn_1635.flac",
+      "raw_reference_transcript": "我们可以开始更环保地生活，加入环保运动，甚至可以成为环保积极分子，在一定程度上减少将来的灾难。",
+      "reference_transcript": "我 们 可 以 开 始 更 环 保 地 生 活 加 入 环 保 运 动 甚 至 可 以 成 为 环 保 积 极 分 子 在 一 定 程 度 上 减 少 将 来 的 灾 难",
+      "gender": "female",
+      "duration_sec": 9.66
+    },
+    {
+      "sample_id": "mandarin_chinese-1651",
+      "language_id": "mandarin_chinese",
+      "fleurs_id": 1651,
+      "audio_path": "audio/cmn_hans_cn/cmn_hans_cn_1651.flac",
+      "raw_reference_transcript": "对于那些计划怎么度过空档年的人来说，游学成为越来越受欢迎的选择。",
+      "reference_transcript": "对 于 那 些 计 划 怎 么 度 过 空 档 年 的 人 来 说 游 学 成 为 越 来 越 受 欢 迎 的 选 择",
+      "gender": "female",
+      "duration_sec": 7.38
+    },
+    {
+      "sample_id": "punjabi-1533",
+      "language_id": "punjabi",
+      "fleurs_id": 1533,
+      "audio_path": "audio/pa_in/pa_in_1533.flac",
+      "raw_reference_transcript": "ਬਹੁਤ ਸਾਰੇ ਆਮ ਫਰਮੈਟਸ (ਉਦਾਹਰਨ ਵੱਜੋਂ ਫਾਰਮੈਟਸ ਦਾ ਏਪੀਐਸ ਪਰਿਵਾਰ) ਬਰਾਬਰ ਜਾਂ ਇਸ ਪੱਖ ਅਨੁਪਾਤ ਦੇ ਲਗਪਗ ਨੇੜੇ-ਤੇੜੇ ਹੈ।",
+      "reference_transcript": "ਬਹੁਤ ਸਾਰੇ ਆਮ ਫਰਮੈਟਸ ਉਦਾਹਰਨ ਵੱਜੋਂ ਫਾਰਮੈਟਸ ਦਾ ਏਪੀਐਸ ਪਰਿਵਾਰ ਬਰਾਬਰ ਜਾਂ ਇਸ ਪੱਖ ਅਨੁਪਾਤ ਦੇ ਲਗਪਗ ਨੇੜੇ-ਤੇੜੇ ਹੈ।",
+      "gender": "female",
+      "duration_sec": 11.88
+    },
+    {
+      "sample_id": "punjabi-1537",
+      "language_id": "punjabi",
+      "fleurs_id": 1537,
+      "audio_path": "audio/pa_in/pa_in_1537.flac",
+      "raw_reference_transcript": "ਤੁਸੀਂ ਹਨੇਰੇ ਵਿੱਚ ਪਿਰਾਮਿਡ ਦੇਖ ਸਕਦੇ ਹੋ ਅਤੇ ਪ੍ਰਦਰਸ਼ਨ ਸ਼ੁਰੂ ਹੋਣ ਤੋਂ ਪਹਿਲਾਂ ਤੁਸੀਂ ਉਨ੍ਹਾਂ ਨੂੰ ਚੁੱਪ ਹਾਲਤ ਵਿੱਚ ਦੇਖ ਸਕਦੇ ਹੋ।",
+      "reference_transcript": "ਤੁਸੀਂ ਹਨੇਰੇ ਵਿੱਚ ਪਿਰਾਮਿਡ ਦੇਖ ਸਕਦੇ ਹੋ ਅਤੇ ਪ੍ਰਦਰਸ਼ਨ ਸ਼ੁਰੂ ਹੋਣ ਤੋਂ ਪਹਿਲਾਂ ਤੁਸੀਂ ਉਨ੍ਹਾਂ ਨੂੰ ਚੁੱਪ ਹਾਲਤ ਵਿੱਚ ਦੇਖ ਸਕਦੇ ਹੋ।",
+      "gender": "female",
+      "duration_sec": 7.8
+    },
+    {
+      "sample_id": "punjabi-1566",
+      "language_id": "punjabi",
+      "fleurs_id": 1566,
+      "audio_path": "audio/pa_in/pa_in_1566.flac",
+      "raw_reference_transcript": "ਸਾਡੇ ਅੱਸੀ ਪ੍ਰਤੀਸ਼ਤ ਉਤਪਾਦਾਂ ‘ਤੇ ਮੱਧ ਅਮਰੀਕਾ ਦੇ ਦੇਸ਼ਾਂ ਵਿੱਚ ਟੈਰਿਫਾਂ ਦੇ ਜ਼ਰੀਏ ਟੈਕਸ ਵਸੂਲਿਆ ਜਾਂਦਾ ਸੀ। ਇਸ ਦੇ ਬਾਵਜੂਦ ਵੀ ਅਸੀਂ ਤੁਹਾਡੇ ਨਾਲ ਚੰਗੀ ਤਰ੍ਹਾ ਪੇਸ਼ ਆਉਂਦੇ ਹਾਂ।",
+      "reference_transcript": "ਸਾਡੇ ਅੱਸੀ ਪ੍ਰਤੀਸ਼ਤ ਉਤਪਾਦਾਂ ‘ਤੇ ਮੱਧ ਅਮਰੀਕਾ ਦੇ ਦੇਸ਼ਾਂ ਵਿੱਚ ਟੈਰਿਫਾਂ ਦੇ ਜ਼ਰੀਏ ਟੈਕਸ ਵਸੂਲਿਆ ਜਾਂਦਾ ਸੀ। ਇਸ ਦੇ ਬਾਵਜੂਦ ਵੀ ਅਸੀਂ ਤੁਹਾਡੇ ਨਾਲ ਚੰਗੀ ਤਰ੍ਹਾ ਪੇਸ਼ ਆਉਂਦੇ ਹਾਂ।",
+      "gender": "female",
+      "duration_sec": 9.66
+    },
+    {
+      "sample_id": "punjabi-1587",
+      "language_id": "punjabi",
+      "fleurs_id": 1587,
+      "audio_path": "audio/pa_in/pa_in_1587.flac",
+      "raw_reference_transcript": "ਇਸ ਸੀਜ਼ਨ ਬਿਮਾਰੀ ਦੇ ਪਹਿਲੇ ਮਾਮਲਿਆਂ ਦਾ ਜੁਲਾਈ ਦੇ ਅੰਤ ਤੱਕ ਪਤਾ ਲਗਾਇਆ ਗਿਆ।",
+      "reference_transcript": "ਇਸ ਸੀਜ਼ਨ ਬਿਮਾਰੀ ਦੇ ਪਹਿਲੇ ਮਾਮਲਿਆਂ ਦਾ ਜੁਲਾਈ ਦੇ ਅੰਤ ਤੱਕ ਪਤਾ ਲਗਾਇਆ ਗਿਆ।",
+      "gender": "female",
+      "duration_sec": 7.92
+    },
+    {
+      "sample_id": "punjabi-1608",
+      "language_id": "punjabi",
+      "fleurs_id": 1608,
+      "audio_path": "audio/pa_in/pa_in_1608.flac",
+      "raw_reference_transcript": "ਮੇਰੀ ਭੈਣ ਅਤੇ ਉਸਦਾ ਦੋਸਤ ਗੁੰਮ ਹੋ ਗਏ ਅਤੇ ਮੇਰੇ ਵਾਪਸ ਆਉਂਦੇ ਸਮੇਂ ਰਸਤੇ ਵਿੱਚ ਦੋ ਅਯੋਗ ਵਿਅਕਤੀ ਵ੍ਹੀਲਚੇਅਰ 'ਤੇ ਸਵਾਰ ਸਨ, ਲੋਕ ਬੱਸ ਇੱਧਰ ਉਧਰ ਉੱਛਲ ਰਹੈ ਸਨ ਅਤੇ ਉਨ੍ਹਾਂ ਨੂੰ ਧੱਕਾ ਮਾਰ ਰਹੇ ਸਨ,\" ਅਰਮਾਂਡ ਵਰਸੇਸ ਨੇ ਕਿਹਾ।",
+      "reference_transcript": "ਮੇਰੀ ਭੈਣ ਅਤੇ ਉਸਦਾ ਦੋਸਤ ਗੁੰਮ ਹੋ ਗਏ ਅਤੇ ਮੇਰੇ ਵਾਪਸ ਆਉਂਦੇ ਸਮੇਂ ਰਸਤੇ ਵਿੱਚ ਦੋ ਅਯੋਗ ਵਿਅਕਤੀ ਵ੍ਹੀਲਚੇਅਰ 'ਤੇ ਸਵਾਰ ਸਨ ਲੋਕ ਬੱਸ ਇੱਧਰ ਉਧਰ ਉੱਛਲ ਰਹੈ ਸਨ ਅਤੇ ਉਨ੍ਹਾਂ ਨੂੰ ਧੱਕਾ ਮਾਰ ਰਹੇ ਸਨ, ਅਰਮਾਂਡ ਵਰਸੇਸ ਨੇ ਕਿਹਾ।",
+      "gender": "female",
+      "duration_sec": 14.64
+    },
+    {
+      "sample_id": "punjabi-1632",
+      "language_id": "punjabi",
+      "fleurs_id": 1632,
+      "audio_path": "audio/pa_in/pa_in_1632.flac",
+      "raw_reference_transcript": "ਔਰਤਾਂ ਨੂੰ ਇਹ ਸਮਝਣਾ ਚਾਹੀਦਾ ਹੈ ਕਿ ਸੱਭਿਆਚਾਰਾਂ ਵਿੱਚ ਵਖਰੇਵਿਆਂ ਦੇ ਨਤੀਜੇ ਵਜੋਂ ਉਹਨਾਂ ਨੂੰ ਕਈ ਚੀਜਾਂ ਪਰੇਸ਼ਾਨ ਕਰ ਸਕਦੀਆਂ ਹਨ ਅਤੇ ਪਿੱਛਾ ਕੀਤੇ ਜਾਣਾ ਅਤੇ ਬਾਂਹ ਤੋਂ ਘੁੱਟ ਲੈਣਾ ਆਦਿ ਨੂੰ ਆਮ ਨਹੀਂ ਮੰਨਿਆ ਜਾਂਦਾ।",
+      "reference_transcript": "ਔਰਤਾਂ ਨੂੰ ਇਹ ਸਮਝਣਾ ਚਾਹੀਦਾ ਹੈ ਕਿ ਸੱਭਿਆਚਾਰਾਂ ਵਿੱਚ ਵਖਰੇਵਿਆਂ ਦੇ ਨਤੀਜੇ ਵਜੋਂ ਉਹਨਾਂ ਨੂੰ ਕਈ ਚੀਜਾਂ ਪਰੇਸ਼ਾਨ ਕਰ ਸਕਦੀਆਂ ਹਨ ਅਤੇ ਪਿੱਛਾ ਕੀਤੇ ਜਾਣਾ ਅਤੇ ਬਾਂਹ ਤੋਂ ਘੁੱਟ ਲੈਣਾ ਆਦਿ ਨੂੰ ਆਮ ਨਹੀਂ ਮੰਨਿਆ ਜਾਂਦਾ।",
+      "gender": "female",
+      "duration_sec": 17.16
+    },
+    {
+      "sample_id": "punjabi-1635",
+      "language_id": "punjabi",
+      "fleurs_id": 1635,
+      "audio_path": "audio/pa_in/pa_in_1635.flac",
+      "raw_reference_transcript": "ਅਸੀਂ ਵਾਤਾਵਰਨ ਨਾਲ ਵਧੇਰੇ ਇੱਕ ਮਿੱਕ ਹੋ ਕੇ ਜਿਉਣਾ ਸ਼ੁਰੂ ਕਰ ਸਕਦੇ ਹਾਂ, ਅਸੀਂ ਵਾਤਾਵਰਨ ਬਚਾਉਣ ਸੰਬੰਧੀ ਕਿਸੇ ਲਹਿਰ ਵਿੱਚ ਸ਼ਾਮਲ ਹੋ ਸਕਦੇ ਹਾਂ, ਅਤੇ ਭਵਿੱਖ ਦੀਆਂ ਮੁਸ਼ਕਲਾਂ ਨੂੰ ਘਟਾਉਣ ਲਈ ਕੁਝ ਹੱਦ ਤੱਕ ਸਰਗਰਮ ਕਾਰਜਕਰਤਾ ਵੀ ਬਣ ਸਕਦੇ ਹਾਂ।",
+      "reference_transcript": "ਅਸੀਂ ਵਾਤਾਵਰਨ ਨਾਲ ਵਧੇਰੇ ਇੱਕ ਮਿੱਕ ਹੋ ਕੇ ਜਿਉਣਾ ਸ਼ੁਰੂ ਕਰ ਸਕਦੇ ਹਾਂ ਅਸੀਂ ਵਾਤਾਵਰਨ ਬਚਾਉਣ ਸੰਬੰਧੀ ਕਿਸੇ ਲਹਿਰ ਵਿੱਚ ਸ਼ਾਮਲ ਹੋ ਸਕਦੇ ਹਾਂ ਅਤੇ ਭਵਿੱਖ ਦੀਆਂ ਮੁਸ਼ਕਲਾਂ ਨੂੰ ਘਟਾਉਣ ਲਈ ਕੁਝ ਹੱਦ ਤੱਕ ਸਰਗਰਮ ਕਾਰਜਕਰਤਾ ਵੀ ਬਣ ਸਕਦੇ ਹਾਂ।",
+      "gender": "female",
+      "duration_sec": 13.8
+    },
+    {
+      "sample_id": "punjabi-1651",
+      "language_id": "punjabi",
+      "fleurs_id": 1651,
+      "audio_path": "audio/pa_in/pa_in_1651.flac",
+      "raw_reference_transcript": "ਗੈਪ ਦੇ ਸਾਲ ਦੀ ਯੋਜਨਾ ਬਣਾਉਣ ਵਾਲਿਆਂ ਲੋਕਾਂ ਲਈ ਇੱਕ ਹੋਰ ਵਧੇਰੇ ਪ੍ਰਸਿੱਧ ਵਿਕਲਪ ਹੈ ਸੈਰ-ਸਪਾਟਾ ਕਰਨਾ ਅਤੇ ਸਿੱਖਣਾ।",
+      "reference_transcript": "ਗੈਪ ਦੇ ਸਾਲ ਦੀ ਯੋਜਨਾ ਬਣਾਉਣ ਵਾਲਿਆਂ ਲੋਕਾਂ ਲਈ ਇੱਕ ਹੋਰ ਵਧੇਰੇ ਪ੍ਰਸਿੱਧ ਵਿਕਲਪ ਹੈ ਸੈਰ-ਸਪਾਟਾ ਕਰਨਾ ਅਤੇ ਸਿੱਖਣਾ।",
+      "gender": "female",
+      "duration_sec": 7.5
+    },
+    {
+      "sample_id": "urdu-1533",
+      "language_id": "urdu",
+      "fleurs_id": 1533,
+      "audio_path": "audio/ur_pk/ur_pk_1533.flac",
+      "raw_reference_transcript": "بہت سے مشترک فارمیٹس (مثال کے طور پر، اے پی ایس فیملی آف فارمیٹس) اس تناسبِ نظر کے برابر یا تقریباً قریب تر ہیں۔",
+      "reference_transcript": "بہت سے مشترک فارمیٹس مثال کے طور پر، اے پی ایس فیملی آف فارمیٹس اس تناسبِ نظر کے برابر یا تقریباً قریب تر ہیں۔",
+      "gender": "female",
+      "duration_sec": 10.2
+    },
+    {
+      "sample_id": "urdu-1537",
+      "language_id": "urdu",
+      "fleurs_id": 1537,
+      "audio_path": "audio/ur_pk/ur_pk_1537.flac",
+      "raw_reference_transcript": "آپ اہرام کو تاریکی میں دیکھ سکتے ہیں اور آپ ان کو شو شروع ہونے سے پہلے کے سکون میں بھی دیکھ سکتے ہیں۔",
+      "reference_transcript": "آپ اہرام کو تاریکی میں دیکھ سکتے ہیں اور آپ ان کو شو شروع ہونے سے پہلے کے سکون میں بھی دیکھ سکتے ہیں",
+      "gender": "female",
+      "duration_sec": 9.42
+    },
+    {
+      "sample_id": "urdu-1566",
+      "language_id": "urdu",
+      "fleurs_id": 1566,
+      "audio_path": "audio/ur_pk/ur_pk_1566.flac",
+      "raw_reference_transcript": "پھر بھی وسطی امریکی ممالک میں ہمارے اسی فیصد سازو سامان پر ٹیرف کے ذریعے ٹیکس لگایا جاتا تھا۔ ہم تم سے نمٹ لیں گے۔",
+      "reference_transcript": "پھر بھی وسطی امریکی ممالک میں ہمارے اسی فیصد سازو سامان پر ٹیرف کے ذریعے ٹیکس لگایا جاتا تھا ہم تم سے نمٹ لیں گے",
+      "gender": "female",
+      "duration_sec": 10.56
+    },
+    {
+      "sample_id": "urdu-1587",
+      "language_id": "urdu",
+      "fleurs_id": 1587,
+      "audio_path": "audio/ur_pk/ur_pk_1587.flac",
+      "raw_reference_transcript": "اس موسم میں بیماری کے اولین کیسز جولائی کے اواخر میں رپورٹ ہوئے۔",
+      "reference_transcript": "اس موسم میں بیماری کے اولین کیسز جولائی کے اواخر میں رپورٹ ہوئے",
+      "gender": "female",
+      "duration_sec": 7.02
+    },
+    {
+      "sample_id": "urdu-1608",
+      "language_id": "urdu",
+      "fleurs_id": 1608,
+      "audio_path": "audio/ur_pk/ur_pk_1608.flac",
+      "raw_reference_transcript": "ارمند ورسی نے کہا: \"میں نے اپنی بہن اور اس کے دوست کو کھو دیا۔ میرے راستے میں وہیل چیرس پر دو معذور افراد تھے، لوگ بس اچھلتے ہوئے انھیں دھکا دے رہے تھے۔\"",
+      "reference_transcript": "ارمند ورسی نے کہا میں نے اپنی بہن اور اس کے دوست کو کھو دیا میرے راستے میں وہیل چیرس پر دو معذور افراد تھے لوگ بس اچھلتے ہوئے انھیں دھکا دے رہے تھے",
+      "gender": "female",
+      "duration_sec": 11.28
+    },
+    {
+      "sample_id": "urdu-1632",
+      "language_id": "urdu",
+      "fleurs_id": 1632,
+      "audio_path": "audio/ur_pk/ur_pk_1632.flac",
+      "raw_reference_transcript": "خواتین کو یہ ادراک ہونا چاہئے کہ ثقافتی تفریق کا نتیجہ یہ نکل سکتا ہے کہ وہ کسی عام بات کو ہرا سانی شمار کر بیٹھیں، کسی کا پیچھا کرنا، اسکو بازو سے پکڑنا وغیرہ کوئی معمول کے برخلاف بات نہیں ہے۔",
+      "reference_transcript": "خواتین کو یہ ادراک ہونا چاہئے کہ ثقافتی تفریق کا نتیجہ یہ نکل سکتا ہے کہ وہ کسی عام بات کو ہرا سانی شمار کر بیٹھیں کسی کا پیچھا کرنا اسکو بازو سے پکڑنا وغیرہ کوئی معمول کے برخلاف بات نہیں ہے",
+      "gender": "female",
+      "duration_sec": 17.88
+    },
+    {
+      "sample_id": "urdu-1635",
+      "language_id": "urdu",
+      "fleurs_id": 1635,
+      "audio_path": "audio/ur_pk/ur_pk_1635.flac",
+      "raw_reference_transcript": "ہم ماحول کے ساتھ زیادہ دوستانہ زندگی گزار سکتے ہیں، ہم ماحولیاتی تحریک میں شامل ہوسکتے ہیں، اور ہم سرگرم رکن بن سکتے ہیں تاکہ کسی حد تک مستقبل کی تکالیف کو کم کیا جاسکے۔",
+      "reference_transcript": "ہم ماحول کے ساتھ زیادہ دوستانہ زندگی گزار سکتے ہیں ہم ماحولیاتی تحریک میں شامل ہوسکتے ہیں اور ہم سرگرم رکن بن سکتے ہیں تاکہ کسی حد تک مستقبل کی تکالیف کو کم کیا جاسکے",
+      "gender": "female",
+      "duration_sec": 11.16
+    },
+    {
+      "sample_id": "urdu-1651",
+      "language_id": "urdu",
+      "fleurs_id": 1651,
+      "audio_path": "audio/ur_pk/ur_pk_1651.flac",
+      "raw_reference_transcript": "ان لوگوں کے لئے جو سال بھر کا وقفہ کرنے کا منصوبہ کر رہے ہیں ایک تیزی کے ساتھ بڑھتا ہوا زیادہ مقبول آپشن۔",
+      "reference_transcript": "ان لوگوں کے لئے جو سال بھر کا وقفہ کرنے کا منصوبہ کر رہے ہیں ایک تیزی کے ساتھ بڑھتا ہوا زیادہ مقبول آپشن",
+      "gender": "female",
+      "duration_sec": 8.82
+    }
+  ]
+}
