@@ -1,6 +1,6 @@
 # T-003 — Implement v1 schemas, identity mapping and fixtures
 
-**Status:** TODO (not implemented)  
+**Status:** In review — implemented; automated tests explicitly skipped at user request.
 **Priority:** P0  
 **Owner:** Shared  
 **Depends on:** `T-001`, `T-002`  
@@ -63,3 +63,10 @@ def valid_pair(auto, guided):
 - [ ] `INDEX.md` status changed only after reviewer verifies it; next dependency unblocked.
 
 **Evidence to record:** local command, date, short result/log, relevant commit, any contract amendment, demonstration steps and blocked tickets.
+
+Implementation: Pydantic research schemas, matching TypeScript/Zod types and runtime
+validators, crosswalk-derived shared language map, five explicitly MOCK fixtures,
+and a Vite build guard for generated research artifacts. Duplicate/unknown IDs,
+invalid enums, missing-outcome numeric metrics and broken bundle references are
+rejected. Existing app shell remains unchanged. No tests were created or run;
+acceptance/round-trip verification remains incomplete. Do not mark Done yet.

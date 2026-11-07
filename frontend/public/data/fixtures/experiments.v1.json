@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "generated_at_utc": null,
+  "source": {
+    "kind": "synthetic_fixture",
+    "description": "One MOCK sample; no real recording, demographics or experiment results."
+  },
+  "is_fixture": true,
+  "fixture_label": "MOCK ? UI fixture only; not research evidence",
+  "model": {
+    "provider": "elevenlabs",
+    "model_id": null,
+    "api_version": null
+  },
+  "records": [
+    {
+      "sample_id": "urdu-0",
+      "language_id": "urdu",
+      "fleurs_id": 0,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "MOCK fixture",
+        "evaluated_at_utc": null
+      }
+    }
+  ],
+  "summaries": [
+    {
+      "language_id": "urdu",
+      "n_selected": 1,
+      "n_auto_completed": 0,
+      "n_guided_completed": 0,
+      "n_paired": 0,
+      "mean_auto_cer": null,
+      "mean_guided_cer": null,
+      "mean_delta_cer": null,
+      "improved_count": 0,
+      "worsened_count": 0,
+      "unchanged_count": 0,
+      "unpaired_reasons": {
+        "not_tested": 1
+      }
+    }
+  ]
+}

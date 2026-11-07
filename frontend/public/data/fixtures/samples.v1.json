@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "generated_at_utc": null,
+  "source": {
+    "kind": "synthetic_fixture",
+    "description": "One MOCK sample; no real recording, demographics or experiment results."
+  },
+  "is_fixture": true,
+  "fixture_label": "MOCK ? UI fixture only; not research evidence",
+  "selection": {
+    "seed": 2026,
+    "strategy": "common_fleurs_ids_random_sample",
+    "ids": [
+      0
+    ]
+  },
+  "samples": [
+    {
+      "sample_id": "urdu-0",
+      "language_id": "urdu",
+      "fleurs_id": 0,
+      "audio_path": "audio/fixtures/mock-not-a-recording.flac",
+      "raw_reference_transcript": "MOCK reference ? no source recording",
+      "reference_transcript": "MOCK reference ? no source recording",
+      "gender": "other",
+      "duration_sec": null
+    }
+  ]
+}

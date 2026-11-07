@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "generated_at_utc": null,
+  "source": {
+    "kind": "synthetic_fixture",
+    "description": "One MOCK sample; no real recording, demographics or experiment results."
+  },
+  "is_fixture": true,
+  "fixture_label": "MOCK ? UI fixture only; not research evidence",
+  "method": "missing_task_audio_then_city_home_speakers_desc",
+  "items": []
+}

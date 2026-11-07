@@ -1,0 +1,17 @@
+@import "tailwindcss" source("./");
+
+:root { font-family: "Segoe UI", system-ui, sans-serif; color: #163d35; background: #f7f6f1; font-synthesis: none; }
+body { margin: 0; min-width: 320px; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; }
+button:disabled { cursor: wait; }
+:focus-visible { outline: 3px solid #a64419; outline-offset: 5px; }
+.brand { font-size: 1.6rem; font-weight: 800; letter-spacing: -.06em; text-decoration: none; }
+.brand span { color: #b8461d; }
+.eyebrow { font-size: .72rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+.status-panel { background: #eaf0e9; border: 1px solid #c3d0c1; border-radius: 1rem; padding: 1.75rem; }
+.module-card { background: #fffefa; border: 1px solid #d8d9cf; border-radius: 1rem; padding: 1.75rem; }
+.journey-link { border: 1px solid #d3d5ca; border-radius: 999px; padding: .65rem 1rem; font-size: .85rem; }
+.journey-link:hover, button:hover:not(:disabled) { background: #dfe8dc; }
+.skip-link { position: absolute; left: 1rem; top: -5rem; padding: .8rem; background: white; z-index: 10; }
+.skip-link:focus { top: 1rem; }

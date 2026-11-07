@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "generated_at_utc": null,
+  "source": {
+    "kind": "synthetic_fixture",
+    "description": "One MOCK sample; no real recording, demographics or experiment results."
+  },
+  "is_fixture": true,
+  "fixture_label": "MOCK ? UI fixture only; not research evidence",
+  "languages": [
+    {
+      "language_id": "urdu",
+      "display_name": "Urdu",
+      "census_home_column": "home_urdu",
+      "fleurs_config": "ur_pk",
+      "dataset_language_code": "ur",
+      "city_home_speakers": null,
+      "coverage_status": "no_task_audio",
+      "request_clip_counts": {
+        "minds14": 0,
+        "speech_massive": 0
+      },
+      "pilot_selected": true
+    }
+  ]
+}

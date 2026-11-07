@@ -1,0 +1,73 @@
+{
+  "reviewed_on": "2026-11-07",
+  "basis": "Supplied LICENSES.md plus manual upstream checks recorded in docs/DATA_SOURCES.md. Offline audit verifies pack declarations; it does not refresh web licenses.",
+  "public_assets_copied": 0,
+  "datasets": [
+    {
+      "id": "mississauga",
+      "pack_match": "City of Mississauga 2021 Census",
+      "declared_license": "City of Mississauga open data terms",
+      "source_url": "https://data.mississauga.ca",
+      "license_url": "https://www.mississauga.ca/file/COM/CityOfMississaugaTermsOfUse.pdf",
+      "attribution": "Contains information provided by the City of Mississauga. 2021 census; pack-derived corrected Ward 10.",
+      "upstream_review": "Current dataset-specific terms not conclusively matched; older city-hosted terms contain inconsistent city naming.",
+      "redistribution": "Local analysis; retain attribution. Review applicable dataset terms before public export.",
+      "scope": "Corrected ward/census metadata; raw 311 is excluded from MVP."
+    },
+    {
+      "id": "fleurs",
+      "pack_match": "| FLEURS |",
+      "declared_license": "CC BY 4.0",
+      "source_url": "https://huggingface.co/datasets/google/fleurs",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "attribution": "Google; Conneau et al. (2022), FLEURS: Few-shot Learning Evaluation of Universal Representations of Speech.",
+      "upstream_review": "Dataset card corroborates CC BY 4.0.",
+      "redistribution": "Attributed, curated clips only after selection/review; include source, license link and modification notice. No clips approved by this audit.",
+      "scope": "MVP speech source; supplied pack omits Bengali."
+    },
+    {
+      "id": "accent",
+      "pack_match": "| Speech Accent Archive |",
+      "declared_license": "CC BY-NC-SA 4.0",
+      "source_url": "https://accent.gmu.edu",
+      "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "attribution": "Weinberger, S. (2015), Speech Accent Archive, George Mason University; https://osf.io/yh23d.",
+      "upstream_review": "Pack declaration verified; upstream license not independently retrieved.",
+      "redistribution": "Excluded from public MVP audio. Noncommercial and ShareAlike restrictions; resolve upstream terms before reuse.",
+      "scope": "Stretch only; do not export age, birthplace or other speaker details."
+    },
+    {
+      "id": "minds14",
+      "pack_match": "| MInDS-14 |",
+      "declared_license": "CC BY 4.0",
+      "source_url": "https://huggingface.co/datasets/PolyAI/minds14",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "attribution": "PolyAI; Gerz et al. (2021), Multilingual and Cross-Lingual Intent Detection from Spoken Data.",
+      "upstream_review": "Dataset card corroborates CC BY 4.0.",
+      "redistribution": "Coverage counts only in MVP; attributed clips require a separate deliberate review.",
+      "scope": "Banking request metadata; locale labels are not a guarantee of actual spoken language."
+    },
+    {
+      "id": "speech_massive",
+      "pack_match": "| Speech-MASSIVE |",
+      "declared_license": "CC BY-NC-SA 4.0",
+      "source_url": "https://huggingface.co/datasets/FBK-MT/Speech-MASSIVE",
+      "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "attribution": "FBK; Lee et al. (2024), Speech-MASSIVE: A Multilingual Speech Dataset for SLU and Beyond.",
+      "upstream_review": "FBK project page and dataset listing corroborate CC BY-NC-SA 4.0.",
+      "redistribution": "No public MVP audio/transcripts; noncommercial and ShareAlike restrictions apply to reuse as stated in pack.",
+      "scope": "Coverage counts only; no speaker background exported."
+    },
+    {
+      "id": "toronto",
+      "pack_match": "| Toronto 311 Service Requests",
+      "declared_license": "Open Government Licence - Toronto",
+      "source_url": "https://open.toronto.ca",
+      "license_url": "https://open.toronto.ca/open-data-licence/",
+      "attribution": "Contains information licensed under the Open Government Licence - Toronto.",
+      "upstream_review": "Official Toronto licence page reviewed.",
+      "redistribution": "Raw 311 is excluded; any later reuse requires attribution and applicable licence conditions.",
+      "scope": "Toronto context only; never join Toronto ward IDs to Mississauga."
+    }
+  ]
+}

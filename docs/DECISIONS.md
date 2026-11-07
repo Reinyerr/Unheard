@@ -43,3 +43,16 @@
 - Verified local deployment, working map GeoJSON, functional recovery demo, or public website. **Not built yet.**
 - Exact supported Scribe language hints / model-version API syntax or multilingual TTS support. **Requires real preflight.**
 - Official submission deadlines or sponsor requirements beyond the provided pack. Team independently checks its event portal.
+
+## Implementation clarification — T-002 (2026-11-07)
+
+No product-scope or public-contract amendment. The source audit now emits a
+**local-only** `source_audit` manifest (`schema_version: "1.0"`) under ignored
+`data/processed/`. It records observed file hashes, counts, formats and license
+restrictions, not public application artifacts or redistribution approval.
+Missing pack/upstream version is `null`; hashes identify the supplied bytes.
+Audit failure replaces stale success with `status: "failed"` and a path-specific
+error. The audit accepts an explicit ZIP or exact extracted root, reads without
+extraction and makes no API requests. In the observed pack MInDS-14 FLAC headers
+are 16 kHz, despite the upstream card's 8 kHz description; conversion history is
+unknown. See `DATA_SOURCES.md` for evidence and unresolved publication gates.

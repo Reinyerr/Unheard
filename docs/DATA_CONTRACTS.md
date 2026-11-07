@@ -2,6 +2,21 @@
 
 **Status:** proposed JSON/API schema, not output already generated. Any change requires compatible frontend/backend updates and ticket/decision log amendment. D-003–D-014 and D-017.
 
+T-003 implementation: `backend/app/schemas/research.py` and
+`frontend/src/types/research.ts` implement the five static artifact contracts;
+`shared/language_map.json` is derived from the audited source crosswalk. Tests and
+fixture round-trips were skipped at user request; these are not yet verified.
+Each artifact requires `source` metadata. Only explicitly labelled fixtures
+(`is_fixture: true`, `fixture_label` starting with `MOCK`) may have a null generation
+time. Loaders reject fixtures unless explicitly opted in. Fixtures under
+`frontend/public/data/fixtures/` contain synthetic references, no audio, and no
+experimental metrics; future fixture views must display `fixture_label`.
+Validate complete exports with `validate_bundle` / `validateBundle` to check
+foreign keys. Vite builds reject incomplete/invalid generated artifact bundles
+when root-level `public/data/*.v1.json` artifacts exist; fixtures are excluded.
+Blank crosswalk fields become null, including English's census column and
+Bengali's FLEURS config. Public field names and status enums remain unchanged.
+
 ## Normalized identity rules
 
 - `language_id`: stable lowercase ASCII slug: `english`, `urdu`, `punjabi`, `cantonese`, `arabic`, `mandarin_chinese`, plus remaining tracked categories from crosswalk. **Not** the FLEURS config or presumed ElevenLabs hint.

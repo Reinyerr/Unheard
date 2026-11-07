@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "generated_at_utc": null,
+  "source": {
+    "kind": "synthetic_fixture",
+    "description": "One MOCK sample; no real recording, demographics or experiment results."
+  },
+  "is_fixture": true,
+  "fixture_label": "MOCK ? UI fixture only; not research evidence",
+  "source_file": "01_people_census/derived/ward_language_profile_2021_corrected.csv",
+  "missing_request_language_ids": [
+    "urdu"
+  ],
+  "wards": [
+    {
+      "ward_id": 1,
+      "population_language_base": null,
+      "gap_population": null,
+      "gap_share_pct": null,
+      "home_speakers_by_language": {
+        "urdu": null
+      }
+    }
+  ]
+}

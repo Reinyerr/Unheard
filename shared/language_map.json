@@ -1,0 +1,96 @@
+{
+  "source_file": "language_crosswalk.csv",
+  "source_sha256": "0f23d538843bcd9f2993c842bcb08201134aaf89c0bfeba059e0fad5c136aad9",
+  "languages": {
+    "english": {
+      "display_name": "English",
+      "census_home_column": null,
+      "fleurs_config": "en_us",
+      "dataset_language_code": "en"
+    },
+    "urdu": {
+      "display_name": "Urdu",
+      "census_home_column": "home_urdu",
+      "fleurs_config": "ur_pk",
+      "dataset_language_code": "ur"
+    },
+    "arabic": {
+      "display_name": "Arabic",
+      "census_home_column": "home_arabic",
+      "fleurs_config": "ar_eg",
+      "dataset_language_code": "ar"
+    },
+    "mandarin_chinese": {
+      "display_name": "Mandarin Chinese",
+      "census_home_column": "home_mandarin",
+      "fleurs_config": "cmn_hans_cn",
+      "dataset_language_code": "zh"
+    },
+    "punjabi": {
+      "display_name": "Punjabi",
+      "census_home_column": "home_punjabi",
+      "fleurs_config": "pa_in",
+      "dataset_language_code": "pa"
+    },
+    "polish": {
+      "display_name": "Polish",
+      "census_home_column": "home_polish",
+      "fleurs_config": "pl_pl",
+      "dataset_language_code": "pl"
+    },
+    "cantonese": {
+      "display_name": "Cantonese",
+      "census_home_column": "home_cantonese",
+      "fleurs_config": "yue_hant_hk",
+      "dataset_language_code": "yue"
+    },
+    "tagalog": {
+      "display_name": "Tagalog",
+      "census_home_column": "home_tagalog",
+      "fleurs_config": "fil_ph",
+      "dataset_language_code": "tl"
+    },
+    "spanish": {
+      "display_name": "Spanish",
+      "census_home_column": "home_spanish",
+      "fleurs_config": "es_419",
+      "dataset_language_code": "es"
+    },
+    "tamil": {
+      "display_name": "Tamil",
+      "census_home_column": "home_tamil",
+      "fleurs_config": "ta_in",
+      "dataset_language_code": "ta"
+    },
+    "vietnamese": {
+      "display_name": "Vietnamese",
+      "census_home_column": "home_vietnamese",
+      "fleurs_config": "vi_vn",
+      "dataset_language_code": "vi"
+    },
+    "hindi": {
+      "display_name": "Hindi",
+      "census_home_column": "home_hindi",
+      "fleurs_config": "hi_in",
+      "dataset_language_code": "hi"
+    },
+    "portuguese": {
+      "display_name": "Portuguese",
+      "census_home_column": "home_portuguese",
+      "fleurs_config": "pt_br",
+      "dataset_language_code": "pt"
+    },
+    "gujarati": {
+      "display_name": "Gujarati",
+      "census_home_column": "home_gujarati",
+      "fleurs_config": "gu_in",
+      "dataset_language_code": "gu"
+    },
+    "bengali": {
+      "display_name": "Bengali",
+      "census_home_column": "home_bengali",
+      "fleurs_config": null,
+      "dataset_language_code": "bn"
+    }
+  }
+}

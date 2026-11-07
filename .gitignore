@@ -1,0 +1,44 @@
+# Credentials (examples are intentionally safe)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials*.json
+# Local sources, recordings and service requests
+/data/
+raw/
+recordings/
+*311*.csv
+*.csv
+*.tsv
+*.parquet
+*.zip
+*.7z
+*.tar
+*.gz
+*.wav
+*.mp3
+*.flac
+*.ogg
+*.m4a
+*.mp4
+*.webm
+# Generated dependencies, caches and test evidence
+node_modules/
+dist/
+.venv/
+.tools/
+.cache/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+coverage/
+playwright-report/
+test-results/
+*.log
+*.tsbuildinfo
+.DS_Store
+Thumbs.db

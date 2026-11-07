@@ -1,12 +1,12 @@
 # Ticket index — source of truth for implementation
 
-**All tickets are TODO.** No application has been generated or code tests executed in this documentation package. Each ticket has implementation steps, target files, code sketches, failure states and checkboxes.
+**T-001 and T-002 are Done (verified 2026-11-07).** T-003 is implemented and In review; tests were explicitly skipped at user request. Other tickets remain TODO with their listed dependencies. Research export pipelines and speech experiments are not implemented.
 
 | Ticket | Feature | Priority | Owner | Depends on | Status |
 |---|---|---|---|---|---|
-| [T-001](T-001-project-bootstrap.md) | Initialize repo, local Vite/FastAPI and safe defaults | P0 | Shared | — | TODO |
-| [T-002](T-002-source-and-license-audit.md) | Audit source archive, licenses and provenance | P0 | Dev 1 | T-001 | TODO |
-| [T-003](T-003-data-schema-and-fixtures.md) | Implement v1 schemas, identity mapping and fixtures | P0 | Shared | T-001, T-002 | TODO |
+| [T-001](T-001-project-bootstrap.md) | Initialize repo, local Vite/FastAPI and safe defaults | P0 | Shared | — | Done |
+| [T-002](T-002-source-and-license-audit.md) | Audit source archive, licenses and provenance | P0 | Dev 1 | T-001 | Done |
+| [T-003](T-003-data-schema-and-fixtures.md) | Implement v1 schemas, identity mapping and fixtures | P0 | Shared | T-001, T-002 | In review |
 | [T-004](T-004-corrected-census-processing.md) | Generate corrected ward language metrics | P0 | Dev 1 | T-002, T-003 | TODO |
 | [T-005](T-005-coverage-and-recommendation-ranking.md) | Build coverage model and language-first ranks | P0 | Dev 1 | T-002, T-003, T-004 | TODO |
 | [T-006](T-006-ward-geometry-validation.md) | Source and validate real Mississauga ward polygons | P0 | Dev 2 | T-002, T-003 | TODO |
