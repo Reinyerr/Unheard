@@ -13,6 +13,10 @@ from pydantic import BaseModel
 from app.routes.recovery import router as recovery_router
 from app.services.recovery_state import RecoveryService
 
+# Match the documented server configuration and TTS CLI. Exported environment
+# variables retain precedence (including an intentionally empty API key).
+load_dotenv(Path(__file__).resolve().parents[1] / ".env")
+# Preserve older root-level setups for variables not configured above.
 load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 
 
