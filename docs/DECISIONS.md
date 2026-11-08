@@ -79,3 +79,72 @@ redacted. Documented provider hints are candidates until real HTTP evidence;
 acceptance does not establish script comparability or quality. No retries/cache
 are introduced here; T-009 owns those. Missing server credentials are a blocked
 configuration state with zero attempts and not_tested guidance, never a metric.
+
+
+## Implementation clarification — T-010 (2026-11-07; review pending)
+
+No public schema fields/enums or product scope changed. Metric policy v1 uses
+NFC Unicode code points, punctuation-to-space, English-only casefolding and
+whitespace-free CER; preserves diacritics/scripts with no translation or variant
+conversion. WER is enabled only for English whitespace tokens until other
+language tokenizers are validated. Script/code/manual-review flags exclude
+incompatible outputs with null metrics; raw outcomes remain intact. Empty valid
+recognition is scored, empty normalized reference excluded. Clip means are
+unweighted; paired delta is autoCER-guidedCER with tie tolerance 1e-12. No
+confidence intervals or significance claims from the tiny partial preflight.
+
+Existing public source metadata carries policies, flags and hashes. Local-only
+metric_details.json (schema_version 1.0) preserves raw/reference/normalized strings,
+edit counts and evidence paths. Summary completion counts refer to comparable
+scored modes; exclusion statuses count once per clip/status and may overlap.
+Input terminal reports reuse T-008's attempt fields (one entry per sample/mode),
+plus existing selection/model provenance. T-009 must resolve retries before export;
+no runner/cache is introduced here. Review and automated verification remain open.
+
+
+## Implementation clarification — T-009 (2026-11-07; review pending)
+
+No public schema, identity, selection or ranking change. Local cache identity is
+SHA-256 of audio hash + provider endpoint/API version + model alias + canonical
+request options shared with the adapter. Historical provider alias weight
+revisions remain unknown. Matching completed/incompatible/unsupported responses
+are reused; immutable local attempt/raw evidence and checksummed histories remain
+separate from the latest terminal export. Original provider status is preserved
+separately from T-010 comparability and review flags. T-010 accepts optional local
+review_flags on terminal attempts; the existing public source metadata carries
+those flags without new public fields.
+
+The local experiment_attempts envelope (schema_version 1.0) retains T-008's
+selection/model/attempt shape, plus all 96 mode states, per-language counts,
+run config/events and import/script provenance. Retry histories stay outside the
+one-terminal-entry-per-mode export. Default execution is offline; --live permits
+bounded sends only for automatic and live-evidenced guided modes. Unknown guidance
+stays not_tested; never silently switch settings. No resampling after outcomes.
+
+Transient retries are capped per invocation/mode and by total new-POST budget;
+previous failures require explicit retry selection. Unknown interrupted calls
+are journalled and not automatically replayed. A local exclusive lock protects
+concurrent runners, not provider-side idempotency; timeout retries can still bill
+again. These are implementation policies, not claimed crash/retry test evidence.
+All automated tests and the full live pilot remain unperformed by user instruction.
+
+
+## Implementation clarification — T-014 (2026-11-07; review pending)
+
+No product-scope or shared static-schema amendment. The previously proposed
+recovery API is finalized in DATA_CONTRACTS.md and backend recovery schemas:
+explicit saved/live origin, optional same-mode saved fallback, one session-
+preserving retry endpoint with a different curated clip, and an explicit refer
+choice. Two total attempts per session; accepted/referral terminal. Confirmation
+is always the current user's simulation over third-party recordings, never
+original-speaker consent or municipal action. TTS remains unavailable under this
+ticket, with null audio URL, pending T-015.
+
+Sessions use a 128-entry in-memory store with 1800-second idle expiry; deployment
+is one localhost worker, with no database/auth or persistent user data. Body
+limit is 4096 JSON bytes, strict IDs/enums/fields, no uploads. Live calls use the
+T-008 restricted adapter without automatic network retries; saved fallback never
+switches language guidance modes. Only matching real saved evidence and usable
+nonempty script-compatible text can enter confirm. Configuration/guidance without
+an attempted provider result remains not_tested, not fabricated numeric success.
+Live errors return safe details plus a recoverable session/referral state.

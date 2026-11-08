@@ -29,6 +29,17 @@ GUIDANCE_CANDIDATES = {
 Mode = Literal["auto", "guided"]
 
 
+def request_options(language_id: str, mode: Mode) -> dict[str, str]:
+    """Canonical request settings shared by the adapter and experiment cache."""
+    if language_id not in GUIDANCE_CANDIDATES or mode not in {"auto", "guided"}:
+        raise ConfigurationError("Unknown language or transcription mode")
+    options = {"model_id": MODEL_ID, "file_format": "other", "diarize": "false",
+               "tag_audio_events": "false", "timestamps_granularity": "none", "webhook": "false"}
+    if mode == "guided":
+        options["language_code"] = GUIDANCE_CANDIDATES[language_id]
+    return options
+
+
 def now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
@@ -137,10 +148,7 @@ class ElevenLabsAdapter:
             raise ConfigurationError("Expected auto or guided mode")
         audio = self._audio(sample_id)
         sample = self._by_id[sample_id]
-        options = {"model_id": MODEL_ID, "file_format": "other", "diarize": "false",
-                   "tag_audio_events": "false", "timestamps_granularity": "none", "webhook": "false"}
-        if mode == "guided":
-            options["language_code"] = GUIDANCE_CANDIDATES[sample.language_id]
+        options = request_options(sample.language_id, mode)
         started = now()
         result = dict(sample_id=sample_id, language_id=sample.language_id.value, mode=mode,
                       model_id=MODEL_ID, audio_sha256=hashlib.sha256(audio).hexdigest(),

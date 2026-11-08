@@ -1,6 +1,6 @@
 # Ticket index — source of truth for implementation
 
-**T-001 and T-002 are Done (verified 2026-11-07).** T-003, T-004, T-005 and T-007 are implemented and In review; tests were explicitly skipped at user request. T-004/T-005 generated real corrected ward, language and recommendation JSON with production schema validation; acceptance and integration sign-off remain pending. T-007 also generated the frozen 48-record FLEURS selection and selected local audio. Other tickets remain TODO with their listed dependencies; speech experiments are not implemented.
+**T-001 and T-002 are Done (verified 2026-11-07).** T-003, T-004, T-005, T-007, T-009, T-010 and T-014 are implemented and In review; tests were explicitly skipped at user request. T-004/T-005 generated real corrected ward, language and recommendation JSON with production schema validation; acceptance and integration sign-off remain pending. T-007 also generated the frozen 48-record FLEURS selection and selected local audio. T-008 has real small-preflight evidence (In review); T-010 exported its measured outcomes with missing modes explicit. The cached runner is implemented with real offline preflight import; the full live paired pilot remains unrun; remaining tickets retain their dependencies.
 
 | Ticket | Feature | Priority | Owner | Depends on | Status |
 |---|---|---|---|---|---|
@@ -11,13 +11,13 @@
 | [T-005](T-005-coverage-and-recommendation-ranking.md) | Build coverage model and language-first ranks | P0 | Dev 1 | T-002, T-003, T-004 | In review |
 | [T-006](T-006-ward-geometry-validation.md) | Source and validate real Mississauga ward polygons | P0 | Dev 2 | T-002, T-003 | TODO |
 | [T-007](T-007-reproducible-fleurs-sampling.md) | Generate 48-record FLEURS sample manifest | P0 | Dev 1 | T-002, T-003 | In review |
-| [T-008](T-008-elevenlabs-scribe-preflight.md) | Validate real Scribe requests, language hints and credits | P0 | Dev 1 | T-001, T-003, T-007 | Blocked |
-| [T-009](T-009-paired-transcription-runner.md) | Run cached paired ElevenLabs pilot and track failures | P0 | Dev 1 | T-007, T-008, T-010 | Blocked |
-| [T-010](T-010-cer-wer-and-paired-analysis.md) | Calculate multilingual CER/WER and paired summaries | P0 | Dev 1 | T-003, T-007, T-008 | TODO |
+| [T-008](T-008-elevenlabs-scribe-preflight.md) | Validate real Scribe requests, language hints and credits | P0 | Dev 1 | T-001, T-003, T-007 | In review |
+| [T-009](T-009-paired-transcription-runner.md) | Run cached paired ElevenLabs pilot and track failures | P0 | Dev 1 | T-007, T-008, T-010 | In review |
+| [T-010](T-010-cer-wer-and-paired-analysis.md) | Calculate multilingual CER/WER and paired summaries | P0 | Dev 1 | T-003, T-007, T-008 | In review |
 | [T-011](T-011-ward-map-and-metric-toggle.md) | Implement corrected ward map and count/share toggle | P0 | Dev 2 | T-003, T-004, T-006 | TODO |
 | [T-012](T-012-global-selection-and-empty-states.md) | Connect modules with safe global language selection | P0 | Dev 2 | T-003, T-004, T-005 | TODO |
 | [T-013](T-013-speech-lab-playback-and-comparison.md) | Build authentic-audio speech laboratory | P0 | Dev 2 | T-003, T-007, T-010, T-012 | TODO |
-| [T-014](T-014-fastapi-confirmation-state-machine.md) | Implement deterministic confirmation/retry/referral API | P0 | Dev 1 | T-001, T-003, T-008 | TODO |
+| [T-014](T-014-fastapi-confirmation-state-machine.md) | Implement deterministic confirmation/retry/referral API | P0 | Dev 1 | T-001, T-003, T-008 | In review |
 | [T-015](T-015-spoken-recovery-ui-and-tts.md) | Build the demo confirmation flow and spoken prompts | P0 | Dev 2 (UI) + Dev 1 (TTS) | T-012, T-013, T-014 | TODO |
 | [T-016](T-016-priority-recommendations-ui.md) | Implement research-backed language/ward recommendations | P0 | Dev 2 | T-005, T-011, T-012 | TODO |
 | [T-017](T-017-ci-and-regression-tests.md) | Automate high-risk validation and unit checks | P0 | Shared | T-004, T-005, T-010, T-011, T-012, T-014 | TODO |
@@ -39,21 +39,22 @@ Start T-001 → T-002 → T-003, then data branch T-004/T-005 and speech branch 
 
 **Do not mark T-008 or T-009 Done** until at least one real verified ElevenLabs call and correct exception/status handling are recorded. T-017 automated tests do not replace real API preflight.
 
-T-005 now provides all 15 language identities/coverage rows and eight missing-audio
-priorities, with independent count/share recruitment guidance. T-003/T-004/T-005
-review gates remain open. T-007 supplies frozen sample inputs and retains its review gate.
-T-008 adapter/preflight is now implemented, but live verification is blocked by the
-missing server API key. T-012's implementation inputs are also
-available for Dev 2. T-011 still requires T-006; T-016 still requires T-011/T-012.
-The T-003 build guard rejects the partial root artifact bundle until the real
-experiment export arrives through its assigned ticket. None were fabricated.
+T-004/T-005 provide census/coverage/recommendations, T-007 frozen samples, T-008
+real Urdu/Cantonese preflight, and T-010 measured-outcome export. All five public
+artifacts now exist and production Python bundle validation passed. No frontend
+build or automated tests were run; existing review gates remain open.
 
-T-009 prerequisite inspection (2026-11-07, updated after T-008 implementation):
-blocked by absent real T-008 preflight evidence and absent T-010 metrics/export implementation. No runner was
-implemented. Dev 1 unblock order remains T-008 → T-010 → T-009; T-007's frozen
-manifest is present but does not establish verified provider behavior.
+T-009 runner is implemented and In review. Offline production import/cache/export
+recorded four real modes, 92 not_tested and zero new POSTs; no automated tests or
+full live pilot ran. Four other languages still need guidance preflight evidence;
+credit/rate and script-review limits remain. T-014 is now implemented and In
+review, with manual saved Urdu confirmation and explicit live-to-saved fallback
+proof, no automated tests and no new ElevenLabs requests.
+T-013 also has backend sample/metric inputs but still needs T-012; T-011 needs
+T-006, and T-016 needs T-011/T-012. No downstream feature was implemented.
 
-T-008 command exited 1 with `missing_api_key`; ignored latest/per-run logs record
-zero remote attempts and not_tested guidance. No tests were created/run. Finish
-the small live T-008 preflight first, then T-010 is the next Dev 1 ticket; T-009
-still requires both. No real language support, transcripts or credits are verified.
+
+T-014 provides backend capabilities/start/decision/retry/session routes. T-015
+UI/TTS is the next handoff, still requiring T-012/T-013; T-017 still needs its
+listed frontend prerequisites. No unimplemented ticket exclusively assigned to
+Dev 1 is currently ready; review/live-pilot gates on implemented work remain open.

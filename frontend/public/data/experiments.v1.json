@@ -1,0 +1,1380 @@
+{
+  "schema_version": "1.0",
+  "generated_at_utc": "2026-11-08T00:24:31.234366+00:00",
+  "source": {
+    "dataset": "FLEURS; Google / Conneau et al. (2022)",
+    "source_url": "https://huggingface.co/datasets/google/fleurs",
+    "license": "CC BY 4.0; https://creativecommons.org/licenses/by/4.0/",
+    "selection_sha256": "59f8c23640f271eefa5787fdedd3833e0091af14e40e448e1f4c8a58584d886c",
+    "outcome_input_sha256": "4bdc316efe9248fe0cbe64526c94111c8e61d3f36a44b743efc8a253cd697517",
+    "metrics_script_sha256": "f0aaf83ed38a7e6bc98d24ce85664b5c3ea2dc58bcf8e21921a7ac04897a6fe5",
+    "policy": "nfc_codepoints_punctuation_space_english_casefold_v1",
+    "unicode_version": "16.0.0",
+    "normalization": "NFC; punctuation replaced with spaces; whitespace collapsed; English casefold only; CER removes whitespace; no transliteration, translation, diacritic removal or script conversion",
+    "cer_units": "Unicode code points, combining marks retained; Levenshtein unit costs / reference length; uncapped ratios",
+    "wer_policy": "English whitespace tokens only; other five languages null pending validated tokenization",
+    "script_policy": "Expected script must represent >=50% of reference/output letters; detected-language mismatch and recorded manual exclusions block metrics. Empty successful transcript is scored. Same-script translation/Chinese variants require manual review.",
+    "review_flags": "{\"cantonese-1533:auto\": [\"detected_language_mismatch_requires_review\", \"recorded_manual_script_review_exclusion\"]}",
+    "raw_response_sha256": "{\"cantonese-1533:auto\": \"019346d649db9bd9114583ed913983dbf7d3886525cb1b42d03a9d3b5888ae35\", \"cantonese-1533:guided\": \"d4ce52109dc0ca119fc3c092b15e772ef3dd0e28ba740226486e632f8a42fc92\", \"urdu-1533:auto\": \"1f1f669595dca3962998b627d2e52bf1132d8f142d19b4c8fba92e3b95375287\", \"urdu-1533:guided\": \"194ccfb799e50a18fa4f2376d5f618e5175bd0ffc50a79d318ff4f01a9898149\"}",
+    "selected_sample_count": "48",
+    "recorded_mode_count": "4",
+    "summary_policy": "Unweighted per-clip means; completion counts mean comparable scored outcomes, not HTTP successes. Missing statuses counted once per clip/status; exclusions may overlap. Delta=autoCER-guidedCER; positive improves; tie tolerance 1e-12.",
+    "limitations": "Exploratory pilot (n_selected=8 per language); inspect recorded/scored/paired counts for completeness. No population, ward or significance inference. Independent mode means may have different clip sets; mean_delta_cer uses paired clips only. No confidence intervals or general improvement claim."
+  },
+  "is_fixture": false,
+  "fixture_label": null,
+  "model": {
+    "provider": "elevenlabs",
+    "model_id": "scribe_v2",
+    "api_version": "v1"
+  },
+  "records": [
+    {
+      "sample_id": "arabic-1533",
+      "language_id": "arabic",
+      "fleurs_id": 1533,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "arabic-1537",
+      "language_id": "arabic",
+      "fleurs_id": 1537,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "arabic-1566",
+      "language_id": "arabic",
+      "fleurs_id": 1566,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "arabic-1587",
+      "language_id": "arabic",
+      "fleurs_id": 1587,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "arabic-1608",
+      "language_id": "arabic",
+      "fleurs_id": 1608,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "arabic-1632",
+      "language_id": "arabic",
+      "fleurs_id": 1632,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "arabic-1635",
+      "language_id": "arabic",
+      "fleurs_id": 1635,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "arabic-1651",
+      "language_id": "arabic",
+      "fleurs_id": 1651,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "cantonese-1533",
+      "language_id": "cantonese",
+      "fleurs_id": 1533,
+      "auto": {
+        "status": "incompatible_output",
+        "transcript_raw": "许多常见格式，比方 APS 先进摄影系统格式，都等同或接近这个长宽比。",
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "completed",
+        "transcript_raw": "許多常見格式（比方 APS 先進攝影系統格式）都等同或接近這個長寬比。",
+        "cer": 0.1,
+        "wer": null,
+        "request_id": null,
+        "language_hint": "yue"
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": "2026-11-08T00:11:44.152160+00:00"
+      }
+    },
+    {
+      "sample_id": "cantonese-1537",
+      "language_id": "cantonese",
+      "fleurs_id": 1537,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "cantonese-1566",
+      "language_id": "cantonese",
+      "fleurs_id": 1566,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "cantonese-1587",
+      "language_id": "cantonese",
+      "fleurs_id": 1587,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "cantonese-1608",
+      "language_id": "cantonese",
+      "fleurs_id": 1608,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "cantonese-1632",
+      "language_id": "cantonese",
+      "fleurs_id": 1632,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "cantonese-1635",
+      "language_id": "cantonese",
+      "fleurs_id": 1635,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "cantonese-1651",
+      "language_id": "cantonese",
+      "fleurs_id": 1651,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "english-1533",
+      "language_id": "english",
+      "fleurs_id": 1533,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "english-1537",
+      "language_id": "english",
+      "fleurs_id": 1537,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "english-1566",
+      "language_id": "english",
+      "fleurs_id": 1566,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "english-1587",
+      "language_id": "english",
+      "fleurs_id": 1587,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "english-1608",
+      "language_id": "english",
+      "fleurs_id": 1608,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "english-1632",
+      "language_id": "english",
+      "fleurs_id": 1632,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "english-1635",
+      "language_id": "english",
+      "fleurs_id": 1635,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "english-1651",
+      "language_id": "english",
+      "fleurs_id": 1651,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "mandarin_chinese-1533",
+      "language_id": "mandarin_chinese",
+      "fleurs_id": 1533,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "mandarin_chinese-1537",
+      "language_id": "mandarin_chinese",
+      "fleurs_id": 1537,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "mandarin_chinese-1566",
+      "language_id": "mandarin_chinese",
+      "fleurs_id": 1566,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "mandarin_chinese-1587",
+      "language_id": "mandarin_chinese",
+      "fleurs_id": 1587,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "mandarin_chinese-1608",
+      "language_id": "mandarin_chinese",
+      "fleurs_id": 1608,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "mandarin_chinese-1632",
+      "language_id": "mandarin_chinese",
+      "fleurs_id": 1632,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "mandarin_chinese-1635",
+      "language_id": "mandarin_chinese",
+      "fleurs_id": 1635,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "mandarin_chinese-1651",
+      "language_id": "mandarin_chinese",
+      "fleurs_id": 1651,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "punjabi-1533",
+      "language_id": "punjabi",
+      "fleurs_id": 1533,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "punjabi-1537",
+      "language_id": "punjabi",
+      "fleurs_id": 1537,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "punjabi-1566",
+      "language_id": "punjabi",
+      "fleurs_id": 1566,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "punjabi-1587",
+      "language_id": "punjabi",
+      "fleurs_id": 1587,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "punjabi-1608",
+      "language_id": "punjabi",
+      "fleurs_id": 1608,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "punjabi-1632",
+      "language_id": "punjabi",
+      "fleurs_id": 1632,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "punjabi-1635",
+      "language_id": "punjabi",
+      "fleurs_id": 1635,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "punjabi-1651",
+      "language_id": "punjabi",
+      "fleurs_id": 1651,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "urdu-1533",
+      "language_id": "urdu",
+      "fleurs_id": 1533,
+      "auto": {
+        "status": "completed",
+        "transcript_raw": "بہت سے مشترکہ فارمیٹس مثال کے طور پر APS فیملی آف فارمیٹس اس تناسبے نظر کے برابر یا تقریباً قریب تر ہیں۔",
+        "cer": 0.10588235294117647,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "completed",
+        "transcript_raw": "بہت سے مشترکہ فارمیٹس مثال کے طور پر APS فیملی آف فارمیٹس اس تناسب نظر کے برابر یا تقریباً قریب تر ہیں۔",
+        "cer": 0.10588235294117647,
+        "wer": null,
+        "request_id": null,
+        "language_hint": "urd"
+      },
+      "paired_delta_cer": 0.0,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": "2026-11-08T00:11:42.948895+00:00"
+      }
+    },
+    {
+      "sample_id": "urdu-1537",
+      "language_id": "urdu",
+      "fleurs_id": 1537,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "urdu-1566",
+      "language_id": "urdu",
+      "fleurs_id": 1566,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "urdu-1587",
+      "language_id": "urdu",
+      "fleurs_id": 1587,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "urdu-1608",
+      "language_id": "urdu",
+      "fleurs_id": 1608,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "urdu-1632",
+      "language_id": "urdu",
+      "fleurs_id": 1632,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "urdu-1635",
+      "language_id": "urdu",
+      "fleurs_id": 1635,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    },
+    {
+      "sample_id": "urdu-1651",
+      "language_id": "urdu",
+      "fleurs_id": 1651,
+      "auto": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "guided": {
+        "status": "not_tested",
+        "transcript_raw": null,
+        "cer": null,
+        "wer": null,
+        "request_id": null,
+        "language_hint": null
+      },
+      "paired_delta_cer": null,
+      "provenance": {
+        "source_dataset": "FLEURS",
+        "evaluated_at_utc": null
+      }
+    }
+  ],
+  "summaries": [
+    {
+      "language_id": "arabic",
+      "n_selected": 8,
+      "n_auto_completed": 0,
+      "n_guided_completed": 0,
+      "n_paired": 0,
+      "mean_auto_cer": null,
+      "mean_guided_cer": null,
+      "mean_delta_cer": null,
+      "improved_count": 0,
+      "worsened_count": 0,
+      "unchanged_count": 0,
+      "unpaired_reasons": {
+        "not_tested": 8
+      }
+    },
+    {
+      "language_id": "cantonese",
+      "n_selected": 8,
+      "n_auto_completed": 0,
+      "n_guided_completed": 1,
+      "n_paired": 0,
+      "mean_auto_cer": null,
+      "mean_guided_cer": 0.1,
+      "mean_delta_cer": null,
+      "improved_count": 0,
+      "worsened_count": 0,
+      "unchanged_count": 0,
+      "unpaired_reasons": {
+        "incompatible_output": 1,
+        "not_tested": 7
+      }
+    },
+    {
+      "language_id": "english",
+      "n_selected": 8,
+      "n_auto_completed": 0,
+      "n_guided_completed": 0,
+      "n_paired": 0,
+      "mean_auto_cer": null,
+      "mean_guided_cer": null,
+      "mean_delta_cer": null,
+      "improved_count": 0,
+      "worsened_count": 0,
+      "unchanged_count": 0,
+      "unpaired_reasons": {
+        "not_tested": 8
+      }
+    },
+    {
+      "language_id": "mandarin_chinese",
+      "n_selected": 8,
+      "n_auto_completed": 0,
+      "n_guided_completed": 0,
+      "n_paired": 0,
+      "mean_auto_cer": null,
+      "mean_guided_cer": null,
+      "mean_delta_cer": null,
+      "improved_count": 0,
+      "worsened_count": 0,
+      "unchanged_count": 0,
+      "unpaired_reasons": {
+        "not_tested": 8
+      }
+    },
+    {
+      "language_id": "punjabi",
+      "n_selected": 8,
+      "n_auto_completed": 0,
+      "n_guided_completed": 0,
+      "n_paired": 0,
+      "mean_auto_cer": null,
+      "mean_guided_cer": null,
+      "mean_delta_cer": null,
+      "improved_count": 0,
+      "worsened_count": 0,
+      "unchanged_count": 0,
+      "unpaired_reasons": {
+        "not_tested": 8
+      }
+    },
+    {
+      "language_id": "urdu",
+      "n_selected": 8,
+      "n_auto_completed": 1,
+      "n_guided_completed": 1,
+      "n_paired": 1,
+      "mean_auto_cer": 0.10588235294117647,
+      "mean_guided_cer": 0.10588235294117647,
+      "mean_delta_cer": 0.0,
+      "improved_count": 0,
+      "worsened_count": 0,
+      "unchanged_count": 1,
+      "unpaired_reasons": {
+        "not_tested": 7
+      }
+    }
+  ]
+}

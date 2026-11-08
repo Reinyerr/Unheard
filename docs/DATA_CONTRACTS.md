@@ -127,13 +127,63 @@ In populated records: `paired_delta_cer = auto.cer - guided.cer` **only** when b
 
 `Suggested_ward_ids` is populated from *verified* ward-specific counts and/or shares. Recommendations should name the selection criterion (most speakers vs highest concentration), not invent an overall risk score.
 
-## Proposed local API endpoints (contracts, not implemented)
+## Local recovery API — T-014 (implemented, In review)
 
-- `GET /health`: `{"status":"ok", "mode":"local"}`.
-- `GET /api/recovery/capabilities`: supported selections and TTS configuration from verified backend setup, not guesses.
-- `POST /api/recovery/start`: `{ "language_id": "urdu", "sample_id": "urdu-1511" }` → `{ "session_id": "...", "state":"confirm|retry_or_refer", "transcript": "...|null", "source":"live|saved", "attempts":1, "max_attempts":2, "prompt_audio_url": "...|null" }`.
-- `POST /api/recovery/decision`: `{ "session_id":"...", "decision":"correct|incorrect" }` → updated state, retry availability and referral text. For retry state, frontend must select a **different** licensed/known sample ID via another controlled endpoint or a new start request; exact endpoint to be finalized in T-014.
-- Failure: `{ "error": {"code":"unsupported_language|api_unavailable|invalid_sample|invalid_transition|quota_exhausted", "message":"...", "retryable":false} }` with proper HTTP status. All backend data types validated by Pydantic and limited to a dataset allowlist.
+Static research v1 fields/enums are unchanged. API examples were previously
+proposals; T-014 now defines concrete backend schemas in
+`backend/app/schemas/recovery.py`. Frontend integration remains a separate ticket.
+
+- `GET /health`: unchanged `{"status":"ok","mode":"local"}`.
+- `GET /api/recovery/capabilities`: actual frozen language/sample IDs, per-mode
+  usable saved sample IDs, guided-verification flags, selected_sample_count,
+  live_configured (key presence, not connectivity/credit proof), TTS unavailable,
+  simulation notice and session limits. No keys, raw paths or provider metadata.
+- `POST /api/recovery/start`: required language_id/sample_id; optional source
+  (`saved` default or explicit `live`), mode (`auto` default or `guided`), and
+  allow_saved_fallback (true default). Creates a new simulation/session and
+  consumes its first attempt. Inputs are curated IDs, never uploads/paths.
+- `POST /api/recovery/decision`: session_id and decision correct/incorrect/refer.
+  Correct/incorrect require confirm. Correct accepts only explicit confirmation;
+  first rejection allows retry_or_refer, rejection after attempt 2 gives referral.
+  Refer is allowed from confirm/retry_or_refer. Accepted/referral are terminal.
+- **Concrete retry addition:** `POST /api/recovery/retry` accepts session_id and
+  a different unused sample_id in the same language. It preserves attempts and
+  mode; optional source/allow_saved_fallback explicitly change those choices.
+  Only retry_or_refer permits retry, with at most two total attempts. A new start
+  creates a separate simulation; it is not an in-session retry/reset.
+- `GET /api/recovery/sessions/{session_id}` reads the current session, including
+  transcribing while a provider request is in progress.
+
+Successful responses contain session_id, state, language_id, sample_id, mode,
+transcript (usable text or null), source (actual live/saved or null when none),
+requested_source, transcription_status (existing experiment status), attempts,
+max_attempts=2, retry_available/retry_sample_ids, confirmation_prompt,
+referral_message, simulation_notice and fallback_reason. prompt_audio_url is
+null and tts_status is unavailable; T-015 owns TTS. Retry IDs are unused curated
+clips, not a guarantee that saved responses exist; inspect capabilities per mode.
+
+Saved responses require frozen identity/audio/options and retained real raw
+provider evidence; source is always saved. Live fallback uses the identical
+sample/mode only and is explicitly labelled saved with a reason. Incompatible,
+flagged or empty text cannot enter confirm. Valid empty provider recognition is
+not a technical error or usable confirmation; wrong-script output is incompatible.
+Missing configuration/unverified guidance remains not_tested with no metrics.
+No transcript/reference, demographic, experiment-metric or speech metadata is
+returned beyond the selected transcript/IDs and requested mode/provenance label.
+
+Error shape: `{"error":{"code":"...","message":"...","retryable":false}}`.
+After a consumed failed attempt, also includes session with retry/referral state,
+so the user is not trapped. Invalid IDs/payloads return 400/422, unknown/expired
+sessions 404, invalid transitions/repeated clips 409, payload >4096 bytes 413,
+non-JSON/compressed bodies 415, unavailable data/provider/saved result or capacity
+503. Explicit provider guidance rejection returns 422 unsupported_language;
+unverified guidance is a distinct 422 guidance_not_verified. Failed attempts
+consume the session's two-attempt budget; invalid request/sample selection does
+not. Error messages never include secrets, provider bodies or local paths.
+
+Sessions are bounded in-memory per process (128 sessions, 1800-second idle TTL),
+reset on restart, and require one localhost Uvicorn worker. No persistence/auth,
+mic capture, intent routing, agent or real municipal contact is introduced.
 
 ## Contract safeguards
 
@@ -142,3 +192,30 @@ In populated records: `paired_delta_cer = auto.cer - guided.cer` **only** when b
 3. Changing global selected language clears stale per-sample transcripts/results; changing ward only changes geographic metrics, not the experimental sample membership.
 4. `schema_version` changed on incompatible modifications. Keep UI fixture in sync before merging.
 5. Keep references to original file names, source paths and model request settings. Raw API JSON stored locally and redacted before public sharing.
+
+
+## T-010 export policy clarification (no field/schema change)
+
+The experiment exporter now populates the existing schema from actual saved
+provider outcomes. n_selected includes all eight frozen samples per language;
+untested modes remain not_tested with null metrics. Summary completion counts
+refer to comparable scored outcomes, excluding incompatible_output even when
+HTTP succeeded. Unpaired reasons count once per clip/status and can overlap.
+Raw/reference strings remain in samples/local metric details; review flags and
+normalization/tokenization/interpretation policies use existing string-valued
+source metadata. WER is currently English whitespace tokens only; other pilot
+languages have null WER pending validated tokenization. See DECISIONS.md and
+scripts/README.md for the explicit code-point CER and script-review policies.
+
+
+## T-009 local runner integration (public v1 fields unchanged)
+
+The ignored experiment_attempts.json report reuses the T-008 terminal-attempt
+shape accepted by T-010, bound to selection_sha256/model_id/api_version. attempts
+contains at most one observed terminal result per sample/mode; mode_states covers
+all 96 planned modes with explicit not_tested/missing reasons. Local attempt
+extensions include provider_status, review_flags, origin, cache_key and response
+hash/path. T-010 preserves those review flags in existing source metadata. Raw
+responses, retry history, locks/in-flight journals and evidence stay local.
+Cache completion means a retained provider result, not a comparable CER success.
+No frontend types, statuses or schema version were changed.

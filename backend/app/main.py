@@ -1,4 +1,4 @@
-"""Local health service. No dataset or ElevenLabs access at bootstrap."""
+"""Local health and confirmation/retry/referral API; no provider calls at bootstrap."""
 
 import os
 from pathlib import Path
@@ -9,6 +9,9 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+
+from app.routes.recovery import router as recovery_router
+from app.services.recovery_state import RecoveryService
 
 load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 
@@ -42,18 +45,20 @@ class HealthResponse(BaseModel):
 
 def create_app() -> FastAPI:
     app = FastAPI(title="UNHEARD", version="0.1.0")
+    app.state.recovery_service = RecoveryService()
     app.add_middleware(
         CORSMiddleware,
         allow_origins=cors_origins(),
         allow_credentials=False,
-        allow_methods=["GET"],
-        allow_headers=["Accept"],
+        allow_methods=["GET", "POST"],
+        allow_headers=["Accept", "Content-Type"],
     )
 
     @app.get("/health", response_model=HealthResponse)
     def health() -> HealthResponse:
         return HealthResponse()
 
+    app.include_router(recovery_router)
     return app
 
 

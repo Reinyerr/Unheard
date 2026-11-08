@@ -229,3 +229,154 @@ incomplete; exit 2 means argument error. Missing key is a configuration error,
 not a failed recognition or zero CER. This implementation's observed execution
 was blocked by missing key, with no network/provider requests. No tests were
 written/run. Finish live verification before T-010, then T-009.
+
+
+## Offline metrics and paired summaries (T-010)
+
+From the repository root with the existing backend Python dependencies:
+
+```sh
+python3 scripts/calculate_metrics.py
+```
+
+Default input is ignored `data/local/preflight_log.json`, using recorded T-008
+responses; no key, network, new dependencies or API calls. Explicit later input:
+
+```sh
+python3 scripts/calculate_metrics.py --input data/processed/experiment_attempts.json
+```
+
+The future T-009 runner must supply a report containing selection_sha256,
+model_id, api_version and an attempts array with one final entry per sample/mode,
+using the existing adapter's evidence fields plus raw_response_path. Completed
+outcomes need retained JSON response evidence under data/local, matching frozen
+sample/audio/model identities, HTTP success and raw transcript. Full retry logs
+must remain separate; duplicate terminal entries are rejected. Unknown samples,
+changed selection/model/settings and broken raw evidence fail explicitly.
+Paired request options may differ only in language_code. No runner is added here.
+
+Outputs: `frontend/public/data/experiments.v1.json` and ignored
+`data/processed/metric_details.json`. All 48 samples remain present even when
+unattempted; missing outcomes are not_tested with null metrics. Existing full
+five-artifact bundle validation runs as a production guard before public output
+replacement. This is not a test-suite run or frontend build. Each output is
+individually atomic; rerun after an output-write failure. Exit codes: 0 success,
+1 processing/validation failure, 2 CLI misuse. Input failures preserve old exports,
+which remain historical rather than evidence of a successful new run.
+
+Policy `nfc_codepoints_punctuation_space_english_casefold_v1`:
+
+- NFC preserves scripts/combining marks; punctuation becomes spaces, whitespace
+  collapses, and only English is casefolded. No diacritic removal, transliteration,
+  translation or simplified/traditional conversion.
+- CER uses Unicode code points after whitespace removal; edit distance uses unit
+  insertion/deletion/substitution costs. Divide by reference length; do not cap
+  ratios. Valid empty successful text has full-deletion CER; empty normalized
+  references are incompatible, never scored as zero.
+- WER uses English whitespace tokens only. Other five languages return null until
+  tokenization is separately validated. This conservative MVP policy is explicit.
+- Expected script must form at least half of reference/output letters, allowing
+  minority loanwords/acronyms. Unexpected script/detected-language mismatch and
+  saved manual exclusions yield incompatible_output and null CER/WER. Automatic
+  same-script translation and Chinese variant detection are not provided; retain
+  manual review. Recorded Cantonese auto's simplified/traditional mismatch is
+  excluded without conversion. Raw outputs remain untouched.
+- Delta is autoCER minus guidedCER only for comparable modes of the same clip.
+  Positive means lower guided CER. Per-language means are unweighted clip means;
+  mean delta uses paired clips only. Completion counts mean scored comparable
+  outcomes, not all HTTP successes. Ties use tolerance 1e-12. Unpaired reasons
+  count once per clip/status, with overlap across reasons explicitly allowed.
+
+Public source metadata contains input/selection/raw-response/script hashes,
+normalization/tokenization policy, flags, counts and interpretation limits. Local
+metric details retain raw/reference/normalized strings, edits and evidence paths.
+Raw reference strings are also preserved in the sample artifact. Never infer
+ward-level performance or population effects; the preflight has only one paired
+Urdu clip, not a completed n=8 pilot. No confidence intervals/significance claims.
+
+Manual review: inspect Urdu raw/reference/normalized strings and edit counts,
+independently recompute its ratios/delta, inspect Cantonese auto flags/null metrics,
+and confirm 48 records/6 summaries retain all selected and unattempted modes.
+No automated tests were written/run. The pinned runtime, frontend build and full
+Urdu/cached demo remain unverified. T-009 is next; no later ticket was implemented.
+
+
+## Cached paired pilot runner (T-009)
+
+From the root, using existing backend Python dependencies and the real local
+manifest, audio and preflight evidence:
+
+```sh
+python3 scripts/run_experiments.py
+```
+
+Default is offline: import the latest real T-008 report, verify raw evidence,
+cache terminal results, resolve all 96 frozen modes and export through T-010.
+No key/network is needed. Existing completed results and review exclusions are
+reused. Output is local data/processed/experiment_attempts.json plus per-run
+snapshots, local cache/history/raw files and the existing public experiments JSON.
+There are 48 selected clips, not 48 completed experiments; inspect actual counts.
+
+For new paid requests, export the server key securely, then explicitly run:
+
+```sh
+python3 scripts/run_experiments.py --live --max-requests 12
+```
+
+The cap includes retries; default cap is 96 new POST attempts per invocation.
+--languages urdu cantonese restricts sends to those languages without changing
+any selected IDs. Each pending mode allows at most three sends by default
+(--max-attempts 1/2/3). Only transient failures retry with backoff/Retry-After.
+Known successful, incompatible and unsupported results are never re-purchased.
+A previous retryable technical failure requires --retry-failed; permanent errors
+remain explicit. Provider timeouts have unknown billing and a retry can bill
+again; no provider idempotency claim is made. Retry-After over 30 seconds pauses
+for later resume; credential/permission/quota and exhausted rate errors stop sends.
+
+Guided requests require real accepted language/model/hint evidence from retained
+preflight/cache records, not a dataset code or documentation list. Urdu/Cantonese
+currently have evidence. To complete the other guidance probes with the existing
+T-008 tool, explicitly run:
+
+```sh
+python3 scripts/preflight_scribe.py --languages english arabic punjabi mandarin_chinese
+python3 scripts/run_experiments.py
+```
+
+The first command makes up to eight new POSTs; the second imports them without
+new calls. Earlier cached Urdu/Cantonese results remain. Optional --preflight
+accepts a local report path and may be repeated to import multiple evidence files.
+Inputs must remain under data/local or data/processed. Changed model/config/audio
+or corrupt evidence fails explicitly; no guessed transcript or support state.
+Unknown/rejected guidance is skipped, remains visible, and never falls back to auto.
+
+Cache keys hash frozen audio bytes, endpoint/API/model and canonical form options.
+Both adapter and runner use the same request-options function. No new provider
+model or hidden settings are introduced. Raw redacted provider responses and
+immutable attempt envelopes live under data/local/raw_scribe_responses; checksum
+histories under data/local/experiment_cache. Cache import retains provider_status
+separately from script/comparability exclusions. Cached review_flags flow to T-010.
+
+Before every send an in-flight journal is persisted. Interrupted calls are not
+automatically replayed: inspect the cache, corresponding raw/provider evidence,
+and data/local/experiment_run.lock. Confirm no runner is active before removing
+a stale lock. Resolve any uncertain request manually; do not blindly clear its
+journal. No automatic force-reset option is supplied. Reports with unresolved
+in-flight requests do not replace public metrics. The local lock protects runner
+concurrency; it cannot guarantee remote exactly-once billing.
+
+Terminal report: one attempts entry per observed sample/mode, 96 mode_states,
+guidance evidence, per-language selected/attempted/provider-completed/comparable-
+completed/failed/not_tested counts, unresolved journals, config, events and hashes.
+Full retry history is retained outside the terminal export. Valid partial output
+is usable by calculate_metrics.py; missing/unsupported/errors never receive zero
+metrics. Interrupted/blocked input preserves previous public exports. Outputs
+are individually atomic, not a transaction across all files. Completed run
+snapshots stop changing; latest report is replaced on later invocations.
+
+Exit 0 covers successful offline processing, partial evidence or a planned/live
+pause (inspect status/stop_reason); it does not mean 96 requests succeeded. Exit 1
+means blocked/interrupted/invalid evidence or export failure; 2 is CLI misuse.
+Default production processing observed four real cached modes, 92 not_tested,
+zero new POSTs. No tests, paid full-pilot run, error-path rehearsal or frontend
+build were performed. T-009 is In review; T-014 is the next Dev 1 implementation.

@@ -1,6 +1,6 @@
 # T-008 — Validate real Scribe requests, language hints and credits
 
-**Status:** Blocked — adapter/preflight implemented; live verification requires a server API key.
+**Status:** In review — live Urdu/Cantonese preflight recorded; automated tests and wider validation remain pending.
 **Priority:** P0  
 **Owner:** Dev 1  
 **Depends on:** `T-001`, `T-003`, `T-007`  
@@ -137,3 +137,36 @@ T-010 is next after that evidence exists; T-009 remains blocked by live T-008
 verification and missing T-010. No later ticket was implemented and T-008 is not
 marked Done. Urdu/cached demo regression and automated error-path tests remain
 unperformed.
+
+
+## Live preflight follow-up — 2026-11-07 (America/Toronto)
+
+User supplied a key for this preflight. It was passed through hidden terminal
+input to the process environment, not saved in repository files. Initial restricted
+network execution produced only transport errors; the authorized network-enabled
+run then exited 0 with four HTTP 200 responses. No automated tests were run.
+
+Live run ID: `cf7414d01a52458cb5a7ba56f1596bb0`.
+UTC timestamps are 2026-11-08 00:11, corresponding to November 7 locally.
+Model alias `scribe_v2`; samples `urdu-1533` and `cantonese-1533`, each auto/guided.
+Urdu returned nonempty Urdu text with detected `urd` in both modes. Guided `urd`
+and `yue` were accepted by the API. Cantonese auto detected `zho` and emitted
+simplified Chinese; guided detected `yue` and emitted traditional Chinese.
+Reference text uses traditional characters. The local report's `response_review`
+flags automatic Cantonese as incompatible for metric comparison pending T-010
+script review. HTTP completion remains distinct from comparability; no CER/WER
+or improvement claim was generated. No request-ID headers were observed; nulls
+are retained. All four other pilot languages remain not_tested for guidance.
+
+Before/after subscription GETs returned HTTP 401, despite successful transcription
+POSTs. Credit allowance/budget remains unverified, not zero. Local saved raw
+responses and both latest/per-run reports retain this evidence. Do not publish
+the local logs. The shared-in-chat key should be rotated after use; no key was
+persisted in .env, source, docs or output.
+
+T-008 is now In review, not Done: timeout/rate-limit mocks and acceptance tests
+were skipped by instruction, full decoding/listening and independent human
+review remain outstanding. T-010 now has real preflight evidence for implementation,
+including the explicit script-variant caveat. T-009 still requires T-010 and
+verified guidance for whichever additional languages it attempts. No later ticket
+was implemented.
