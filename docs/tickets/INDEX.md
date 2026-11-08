@@ -1,5 +1,32 @@
 # Ticket index — source of truth for implementation
 
+**Latest T-020 implementation handoff (2026-11-07):** Dev 2 accessibility and
+demo polish implemented: act questions/limits, explicit Urdu walkthrough entry,
+keyboard jump targets/table regions, shared motion/focus/reading styles and
+supplied recovery reference text. FR-A2 all-language initial/reset selection,
+data/contracts and recovery rules preserved. Timing/manual-review instructions
+are in [DEMO_RUNBOOK.md](../DEMO_RUNBOOK.md). No automated tests, build or manual
+browser/audio/accessibility checks ran. **In review**, not Done; T-015 approved
+audio and two-person/reviewer gates remain open. No further unimplemented ticket
+in T-001–T-020 is ready; proceed only with pending reviews/verification when authorized.
+
+**Latest T-019 implementation handoff (2026-11-07):** read-only package audit,
+48-clip attribution ledger and source/privacy/package notes implemented. No
+automated tests, build or new audit command run by user instruction. **In review**
+pending manual audit and reviewer sign-off; applicable City terms and provider
+account/output rights remain unresolved. Runtime/contracts unchanged; existing
+T-018 work preserved. T-020 is the next Developer 2 implementation candidate,
+with T-015 audio/review gates still open; not started here.
+
+**Latest T-018 continuation (2026-11-07):** continued committed WIP `b7759d3`;
+70 Python and 13 frontend tests, build/source checks, 10 online and 10 actually
+backend-stopped browser cases passed. Filled [demo runbook](../DEMO_RUNBOOK.md)
+and [observed evidence](../test-evidence/local-smoke.md). T-018 is **In review**:
+both developers' independent rehearsal and reviewer sign-off remain pending;
+approved TTS and a second usable Urdu result remain unavailable. No new provider
+requests or public-contract changes; T-019/T-020 not implemented. Historical
+dependency review gates remain as recorded below.
+
 **Latest T-017 handoff (2026-11-07):** implementation dependencies T-001–T-016
 are merged per the user. T-017 now has 69 passing Python tests, 13 passing frontend
 tests, 2 offline and 2 online browser smoke cases, passing build/type/export/source
@@ -29,9 +56,9 @@ T-018/T-019/T-020 were not implemented. Earlier notes below are historical.
 | [T-015](T-015-spoken-recovery-ui-and-tts.md) | Build the demo confirmation flow and spoken prompts | P0 | Dev 2 (UI) + Dev 1 (TTS) | T-012, T-013, T-014 | In review — six voices configured; account/audio verification blocked |
 | [T-016](T-016-priority-recommendations-ui.md) | Implement research-backed language/ward recommendations | P0 | Dev 2 | T-005, T-011, T-012 | In review — implemented; acceptance incomplete |
 | [T-017](T-017-ci-and-regression-tests.md) | Automate high-risk validation and unit checks | P0 | Shared | T-004, T-005, T-010, T-011, T-012, T-014 | In review — local checks pass; remote CI/reviewer gate pending |
-| [T-018](T-018-integrated-local-demo-and-outage.md) | Rehearse full four-act localhost and offline scenarios | P0 | Shared | T-011, T-013, T-015, T-016, T-017 | TODO |
-| [T-019](T-019-attribution-privacy-and-package-audit.md) | Audit licenses, secrets and publishable assets | P0 | Shared | T-002, T-007, T-013, T-015 | TODO |
-| [T-020](T-020-ui-accessibility-and-demo-polish.md) | Finish approachable, accessible visual storytelling | P1 | Dev 2 | T-011, T-013, T-015, T-016 | TODO |
+| [T-018](T-018-integrated-local-demo-and-outage.md) | Rehearse full four-act localhost and offline scenarios | P0 | Shared | T-011, T-013, T-015, T-016, T-017 | In review — online/outage checks pass; independent human rehearsal pending |
+| [T-019](T-019-attribution-privacy-and-package-audit.md) | Audit licenses, secrets and publishable assets | P0 | Shared | T-002, T-007, T-013, T-015 | In review — implementation only; manual audit and rights/sign-off pending |
+| [T-020](T-020-ui-accessibility-and-demo-polish.md) | Finish approachable, accessible visual storytelling | P1 | Dev 2 | T-011, T-013, T-015, T-016 | In review — implemented; manual accessibility and two-person rehearsal pending |
 
 ## Status convention
 

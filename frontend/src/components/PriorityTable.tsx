@@ -4,7 +4,7 @@ import { formatCount } from '../features/map/metrics';
 export default function PriorityTable({ data, languages, selected, onSelect }: {
   data: Recommendations; languages: Languages; selected: LanguageId | 'all'; onSelect: (id: string) => void;
 }) {
-  return <div className="priority-table-scroll"><table className="priority-table">
+  return <div className="priority-table-scroll" role="region" tabIndex={0} aria-label="Scrollable language evaluation priorities"><table className="priority-table">
     <caption>Language evaluation priorities · missing supplied task audio first, then home-language count</caption>
     <thead><tr><th scope="col">Priority</th><th scope="col">Language</th><th scope="col">Supplied request coverage</th><th scope="col">2021 city home speakers</th></tr></thead>
     <tbody>{[...data.items].sort((a, b) => a.rank - b.rank).map(item => <tr key={item.language_id}>

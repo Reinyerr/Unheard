@@ -1,6 +1,6 @@
 # T-019 — Audit licenses, secrets and publishable assets
 
-**Status:** TODO (not implemented)  
+**Status:** In review — implementation only; manual audit execution, rights review and sign-off pending.
 **Priority:** P0  
 **Owner:** Shared  
 **Depends on:** `T-002`, `T-007`, `T-013`, `T-015`  
@@ -61,3 +61,44 @@ for path in staged_paths:
 - [ ] `INDEX.md` status changed only after reviewer verifies it; next dependency unblocked.
 
 **Evidence to record:** local command, date, short result/log, relevant commit, any contract amendment, demonstration steps and blocked tickets.
+
+## Implementation handoff — 2026-11-07
+
+Continued `feature/final-integration` at `b7759d3`, preserving uncommitted T-018
+work. Dependencies T-002/T-007/T-013/T-015 exist in code and artifacts; T-015's
+approved audio and historical reviewer gates remain incomplete. No prerequisites
+were replaced with invented audio, provider results or licence approvals.
+
+Implemented `scripts/audit_publishable_assets.py`, [attributions](../attributions.md)
+with all 48 FLEURS paths, final package-scope notes in DATA_SOURCES.md and a
+local report clarification in DECISIONS.md. No runtime or public contract change.
+The audit inspects index bytes, current tracked/nonignored files and public/dist
+including ignored media; flags private/bulk inputs, suspected credentials,
+selected personal fields, unknown assets, hash mismatches and unapproved TTS.
+It reuses the existing frozen selection/TTS approval validators. Public mode
+blocks unresolved applicable City terms and provider-account output rights.
+
+No automated tests were written/run, and no build or new audit command ran,
+per the implementation-only request. Read-only Git inventory observed 136
+indexed paths with zero indexed ZIP/FLAC/MP3/WAV files before these changes;
+that count is not a secret scan or acceptance pass. No new audio or API requests.
+Official ElevenLabs terms/billing guidance was consulted; account/voice rights
+were not inferred. Existing source licence records were retained, not reapproved.
+
+Manual commands from repository root (not run):
+
+```sh
+backend/.venv/bin/python scripts/audit_publishable_assets.py --target local
+backend/.venv/bin/python scripts/audit_publishable_assets.py --target public
+git diff --cached --name-status
+```
+
+See attributions.md for preparation, build/restoration commands, exit codes and
+scope limits. Review current and historic secrets separately; owner rotation of
+the earlier exposed key-shaped example is unverified. Public distribution,
+municipal terms, generation-time account/output permissions and any future TTS
+listening/rights review remain blockers. Acceptance boxes intentionally remain
+open; implementation is not evidence of a passed audit.
+
+Next implementation candidate is T-020 for Developer 2: its UI prerequisites
+exist but T-015 voice/reviewer gates remain. Do not start it under this ticket.

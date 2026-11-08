@@ -4,16 +4,17 @@ import SpeechLab from './features/speech-lab/SpeechLab';
 import Recommendations from './features/recommendations/Recommendations';
 import LanguageSelector from './components/LanguageSelector';
 import Recovery from './features/recovery/Recovery';
-import { SelectionProvider } from './state/selection';
+import AccessibilityNotice from './components/AccessibilityNotice';
+import { SelectionProvider, useSelection } from './state/selection';
 import { ResearchProvider } from './data/ResearchData';
 
 type Connection = 'checking' | 'connected' | 'unavailable';
 export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000').replace(/\/$/, '');
 const modules = [
-  { id: 'discover', act: 'Discover', title: 'Invisible City', description: 'Explore where task-oriented language evaluation is missing, with verified census context.' },
-  { id: 'investigate', act: 'Investigate', title: 'Hear What AI Hears', description: 'Compare authentic recordings and measured transcription outcomes, with their limitations.' },
-  { id: 'demonstrate', act: 'Demonstrate', title: 'A Second Chance', description: 'Explore a confirmation-first interaction, with one retry and a human-assistance referral option.' },
-  { id: 'recommend', act: 'Recommend', title: 'Where Should We Test Next?', description: 'Identify priorities for future evaluation and recruitment from verified evidence.' },
+  { id: 'discover', act: 'Discover', title: 'Invisible City', question: 'Which language communities lack supplied task-request evaluation audio?', description: 'Explore missing evaluation coverage alongside verified census context.', limit: 'Home language does not establish English proficiency or recognition performance. Ward shares use the census language base.' },
+  { id: 'investigate', act: 'Investigate', title: 'Hear What AI Hears', question: 'How do automatic and guided transcription compare on the same recording?', description: 'Compare authentic recordings and measured transcription outcomes.', limit: 'Eight selected clips per pilot language; scored results may be incomplete. FLEURS speakers have no identified Mississauga ward residency.' },
+  { id: 'demonstrate', act: 'Demonstrate', title: 'A Second Chance', question: 'What happens when a user reviews the transcript before accepting it?', description: 'Explore confirmation, one retry and a human-assistance referral option.', limit: 'Judge confirmation is simulated. Referral contacts nobody. Unavailable or unapproved voice prompts remain text-only.' },
+  { id: 'recommend', act: 'Recommend', title: 'Where Should We Test Next?', question: 'Where could future language evaluation and recruitment focus?', description: 'Identify priorities from coverage gaps and verified census context.', limit: 'Coverage and population determine priorities. Pilot error rates remain separate; there is no ward-level failure forecast.' },
 ];
 
 export default function App() {
@@ -21,6 +22,7 @@ export default function App() {
 }
 
 function AppContent() {
+  const { selectLanguage } = useSelection();
   const [connection, setConnection] = useState<Connection>('checking');
   const [attempt, setAttempt] = useState(0);
 
@@ -72,19 +74,30 @@ function AppContent() {
             <button className="mt-4 rounded-lg border border-emerald-900 px-4 py-2 text-sm font-semibold disabled:opacity-50" disabled={connection === 'checking'} onClick={() => setAttempt(value => value + 1)}>Retry connection</button>
           </aside>
         </section>
+        <div className="demo-start">
+          <p>Start with the Urdu walkthrough, or choose a language to explore all four acts.</p>
+          <a className="journey-link demo-start-link" href="#discover" onClick={() => selectLanguage('urdu')}>Start Urdu walkthrough</a>
+        </div>
+        <AccessibilityNotice />
         <LanguageSelector />
         <nav aria-label="Research journey" className="mb-8 flex flex-wrap gap-3">
           {modules.map((module, index) => <a className="journey-link" key={module.id} href={`#${module.id}`}><span className="mr-2 text-stone-500">0{index + 1}</span>{' '}{module.act}</a>)}
         </nav>
         <div className="grid gap-5 md:grid-cols-2">
-          {modules.map((module, index) => <section key={module.id} id={module.id} className="module-card scroll-mt-6 min-w-0 md:col-span-2" aria-labelledby={`${module.id}-title`}>
+          {modules.map((module, index) => <section key={module.id} id={module.id} tabIndex={-1} className="module-card scroll-mt-6 min-w-0 md:col-span-2" aria-labelledby={`${module.id}-title`}>
             <div className="flex items-center justify-between gap-4"><p className="eyebrow">0{index + 1} / {module.act}</p><span className="rounded-full bg-stone-100 px-3 py-1 text-xs text-stone-600">{module.id === 'discover' ? '2021 census' : module.id === 'investigate' ? 'Saved evidence' : module.id === 'recommend' ? 'Evaluation priorities' : 'Simulation'}</span></div>
             <h2 id={`${module.id}-title`} className="mt-6 text-2xl font-semibold tracking-tight">{module.title}</h2>
+            <p className="act-question">{module.question}</p>
             <p className="mt-3 leading-relaxed text-stone-600">{module.description}</p>
+            <p className="act-limit">{module.limit}</p>
             {module.id === 'discover' ? <WardExplorer /> : null}
             {module.id === 'investigate' ? <SpeechLab /> : null}
             {module.id === 'recommend' ? <Recommendations /> : null}
             {module.id === 'demonstrate' ? <Recovery /> : null}
+            <nav className="act-navigation" aria-label={`${module.act} navigation`}>
+              <a href="#language-selection">Change language</a>
+              {index < modules.length - 1 ? <a href={`#${modules[index + 1].id}`}>Next: {modules[index + 1].act}</a> : <a href="#discover">Return to Discover</a>}
+            </nav>
           </section>)}
         </div>
       </main>

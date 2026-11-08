@@ -144,18 +144,27 @@ test('real backend missing evidence or disconnected backend offers an explicit b
     expect(capabilities.selected_sample_count).toBe(48);
     expect(capabilities.live_configured).toBe(false); // No billed request in rehearsal.
     expect(capabilities.tts_status).toBe('unavailable');
-    expect(capabilities.languages.find((row: { language_id: string }) => row.language_id === 'urdu').saved_sample_ids_by_mode.auto).toEqual([]);
+    const savedIds: string[] = capabilities.languages.find((row: { language_id: string }) => row.language_id === 'urdu').saved_sample_ids_by_mode.auto;
     await recovery.getByLabel('Prerecorded sample').selectOption('urdu-1533');
     await recovery.getByRole('button', { name: 'Start saved simulation' }).click();
+    // Local raw evidence is intentionally absent from Git. Both a restored
+    // developer workspace and a clone without it must remain operable.
+    if (savedIds.includes('urdu-1533')) {
+      await expect(recovery.getByText('State: confirm', { exact: true })).toBeVisible();
+      await recovery.getByRole('button', { name: /\(Incorrect\)/ }).click();
+    } else {
+      await expect(recovery.getByRole('alert')).toContainText('No verified saved result');
+    }
     await expect(recovery.getByText('State: retry or refer', { exact: true })).toBeVisible();
-    await expect(recovery.getByRole('alert')).toContainText('No verified saved result');
+    // Choose a known recording without saved evidence; never invent a second result.
+    expect(savedIds).not.toContain('urdu-1537');
     await recovery.getByLabel('Different recording for the single simulated retry').selectOption('urdu-1537');
     await recovery.getByRole('button', { name: 'Try Different Sample' }).click();
     await expect(recovery.getByText('State: referral', { exact: true })).toBeVisible();
     await recovery.getByRole('button', { name: 'Start separate saved browser simulation' }).click();
     // Explicit live API attempt with missing credentials consumes no provider request.
     const missingKey = await request.post('http://127.0.0.1:8000/api/recovery/start', {
-      data: { language_id: 'urdu', sample_id: 'urdu-1533', source: 'live', allow_saved_fallback: true },
+      data: { language_id: 'urdu', sample_id: 'urdu-1533', source: 'live', allow_saved_fallback: false },
     });
     expect(missingKey.status()).toBe(503);
     expect((await missingKey.json()).session.transcription_status).toBe('not_tested');

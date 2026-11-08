@@ -27,7 +27,11 @@ export default function WardMap({ geometry, rows, metric, selectedWard, onSelect
     let observer: ResizeObserver | undefined;
     try {
       instance = L.map(container.current, { scrollWheelZoom: false, zoomAnimation: false,
-        fadeAnimation: false, markerZoomAnimation: false, zoomSnap: 0.25, maxZoom: 17 });
+        fadeAnimation: false, markerZoomAnimation: false, inertia: false, zoomSnap: 0.25, maxZoom: 17 });
+      // Leaflet keyboard panning animates in JavaScript, outside CSS motion rules.
+      // Keep every pan immediate, including keyboard and bounds adjustments.
+      const panBy = instance.panBy.bind(instance);
+      instance.panBy = (offset, options) => panBy(offset, { ...options, animate: false });
       map.current = instance;
       const portals: { id: number; element: HTMLElement }[] = [];
       const collection: FeatureCollection = { type: 'FeatureCollection', features: geometry.features };

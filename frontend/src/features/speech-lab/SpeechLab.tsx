@@ -74,6 +74,7 @@ export default function SpeechLab() {
   const flags = reviewFlags(evidence?.source.review_flags);
   return <div className="speech-lab">
     <p><strong>Saved research evidence · no live transcription requests</strong></p>
+    <p className="speech-note">Character error rate (CER) compares text edits with reference characters; lower is better and insertions can exceed 100%. Word error rate (WER) requires a validated tokenizer. Neither measures whether a municipal request was understood.</p>
     <p>{choices.length} selected {language.display_name} clips · {samples.samples.length} total · seed {samples.selection.seed}. Common FLEURS IDs: {samples.selection.ids.join(', ')}.</p>
     <label htmlFor="speech-sample">Recording
       <select id="speech-sample" value={sample?.sample_id ?? ''} onChange={event => selectSample(choices.find(row => row.sample_id === event.target.value) ?? null, selection.language_revision)}>
@@ -95,12 +96,15 @@ export default function SpeechLab() {
     {sample ? <section key={sample.sample_id} className="speech-record" aria-label={`Selected recording ${sample.sample_id}`}>
       <h3><bdi>{sample.sample_id}</bdi> · FLEURS ID {sample.fleurs_id}</h3>
       <AudioClip key={sample.sample_id} sample={sample} />
-      <h4>Human reference · original supplied text</h4>
+      <nav className="transcript-navigation" aria-label="Selected recording text"><a href="#speech-reference">Read reference transcript</a><a href="#speech-comparisons">Compare saved transcriptions</a></nav>
+      <h4 id="speech-reference" tabIndex={-1}>Human reference · original supplied text</h4>
       <p className="speech-transcript" dir={direction} lang={textLanguage}>{sample.raw_reference_transcript}</p>
       {sample.reference_transcript !== sample.raw_reference_transcript ? <details><summary>Supplied reference used as metric input</summary><p className="speech-transcript" dir={direction} lang={textLanguage}>{sample.reference_transcript}</p></details> : null}
       <p>Clip paired CER delta: <strong>{delta(record?.paired_delta_cer ?? null)}</strong></p>
       {record?.provenance.evaluated_at_utc ? <p className="speech-note">Saved evaluation: {record.provenance.evaluated_at_utc} · source: {record.provenance.source_dataset}</p> : null}
-      {evidence ? <div className="speech-modes"><Mode title="Automatic detection" outcome={record?.auto} sample={sample} direction={direction} language={textLanguage} flags={flags[`${sample.sample_id}:auto`] ?? []} /><Mode title="Guided language" outcome={record?.guided} sample={sample} direction={direction} language={textLanguage} flags={flags[`${sample.sample_id}:guided`] ?? []} /></div> : <p>Saved comparisons are unavailable; the reference and authentic audio remain independent.</p>}
+      <div id="speech-comparisons" tabIndex={-1} role="region" aria-label="Saved transcription comparisons">
+        {evidence ? <div className="speech-modes"><Mode title="Automatic detection" outcome={record?.auto} sample={sample} direction={direction} language={textLanguage} flags={flags[`${sample.sample_id}:auto`] ?? []} /><Mode title="Guided language" outcome={record?.guided} sample={sample} direction={direction} language={textLanguage} flags={flags[`${sample.sample_id}:guided`] ?? []} /></div> : <p>Saved comparisons are unavailable; the reference and authentic audio remain independent.</p>}
+      </div>
     </section> : <EmptyState kind="pending" title="Choose a recording">The complete frozen selection is available above; no clip is chosen based on its outcome.</EmptyState>}
     <details className="speech-sources"><summary>Speech sources, model and metric policy</summary>
       <p>{samples.source.attribution}. <a href="https://huggingface.co/datasets/google/fleurs">FLEURS source</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.</p>
