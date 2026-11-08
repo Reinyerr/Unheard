@@ -1,5 +1,13 @@
 # Ticket index — source of truth for implementation
 
+**One-recording pilot continuation (2026-11-08):** user-authorized eight real
+transcription POSTs completed for ID 1533 in English, Arabic, Punjabi and Mandarin
+(auto/guided HTTP 200). Offline export preserved Urdu's pair and Cantonese's
+automatic exclusion. Five languages now have one comparable pair each; Cantonese
+has guided-only scored evidence. Remaining 84 modes stay not_tested. See
+[execution evidence](../test-evidence/one-recording-pilot.md). This is a bounded
+demonstration, not completion/sign-off of the full pilot or any open review gate.
+
 **T-020 recovery feedback continuation (2026-11-08):** prominent per-action
 outcomes, processing feedback, focused/announced results and a terminal
 recommendations link added at the user's request. Recovery rules/contracts and

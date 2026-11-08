@@ -12,8 +12,10 @@ backend/.venv/bin/python -m uvicorn app.main:app --app-dir backend --host 127.0.
 
 One process owns bounded in-memory sessions (128 maximum; 1800-second idle TTL).
 Restart/reload loses sessions. No API key is required for real saved outcomes.
-The server reads the existing root `.env`/exported environment; keys stay server
-side. Explicit `source: live` can incur charges; no automatic network retries.
+The server reads `backend/.env`, then root `.env` for unset values. Exported
+environment variables take precedence, including an empty key used to disable
+live calls. Restart FastAPI after edits; keys stay server-side. Explicit
+`source: live` can incur charges; no automatic network retries.
 
 In another terminal, inspect the actual curated/saved choices and start Urdu:
 

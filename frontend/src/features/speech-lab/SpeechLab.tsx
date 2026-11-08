@@ -69,6 +69,8 @@ export default function SpeechLab() {
   if (resource.status === 'unavailable') return <EmptyState kind="unavailable" onRetry={reloadSamples}>{resource.message}</EmptyState>;
   if (!samples || !choices.length) return <EmptyState kind="unavailable">No vetted samples are available for this language.</EmptyState>;
   const summary = evidence?.summaries.find(row => row.language_id === selection.language_id);
+  const scoredClipCount = evidence?.records.filter(row => row.language_id === selection.language_id
+    && (row.auto.cer !== null || row.guided.cer !== null)).length ?? 0;
   const direction = selection.language_id === 'urdu' || selection.language_id === 'arabic' ? 'rtl' : 'ltr';
   const textLanguage = language.dataset_language_code;
   const flags = reviewFlags(evidence?.source.review_flags);
@@ -87,6 +89,7 @@ export default function SpeechLab() {
         : !evidence ? <EmptyState kind="unavailable">Sample identity or selection provenance does not match the experiment artifact. Comparisons are withheld.</EmptyState> : null}
     {summary ? <section aria-label="Language pilot summary" className="speech-summary">
       <h3>{language.display_name} pilot summary</h3>
+      {scoredClipCount === 1 ? <p><strong>One-recording demonstration.</strong> These results cover one recording, not overall performance for this language.</p> : null}
       <p>Selected n={summary.n_selected}; scored automatic n={summary.n_auto_completed}; scored guided n={summary.n_guided_completed}; comparable pairs n={summary.n_paired}.</p>
       <dl className="speech-stats"><div><dt>Mean automatic CER</dt><dd>{percent(summary.mean_auto_cer)}</dd></div><div><dt>Mean guided CER</dt><dd>{percent(summary.mean_guided_cer)}</dd></div><div><dt>Mean paired delta</dt><dd>{delta(summary.mean_delta_cer)}</dd></div></dl>
       <p>Improved {summary.improved_count} · worsened {summary.worsened_count} · tied {summary.unchanged_count} (comparable pairs only).</p>
