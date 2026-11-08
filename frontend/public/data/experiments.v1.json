@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "generated_at_utc": "2026-11-08T00:24:31.234366+00:00",
+  "generated_at_utc": "2026-11-08T13:35:48.727224+00:00",
   "source": {
     "dataset": "FLEURS; Google / Conneau et al. (2022)",
     "source_url": "https://huggingface.co/datasets/google/fleurs",
     "license": "CC BY 4.0; https://creativecommons.org/licenses/by/4.0/",
     "selection_sha256": "59f8c23640f271eefa5787fdedd3833e0091af14e40e448e1f4c8a58584d886c",
-    "outcome_input_sha256": "4bdc316efe9248fe0cbe64526c94111c8e61d3f36a44b743efc8a253cd697517",
+    "outcome_input_sha256": "520dca688f0ac5e58dba31a83e7922eedd332f6511d219a302ede14ad4c4e301",
     "metrics_script_sha256": "f0aaf83ed38a7e6bc98d24ce85664b5c3ea2dc58bcf8e21921a7ac04897a6fe5",
     "policy": "nfc_codepoints_punctuation_space_english_casefold_v1",
     "unicode_version": "16.0.0",
