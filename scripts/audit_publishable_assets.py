@@ -33,6 +33,13 @@ PII = {'birth_city', 'birthplace', 'city_of_birth', 'date_of_birth', 'speaker_na
 DATA = {'languages.v1.json', 'wards.v1.json', 'samples.v1.json',
         'experiments.v1.json', 'recommendations.v1.json',
         'mississauga_wards.geojson', 'ward_geometry_status.json', '.gitkeep'}
+THEME_IMAGE_SHA256 = 'cc99a8a383d856431cea6b06f0eb97383d2df54a0bba1de52a4f030e4e7eb218'
+
+
+def built_asset(relative: str, raw: bytes) -> bool:
+    """Allow normal code/style outputs and only the exact user-supplied SDG art."""
+    return relative.startswith('assets/') and (PurePosixPath(relative).suffix in {'.js', '.css'}
+        or PurePosixPath(relative).suffix == '.png' and hashlib.sha256(raw).hexdigest() == THEME_IMAGE_SHA256)
 
 
 def git(*args: str) -> bytes:
@@ -90,7 +97,7 @@ def audit(target: str) -> dict:
                             or len(parts) == 3 and parts[:2] == ('data', 'fixtures') and parts[-1] in DATA)
             prompt = (len(parts) == 4 and parts[:2] == ('audio', 'prompts')
                       and parts[2] in LANGUAGES and parts[3] in {'manifest.json', 'confirm.mp3'})
-            built = scope == 'frontend/dist' and relative.startswith('assets/') and path.suffix in {'.js', '.css'}
+            built = scope == 'frontend/dist' and built_asset(relative, raw)
             if not (allowed_data or prompt or built or relative in expected
                     or relative in {'index.html', 'audio/FLEURS_ATTRIBUTION.txt', 'audio/prompts/README.md'}):
                 flag(scope, name, 'unlisted_public_asset')
@@ -175,7 +182,7 @@ def audit(target: str) -> dict:
             elif relative not in {'index.html', 'audio/FLEURS_ATTRIBUTION.txt', 'audio/prompts/README.md'}:
                 fixture = relative.startswith('data/fixtures/') and PurePosixPath(relative).name in DATA
                 data = relative.startswith('data/') and len(PurePosixPath(relative).parts) == 2 and PurePosixPath(relative).name in DATA
-                built = directory.endswith('dist') and relative.startswith('assets/') and path.suffix in {'.js', '.css'}
+                built = directory.endswith('dist') and built_asset(relative, raw)
                 if not (fixture or data or built):
                     flag(directory, name, 'unlisted_public_asset')
         for relative in expected:

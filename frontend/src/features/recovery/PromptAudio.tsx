@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import AudioWaveform from '../../components/AudioWaveform';
+import { useEffect, useState } from 'react';
 import { z } from 'zod';
 import { PROMPT_REVISION, recoveryPrompt, TTS_ATTRIBUTION, TTS_MODEL } from './prompts';
 
@@ -9,12 +10,6 @@ const manifestSchema = z.object({ schema_version: z.literal('2.0'), language_id:
   review_status: z.literal('approved'), human_listened: z.literal(true), language_reviewed: z.literal(true),
   approved_at_utc: z.string().min(1), rights_reviewed: z.literal(true), attribution: z.literal(TTS_ATTRIBUTION),
   verification: z.object({ synthesis_http_status: z.literal(200), model_language_advertised: z.literal(true), voice_access: z.literal('accessible') }) });
-
-function Player({ url, onError }: { url: string; onError: () => void }) {
-  const audio = useRef<HTMLAudioElement>(null);
-  useEffect(() => { const player = audio.current; return () => player?.pause(); }, []);
-  return <audio ref={audio} controls preload="metadata" src={url} aria-label="Cached simulated confirmation instruction" onError={onError} />;
-}
 
 export default function PromptAudio({ language }: { language: string }) {
   const config = recoveryPrompt(language);
@@ -50,7 +45,7 @@ export default function PromptAudio({ language }: { language: string }) {
   return <div>
     <p><strong>{prompt && !failed ? `Approved cached ${config?.display_name} instruction · prerecorded AI voice` : 'Text-only confirmation · voice unavailable or unapproved.'}</strong></p>
     <p dir={config?.direction === 'rtl' ? 'rtl' : 'ltr'} lang={config?.language_code}>{config?.text}</p>
-    {prompt && !failed ? <><Player url={prompt.url} onError={() => setFailed(true)} />
+    {prompt && !failed ? <><AudioWaveform src={prompt.url} label="Cached simulated confirmation instruction" onError={() => setFailed(true)} />
       <p className="speech-note">{prompt.attribution} Generated {prompt.generated}. This fixed instruction does not read the selected transcript.</p></>
       : <p className="speech-note">Configured voice ID is not verification. Caption and pronunciation require manual language/listening approval before playback.</p>}
   </div>;

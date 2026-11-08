@@ -1,49 +1,82 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
-import App, { API_BASE_URL } from './App';
+import { readFileSync } from 'node:fs';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
+import { beforeEach, expect, it, vi } from 'vitest';
+import App from './App';
 
-describe('bootstrap shell (mocked health responses)', () => {
-  it('connects using the health contract without accepting invalid research payloads', async () => {
-    const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ status: 'ok', mode: 'local' }) });
-    vi.stubGlobal('fetch', fetchMock);
-    render(<App />);
-    expect(await screen.findByText('Backend connected')).toBeInTheDocument();
-    expect(fetchMock).toHaveBeenCalledWith(`${API_BASE_URL}/health`, expect.objectContaining({ signal: expect.any(AbortSignal) }));
-    expect(await screen.findAllByText(/Verified census\/coverage assets could not be loaded/)).not.toHaveLength(0);
-    expect(screen.getByRole('navigation', { name: 'Research journey' })).toBeInTheDocument();
-  });
+// Real released artifacts; only transport is mocked. No fabricated metrics.
+beforeEach(() => {
+  window.history.replaceState(null, '', '/');
+  vi.spyOn(HTMLMediaElement.prototype, 'pause').mockImplementation(() => {});
+  vi.stubGlobal('fetch', vi.fn(async (url: string) => {
+    const name = String(url).match(/data\/([a-z]+)\.v1\.json$/)?.[1];
+    if (!name) throw new Error('MOCK unavailable backend/geometry');
+    return { ok: true, json: async () => JSON.parse(readFileSync(`public/data/${name}.v1.json`, 'utf8')) };
+  }));
+});
 
-  it('offers an actionable retry after network failure and recovers', async () => {
-    let healthCalls = 0;
-    vi.stubGlobal('fetch', vi.fn(async (url: string) => {
-      if (url !== `${API_BASE_URL}/health` || healthCalls++ === 0) throw new Error('offline');
-      return { ok: true, json: async () => ({ status: 'ok', mode: 'local' }) };
-    }));
-    render(<App />);
-    expect(await screen.findByText('Backend unavailable')).toBeInTheDocument();
-    expect(screen.getByText(/Start FastAPI/)).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Retry connection' }));
-    expect(await screen.findByText('Backend connected')).toBeInTheDocument();
-  });
+it('opens with all languages, SDG art and one accessible act; Next/Back focuses the act heading', async () => {
+  render(<App />);
+  expect(await screen.findByLabelText('Selected language')).toHaveValue('all');
+  expect(screen.getByRole('img', { name: 'UN Sustainable Development Goal 10: Reduced Inequalities.' })).toBeVisible();
+  expect(screen.queryByText('Language should never be a barrier to being heard.')).not.toBeInTheDocument();
+  expect(screen.queryByRole('heading', { name: 'Hear What AI Hears' })).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: 'Next: Investigate' }));
+  expect(screen.getByRole('heading', { name: 'Hear What AI Hears' })).toHaveFocus();
+  expect(screen.queryByRole('heading', { name: /Language coverage by ward/ })).not.toBeInTheDocument();
+  expect(screen.getByRole('button', { name: '02 Investigate' })).toHaveAttribute('aria-current', 'step');
+  fireEvent.click(screen.getByRole('button', { name: '← Back' }));
+  expect(screen.getByRole('heading', { name: /Language coverage by ward/ })).toHaveFocus();
+});
 
-  it.each([
-    { ok: false, json: async () => ({ status: 'ok', mode: 'local' }) },
-    { ok: true, json: async () => ({ status: 'ok' }) },
-    { ok: true, json: async () => { throw new Error('invalid JSON'); } },
-  ])('rejects HTTP errors and invalid responses', async (response) => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(response));
-    render(<App />);
-    expect(await screen.findByText('Backend unavailable')).toBeInTheDocument();
-  });
+it('preserves ward, metric, selected recording and recovery session across acts and pauses inactive audio', async () => {
+  render(<App />);
+  await screen.findByLabelText('Selected language');
+  fireEvent.change(screen.getByLabelText('Selected language'), { target: { value: 'urdu' } });
+  fireEvent.click(await screen.findByRole('button', { name: 'Ward 10' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Share of language base' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Next: Investigate' }));
+  fireEvent.change(await screen.findByLabelText('Recording'), { target: { value: 'urdu-1533' } });
+  const player = screen.getByLabelText('FLEURS recording urdu-1533');
+  const pause = vi.spyOn(player as HTMLAudioElement, 'pause');
+  fireEvent.click(screen.getByRole('button', { name: 'Next: Demonstrate' }));
+  expect(pause).toHaveBeenCalled();
+  fireEvent.change(screen.getByLabelText('Demo route'), { target: { value: 'offline' } });
+  fireEvent.change(screen.getByLabelText('Prerecorded sample'), { target: { value: 'urdu-1533' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Start saved simulation' }));
+  expect(screen.getByText('State: confirm')).toBeVisible();
+  fireEvent.click(screen.getByRole('button', { name: 'Next: Recommend' }));
+  fireEvent.click(screen.getByRole('button', { name: '← Back' }));
+  expect(screen.getByText('State: confirm')).toBeVisible();
+  fireEvent.click(screen.getByRole('button', { name: '← Back' }));
+  expect(screen.getByLabelText('Recording')).toHaveValue('urdu-1533');
+  fireEvent.click(screen.getByRole('button', { name: '← Back' }));
+  const detail = within(screen.getByRole('complementary', { name: 'Selected ward demographics' }));
+  expect(detail.getByText('4,520')).toBeVisible();
+  expect(screen.getByRole('button', { name: 'Share of language base' })).toHaveAttribute('aria-pressed', 'true');
+});
 
-  it('times out a stalled backend after five seconds', async () => {
-    vi.useFakeTimers();
-    vi.stubGlobal('fetch', vi.fn((_url, { signal }: RequestInit) => new Promise((_resolve, reject) => {
-      signal?.addEventListener('abort', () => reject(new DOMException('Aborted', 'AbortError')));
-    })));
-    render(<App />);
-    expect(screen.getByText('Checking backend…')).toBeInTheDocument();
-    await act(async () => { await vi.advanceTimersByTimeAsync(5000); });
-    expect(screen.getByText('Backend unavailable')).toBeInTheDocument();
+it('supports direct fragment entry and internal continuation without exposing inactive acts', async () => {
+  window.history.replaceState(null, '', '/#demonstrate');
+  render(<App />);
+  fireEvent.change(await screen.findByLabelText('Selected language'), { target: { value: 'urdu' } });
+  fireEvent.change(await screen.findByLabelText('Demo route'), { target: { value: 'offline' } });
+  fireEvent.change(screen.getByLabelText('Prerecorded sample'), { target: { value: 'urdu-1533' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Start saved simulation' }));
+  fireEvent.click(screen.getByRole('button', { name: /\(Correct\)/ }));
+  await act(async () => {
+    window.location.hash = 'recommend';
+    window.dispatchEvent(new HashChangeEvent('hashchange'));
   });
+  expect(screen.getByRole('heading', { name: 'Where Should We Test Next?' })).toHaveFocus();
+  expect(screen.getByText(/Priorities for future language evaluation/)).toBeVisible();
+  expect(screen.queryByRole('button', { name: /\(Correct\)/ })).not.toBeInTheDocument();
+});
+
+it('rejects invalid research payloads with a usable navigation shell and no invented census values', async () => {
+  vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({ status: 'ok' }) }));
+  render(<App />);
+  expect(await screen.findByText(/No demographic values are displayed/)).toBeVisible();
+  expect(screen.queryByText('79,940')).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: 'Next: Investigate' }));
+  expect(screen.getByRole('heading', { name: 'Hear What AI Hears' })).toBeVisible();
 });

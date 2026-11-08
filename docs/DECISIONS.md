@@ -301,3 +301,65 @@ regions and supplied recovery reference text improve the existing four acts.
 Map pans are immediate with inertia disabled; CSS reduced-motion rules apply
 throughout. No tests/build/manual browser or listening review ran, so accessibility
 and two-person presentation acceptance remain pending rather than certified.
+
+## T-020 visual continuation — 2026-11-08
+
+Explicit user request supersedes the earlier all-pans-immediate presentation:
+remove the old hero/event line/server-health panel, use supplied SDG 10 artwork
+and magenta theme with a Target 10.2 inclusion framing, and make the verified
+ward map the main view. Ward selection now flies to its real bounds and opens
+an animated census popup. Reduced-motion preferences disable CSS reveal and use
+immediate map fitting; toggling reduction during a ward flight stops it. Reset
+clears selection and restores city bounds. No data/API/schema change; counts,
+shares/denominators, source caveats, fallback table and speech/geography separation
+remain. Target 10.2 is thematic context, not a measured SDG indicator or UN endorsement.
+The recovery module retains its own backend-capability handling; the removed
+landing-page health polling is no longer needed. No provider calls introduced.
+
+## T-021 approved guided presentation — 2026-11-08
+
+User explicitly approved the proposed T-021 before implementation. This refines
+D-023's presentation without changing its Discover → Investigate → Demonstrate →
+Recommend order: one visible act, persistent Next/Back/progress, focused headings,
+retained component/session state and paused inactive audio. Existing fragment
+continuations remain compatible. Initial/reset language remains all; Urdu is an
+explicit exploration choice, not an automatic selection or audio trigger.
+
+The formerly deferred cinematic scope is narrowed to permit a lightweight
+screen-space ward lift in existing Leaflet 1.9.4's SVG renderer. A decorative,
+noninteractive footprint uses the same vetted coordinates; CSS translates only
+the selected rendered path, with outline/depth and subdued neighbors. This
+supersedes T-020's selection flight/popup presentation; the readable adjacent
+ward panel and Clear/reset controls retain count/share/language-base context.
+No actual elevation, geographic risk score, geometry mutation or 3D engine.
+Reduced motion disables transitions, retaining a static selection/depth cue.
+
+The supplied SDG artwork remains byte-for-byte unchanged. Opening/final framing
+describes alignment with SDG 10, without UN endorsement or a proven inequality
+outcome. Progressive disclosure retains source metadata, failure statuses,
+sample counts, methodology, raw outcomes and full recruitment plans. No research
+JSON, API, metric, ranking, backend, retry or audio approval contract changed.
+
+Observed frontend tests/build, 14 real-local-artifact browser cases, responsive
+and visual review are recorded in `test-evidence/guided-demo.md`. No provider
+requests or new audio generation. Human rehearsal/listening, prior review and
+rights gates remain open; T-021 is In review rather than automatically Done.
+
+## T-021 minimalist refinement — 2026-11-08
+
+The user's explicit refinement request supersedes T-021's exact opening slogan
+and promotional framing. Retain the guided acts, original SDG artwork, SVG ward
+lift/dimming and evidence disclosures; use factual headings, full-width map and
+selected-only compact ward details. Shared native audio controls gain whole-file
+waveforms decoded from each recording's own bytes; native currentTime/events
+control the seek position. Decoding never creates a second playback source.
+Decode/browser failures retain native playback and explicit fallback. This is
+presentation-only; research JSON, data counts, APIs, recovery and TTS approval
+contracts remain unchanged. No dependency or provider request is introduced.
+
+## T-021 language shortcut removal
+
+At the user's explicit request, remove Discover's Explore Urdu shortcut. This
+supersedes the earlier dedicated Urdu-entry button requirement; Urdu remains an
+explicit choice in the persistent language dropdown. All-language initial/reset
+selection, guided order and data/API contracts remain unchanged.

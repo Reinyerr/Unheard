@@ -139,3 +139,31 @@ referral with no further retry. Follow the recommendations link with keyboard.
 For key-disabled backend requests, inspect processing/disabled controls and
 unknown-response recovery without automatically replaying requests. Verify focus
 and spoken announcements manually. T-020 remains In review, not Done.
+
+## SDG 10 map-first continuation — 2026-11-08
+
+User approved removing the previous hero/event copy and server-status panel,
+using the supplied SDG 10 reference theme, and animated ward zoom/information.
+Implemented App layout, imported reference artwork, shared sdg-theme.css,
+magenta map colors, compact expandable context and full-width/taller map. Selecting
+via boundary or table fits real ward bounds, opens a dismissible portal popup,
+and retains the independent numerical detail/table. Reset closes popup, clears
+ward selection and restores the city. Reveals/flights honor reduced motion.
+The per-module recovery API handling and actual research artifacts are unchanged.
+
+Verified official Target 10.2 wording at https://sdgs.un.org/goals/goal10; the UI
+paraphrases the inclusion aim and keeps the census/evaluation interpretation
+separate. User-supplied artwork is copied unmodified in src/assets; the package
+audit allows only its exact SHA-256 when emitted as a bundled PNG, not arbitrary
+new images. Artwork provenance is in docs/attributions.md.
+
+Manual browser review on the running localhost app (CUA): old intro/status absent;
+new SDG identity/target text present; real 11 wards render; selecting Urdu then
+Ward 10 opens a popup with 4,520, 6.12%, base 73,830. Screenshot inspected; corrected
+an overlapping hover tooltip and popup position found during review. Preview saved
+locally at /private/tmp/unheard-sdg10-map.jpg. TypeScript/build passed after fixing
+a callback type for clearing selection; no automated tests written or run, no
+speech/TTS requests or audio listening. Reduced-motion/mobile acceptance and full
+four-act regression were not manually exercised here. Existing shell tests still
+expect the intentionally removed status panel; updating them awaits test scope.
+T-020 remains In review pending broader acceptance and human sign-off.

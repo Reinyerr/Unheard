@@ -149,3 +149,15 @@ PII, copyright, unreachable Git objects or legal compliance. Inspect output path
 before sharing reports, since filenames themselves can contain personal data.
 Publishing, deployment and submission remain team-owned (D-021/D-024); this ticket
 creates neither a release package nor a public service.
+
+## SDG 10 visual reference — 2026-11-08
+
+User supplied the Reduced Inequalities / Goal 10 image for the requested theme.
+Copied unmodified to `frontend/src/assets/sdg10-reduced-inequalities.png` and
+bundled by Vite; SHA-256
+`cc99a8a383d856431cea6b06f0eb97383d2df54a0bba1de52a4f030e4e7eb218`.
+The package auditor permits only these exact PNG bytes among bundled images.
+[UN Goal 10 and Target 10.2](https://sdgs.un.org/goals/goal10) supplies the inclusion
+context. The website paraphrases that aim, does not measure indicator 10.2.1 and
+does not assert UN endorsement. This records source provenance; existing public
+release and branding-use review requirements remain separate from local display.
