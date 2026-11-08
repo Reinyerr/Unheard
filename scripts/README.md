@@ -380,3 +380,52 @@ means blocked/interrupted/invalid evidence or export failure; 2 is CLI misuse.
 Default production processing observed four real cached modes, 92 not_tested,
 zero new POSTs. No tests, paid full-pilot run, error-path rehearsal or frontend
 build were performed. T-009 is In review; T-014 is the next Dev 1 implementation.
+
+
+## Official ward geometry (T-006, Developer 2)
+
+Use a separate geometry environment; do not change the backend environment:
+
+```sh
+python3 -m venv scripts/.geometry-venv
+scripts/.geometry-venv/bin/python -m pip install -r scripts/geometry-requirements.txt
+scripts/.geometry-venv/bin/python scripts/validate_wards.py --refresh
+```
+
+--refresh downloads fixed official Mississauga item/service/layer-2 metadata,
+GeoJSON with outSR=4326, municipal vintage evidence and retrieval hashes into
+ignored data/raw/ward_geometry. The linked terms download is attempted and its
+failure recorded without claiming licence review. Only Shapely and its required
+NumPy dependency are installed; backend files/runtime are untouched. After the
+first acquisition, offline reproduction uses:
+
+```sh
+scripts/.geometry-venv/bin/python scripts/validate_wards.py
+```
+
+It validates official identity, real WARD field/unique IDs, corrected nonfixture
+T-004 ward IDs, valid finite Polygon/MultiPolygon geometry, closed rings and CRS/
+extent agreement. All 11 wards must match; no silent drops, repairs or guessed
+shapes. Legacy EPSG:4326 metadata is explicitly verified before removal from
+output. The additional cross-ward overlap diagnostic is reported, not treated as
+an area/population statistic or disjoint-coverage certification.
+
+Outputs: frontend/public/data/mississauga_wards.geojson and
+ward_geometry_status.json, with attribution, hashes, dates and warnings. Valid
+production status permits local prototype map use; linked terms remain unresolved
+and the snapshot is not a certified 2021 geometry edition. Failure exits 1,
+removes stale public geometry and writes map_ready=false with an explanation.
+Success exits 0; argument misuse exits 2. Source files stay separate from fixtures.
+
+Frontend utility frontend/src/data/wardGeometry.ts validates the sidecar/hash,
+structure/IDs and census join, returning a ready/unavailable union. T-011 must
+consume it and render a real verified chart/table when unavailable. T-006 does
+not add map/chart UI or modify React components. The five existing research
+artifacts and backend contracts remain unchanged.
+
+Manual review: inspect the 11 feature IDs/properties and status warnings, compare
+IDs with wards.v1.json, inspect coordinates in a GIS viewer, and independently
+exercise missing Ward 10/geometry and the later fallback UI. No simulated failures,
+automated tests, frontend build/typecheck or browser rendering checks were run.
+Raw snapshots/geometry environment are ignored; source metadata and curated local
+GeoJSON/status output are intentional assets. Next ticket is T-011, then T-012.

@@ -1,0 +1,11 @@
+.recovery { margin-top: 1.5rem; min-width: 0; }
+.recovery p { margin: .8rem 0; line-height: 1.65; }
+.recovery label { display: grid; gap: .5rem; font-weight: 600; margin: 1rem 0; }
+.recovery select { width: 100%; max-width: 38rem; border: 1px solid #7e978c; border-radius: .5rem; padding: .65rem; background: white; }
+.recovery button { border: 1px solid #17604b; border-radius: .5rem; padding: .65rem 1rem; margin: .5rem .75rem .5rem 0; font-weight: 600; }
+.recovery button:disabled { opacity: .5; cursor: not-allowed; }
+.recovery button:focus-visible, .recovery select:focus-visible { outline: 3px solid #17604b; outline-offset: 3px; }
+.recovery audio { display: block; width: 100%; max-width: 38rem; margin: 1rem 0; }
+.recovery h3, .recovery summary { font-weight: 650; margin-top: 1rem; }
+.recovery details { border-top: 1px solid #cbd4ce; margin-top: 1.5rem; padding-top: 1rem; }
+.recovery a { text-decoration: underline; }

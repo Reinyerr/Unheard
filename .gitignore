@@ -28,6 +28,7 @@ recordings/
 node_modules/
 dist/
 .venv/
+.geometry-venv/
 .tools/
 .cache/
 __pycache__/

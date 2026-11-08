@@ -15,6 +15,8 @@ from app.schemas.recovery import (
     RecoveryResponse, RetryRequest, StartRequest,
 )
 from app.schemas.research import ExperimentStatus, Origin, RecoveryState
+from app.services.tts_adapter import cached_prompt
+from app.services.tts_config import LANGUAGES
 from app.services.elevenlabs_adapter import (
     MODEL_ID, REPO, ConfigurationError, ElevenLabsAdapter, load_selection, request_options,
 )
@@ -164,16 +166,21 @@ class RecoveryService:
     def _view(self, session: Session) -> RecoveryResponse:
         retry_ids = [identity for identity in session.sample_ids if identity not in session.used_ids]
         retry_available = session.state == RecoveryState.retry_or_refer and session.attempts < 2 and bool(retry_ids)
+        prompt = cached_prompt(session.language_id) if session.state == RecoveryState.confirm else None
         return RecoveryResponse(
             session_id=session.session_id, state=session.state, language_id=session.language_id,
             sample_id=session.sample_id, mode=session.mode, transcript=session.transcript,
             source=session.source, requested_source=session.requested_source,
             transcription_status=session.transcription_status, attempts=session.attempts,
             retry_available=retry_available, retry_sample_ids=retry_ids if retry_available else [],
-            confirmation_prompt=(f'Did the recording’s speaker say: “{session.transcript}”? Choose Correct or Incorrect.'
+            confirmation_prompt=(LANGUAGES[session.language_id]["text"]
                                  if session.state == RecoveryState.confirm else None),
             referral_message=REFERRAL if session.state in {RecoveryState.retry_or_refer, RecoveryState.referral} else None,
             simulation_notice=NOTICE, fallback_reason=session.fallback_reason,
+            prompt_audio_url=prompt["audio_path"] if prompt else None,
+            tts_status="cached" if prompt else "unavailable",
+            prompt_caption=LANGUAGES[session.language_id]["text"] if session.state == RecoveryState.confirm else None,
+            tts_attribution=prompt["attribution"] if prompt else None,
         )
 
     def capabilities(self) -> CapabilitiesResponse:
@@ -185,9 +192,12 @@ class RecoveryService:
             languages.append(LanguageCapability(language_id=language, sample_ids=ids,
                 saved_sample_ids_by_mode={mode: [identity for identity in ids if (identity, mode) in saved]
                                           for mode in ("auto", "guided")}, guided_verified=language in guided))
+        cached_languages = [language for language in LANGUAGES if cached_prompt(language)]
         return CapabilitiesResponse(available=True, selected_sample_count=len(samples.samples),
             live_configured=bool(os.environ.get("ELEVENLABS_API_KEY", "").strip()),
-            languages=languages, simulation_notice=NOTICE, warnings=warnings)
+            languages=languages, simulation_notice=NOTICE, warnings=warnings,
+            tts_status="cached" if cached_languages else "unavailable",
+            tts_language_ids=cached_languages)
 
     @staticmethod
     def _check_sample(sample_id: str, language: str, samples, assets) -> None:

@@ -218,3 +218,46 @@ Production generation checked all metadata audio references/header durations and
 selected file hashes. Full decoding/listening, independent reproducibility checks
 and acceptance tests remain unperformed; no API experiment was run. T-007 is In
 review and the pilot remains exploratory with the documented script/gender limits.
+
+
+## T-006 official ward geometry acquisition — 2026-11-07
+
+Provider: City of Mississauga / ArcGIS owner MississaugaData. Dataset:
+[Ward Boundaries](https://data.mississauga.ca/datasets/mississauga::ward-boundaries/about),
+[item f1cad02b3a40422dac2ea99b59cc36a5](https://www.arcgis.com/home/item.html?id=f1cad02b3a40422dac2ea99b59cc36a5),
+[actual FeatureServer layer 2](https://services6.arcgis.com/hM5ymMLbxIyWTjn2/arcgis/rest/services/Ward_Boundaries/FeatureServer/2).
+The metadata WARD field is a string; 11 observed features normalize exactly to
+integer ward_id 1–11 and match the real corrected T-004 export without changing
+any census numbers. Item publisher/service identity and input hashes are retained.
+
+Raw item/service/layer/query snapshots and retrieval evidence remain ignored in
+data/raw/ward_geometry. Published local artifacts are mississauga_wards.geojson
+and ward_geometry_status.json under frontend/public/data. Source metadata and
+attribution are included in both. Selected properties omit civic contact/name/
+photo fields. No source CSV/audio/fixtures or backend code changed.
+
+Source layer CRS is Web Mercator EPSG:3857 (102100 alias). ArcGIS queried with
+outSR=4326 returned longitude/latitude plus a legacy EPSG:4326 crs member. That
+specific member is verified and removed for RFC 7946-style output. Coordinate
+values/ring order are retained; no simplification, repair or hand drawing.
+GEOS/Shapely validates individual polygon topology, finite bounds and rings;
+WGS84 bounds match the layer's projected extent. Three source overlap slivers
+are exposed in source_overlap_diagnostics (7/1, 3/1, 8/2), not repaired. Valid
+individual polygons and ID joins do not certify disjoint or gap-free coverage.
+
+Vintage evidence: the City's [municipal map layer](https://ext.maps.mississauga.ca/Geocortex/Essentials/REST/sites/eMaps/map/mapservices/57/layers/2)
+is explicitly Municipal Wards (2006-). ArcGIS metadata was updated in June 2024;
+this downloaded snapshot is not an independently verified immutable 2021 geometry
+edition. Retain this caveat alongside any visualization of 2021 census counts.
+No geographic speech-recognition inference is allowed.
+
+The dataset links [City Terms of Use](https://smartcity.mississauga.ca/wp-content/uploads/2021/04/CityofMississauga_TermsofUse.pdf).
+Retrieval returned HTTP 403, so the precise linked licence has not been reviewed.
+Attribution: Contains information provided by the City of Mississauga; Ward
+Boundaries. Local prototype only pending T-019 redistribution review; no public
+hosting/distribution approval is implied. Prior municipal licence uncertainties
+remain open. Current hashes, retrieval/modified timestamps and warnings are in
+the generated sidecar; no vintage or permission is inferred from a filename.
+
+Production acquisition/validation succeeded; automated missing-ward/fallback
+checks and visual inspection were skipped by user instruction. T-006 is In review.

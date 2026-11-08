@@ -219,3 +219,78 @@ hash/path. T-010 preserves those review flags in existing source metadata. Raw
 responses, retry history, locks/in-flight journals and evidence stay local.
 Cache completion means a retained provider result, not a comparable CER success.
 No frontend types, statuses or schema version were changed.
+
+
+## T-006 geometry sidecar contract (separate from five research v1 artifacts)
+
+mississauga_wards.geojson is a FeatureCollection of 11 Polygon/MultiPolygon
+features. Feature id and properties.ward_id are the same integer 1–11;
+properties.source_ward retains the original official WARD value. Coordinates
+are WGS84 longitude/latitude, never guessed/projected screen coordinates.
+Foreign members schema_version=1.0, generated_at_utc, bbox and source retain
+source identity, attribution, hashes, coordinate/vintage/licence/overlap caveats.
+No existing demographic/experiment schema field or backend contract changes.
+
+ward_geometry_status.json (schema_version 1.0) is validated/map_ready=true only
+after production geometry/census checks. It names the fixed GeoJSON file, exact
+SHA-256, ward_ids and warnings. On validation failure it becomes failed with
+map_ready=false/message and stale public geometry is removed. The frontend
+loadWardGeometry(wards) returns ready with geometry/warnings, or unavailable
+with a chart/table explanation. Missing status/geometry, invalid IDs/rings or
+hash mismatch fails closed. Individual topology validation is offline; this
+browser guard does not replace GEOS validation or a historical boundary audit.
+T-011 must render the actual chart/table fallback and retain source warnings.
+
+## T-015 multilingual recovery prompts and browser-only saved route
+
+Static research v1 and T-014 routes/transitions/attempt limits are unchanged.
+RecoveryResponse retains cached/unavailable `tts_status`, nullable relative
+`prompt_audio_url`, `prompt_caption` and `tts_attribution`. In confirm, caption
+and confirmation_prompt now carry the selected language's fixed authored
+instruction, including during text-only fallback; it does not read the selected
+transcript. Caption availability is not audio approval. Audio path/attribution
+are populated only for a validated approved cache. Capabilities `tts_language_ids`
+contains only approved cached languages; global tts_status is cached if that list
+is nonempty. No TTS network call occurs in runtime endpoint handling.
+
+`shared/tts_prompts.json` is the non-secret catalog: exact user-selected voice,
+language code, preferred model eleven_v3, authored draft caption, button labels,
+direction and prompt revision. Backend dotenv defaults mirror it; differing
+voice/model values fail closed, with no replacement voice or v2 fallback. React
+uses the same catalog without any API key. No live voice verification is inferred
+from this file or from a model's documented language list.
+
+Optional `audio/prompts/{language_id}/manifest.json` uses separate schema_version
+2.0, replacing the incompatible English-only 1.0 prompt sidecar (no audio/cache
+existed to migrate). Sibling audio is confirm.mp3. Allowed language_id values:
+`urdu`, `punjabi`, `cantonese`, `arabic`, `mandarin_chinese`, `english`.
+Required metadata: language_id/language_code, text/prompt_revision,
+provider/model_id/voice_id, generated_at_utc, origin saved, audio_path/audio_sha256,
+review_status, human_listened, language_reviewed, approved_at_utc, rights_reviewed,
+attribution and verification. Verification retains observed model language,
+voice accessibility/metadata compatibility, generation HTTP status and request ID
+when provided; GET accessibility is not proof of synthesis or language quality.
+No provider body/credentials/voice-owner details are exported.
+
+The single-language opt-in preparation command requires --authorize-billable and
+--rights-reviewed before at most one POST. Generated audio is staged only in
+ignored data/local/tts/{language_id}, with review_status pending_review,
+human_listened=false, language_reviewed=false and approved_at_utc=null.
+An exclusive attempt marker prevents replay/overwrite after interrupted calls.
+Approval identifies the exact audio hash and requires a competent speaker's
+manual listening/caption/labels/pronunciation/meaning review via
+--language-reviewed. Only then is review_status approved and the vetted cache
+copied to public-local assets. Server/browser require exact catalog identity,
+model, code, text, revision, path, real synthesis HTTP 200 and audio hash plus
+both approval flags and timestamp before allowing playback. Missing/unapproved/
+wrong-language/legacy/mismatched/unplayable audio stays explicitly text-only.
+There is no automatic generation or mass-approval path. All six currently have
+no generated/approved audio. T-019 redistribution review remains separate.
+
+The explicit browser-only simulation still uses validated matching samples and
+experiment exports/selection hashes. Only completed, nonempty comparable saved
+outputs without review flags can enter confirm. Its IDs begin offline- and are
+never sent as backend session IDs. Two attempts, different-clip retry and the
+simulation/referral notices are retained. Global language changes dispose the
+UI/audio/pending request and reset session selection; ward changes do not affect
+speech. No backend-to-browser session migration or automatic replay is implied.

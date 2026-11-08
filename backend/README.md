@@ -87,3 +87,86 @@ unavailable pending T-015. Review gates remain open: no automated tests were
 written/run, no new ElevenLabs/TTS calls or full two-clip/frontend/outage rehearsal
 were performed. Manual HTTP proof covers health, capabilities, saved Urdu,
 explicit saved fallback with missing key and correct-to-accepted only.
+
+## T-015 multilingual cached recovery instructions
+
+All six exact user-selected voice IDs and draft authored prompts are in
+`shared/tts_prompts.json`, consumed by backend `tts_config.py` and React. The
+existing dotenv entry points read `backend/.env` (or exported server variables).
+`.env.example` contains a blank key plus non-secret voice/model defaults; never
+load it as credentials or expose a key through `VITE_`. Conflicting voice/model
+environment values fail closed. `eleven_v3` is the sole selected model; no silent
+model or voice substitutions. Prior English-only/premade restrictions are
+superseded by the user-selected multilingual configuration; no cloning is added.
+
+Official references checked 2026-11-07:
+[model language list](https://elevenlabs.io/docs/overview/models),
+[convert endpoint](https://elevenlabs.io/docs/api-reference/text-to-speech/convert),
+[model metadata](https://elevenlabs.io/docs/api-reference/models/list), and
+[voice metadata](https://elevenlabs.io/docs/api-reference/voices/get).
+The docs list ur, pa, yue, ar, zh and en for eleven_v3. Availability to this
+account and voice compatibility remain unconfirmed until actual evidence.
+
+From the repository root, inspect metadata only (one model GET and six voice
+GETs; zero audio POSTs), or add `--language urdu` for just the priority voice:
+
+```sh
+PYTHONPATH=backend backend/.venv/bin/python -m app.services.tts_adapter --check
+```
+
+The ignored `data/local/tts/preflight.json` records minimal observations. A
+successful voice GET means accessible, not verified speech quality or synthesis
+permission. Voice model metadata is advisory; absent model entries remain
+unconfirmed, not automatically unsupported. No API key is configured currently:
+observed preflight exited 1 with blocked_missing_credentials and zero requests.
+
+Only after explicit authorization for the chosen language and review of the
+account/voice usage terms, prepare one short sample (Urdu first):
+
+```sh
+PYTHONPATH=backend backend/.venv/bin/python -m app.services.tts_adapter --language urdu --live --authorize-billable --rights-reviewed
+open data/local/tts/urdu/confirm.mp3
+cat data/local/tts/urdu/manifest.json
+```
+
+This checks model-advertised language and exact voice access, then sends at most
+one `POST https://api.elevenlabs.io/v1/text-to-speech/{assigned_voice_id}` with
+`output_format=mp3_44100_128` and JSON `text`, `model_id=eleven_v3`,
+`language_code=ur` (or pa/yue/ar/zh/en for the chosen language). No retries.
+The explicit authorization flag applies to this one selected language only;
+there is no bulk generation command. It sends only the fixed authored
+instruction, not a dataset transcript or recording. Provider rejection leaves
+text fallback; it never silently changes voice/model/language.
+
+Audio and metadata are staged under `data/local/tts/{language_id}/`, marked
+pending_review. Review the entire audio and draft caption/button labels with a
+speaker competent in that language; check pronunciation, language, meaning and
+playability. Then approve its exact audio_sha256 from the local manifest:
+
+```sh
+PYTHONPATH=backend backend/.venv/bin/python -m app.services.tts_adapter --language urdu --approve REPLACE_WITH_LISTENED_AUDIO_SHA256 --language-reviewed
+```
+
+For another language replace `urdu` in commands/paths with exactly `punjabi`,
+`cantonese`, `arabic`, `mandarin_chinese`, or `english`, obtaining separate explicit
+billable authorization and manual approval each time. These commands were not
+run for generation/approval. All six currently remain text-only.
+
+Approval copies only the exact approved MP3 and schema-2.0 provenance to
+`frontend/public/audio/prompts/{language_id}/confirm.mp3` and `manifest.json`.
+Runtime endpoints never generate audio. React independently checks the exact
+language/code/voice/model/text/revision/path, approval flags, generation evidence
+and SHA-256 before offering native playback in confirm state. Decode/playback
+failure returns to text-only. A caption is an instruction to review the displayed
+transcript, not a readback or the FLEURS speaker's voice. Existing T-014 transitions,
+two-attempt budget, retries/referral and saved transcription provenance remain.
+Capabilities enumerate only approved cached languages, never merely configured
+voices. Backend outage still permits separately labelled saved browser sessions.
+
+An exclusive attempt marker prevents replay or overwrite after interruption,
+failure or success; inspect retained evidence before arranging any separately
+authorized regeneration. Do not delete the marker to retry blindly. MP3/raw
+staging remains ignored. T-019 public-package/licence review still applies.
+No verified audio is supplied. Build/syntax checks passed; automated tests were
+explicitly prohibited. New multilingual listening/playback, real outage and the
+full recovery acceptance walkthrough remain pending.

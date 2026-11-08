@@ -1,0 +1,36 @@
+{
+  "model_id": "eleven_v3",
+  "prompt_revision": "multilingual-confirm-v1",
+  "languages": {
+    "urdu": {
+      "display_name": "Urdu", "language_code": "ur", "voice_id": "vH5LP38dcYJ3CIbC2rKX", "direction": "rtl",
+      "text": "یہ تصدیق کی ایک مشق ہے۔ دکھائی گئی عبارت دیکھیں اور درست یا غلط منتخب کریں۔ کسی بلدیاتی ادارے سے رابطہ نہیں کیا جائے گا۔",
+      "correct_label": "درست", "incorrect_label": "غلط"
+    },
+    "punjabi": {
+      "display_name": "Punjabi", "language_code": "pa", "voice_id": "z0HCBc2pw7Mdq6koP5os", "direction": "ltr",
+      "text": "ਇਹ ਪੁਸ਼ਟੀ ਦਾ ਅਭਿਆਸ ਹੈ। ਦਿਖਾਇਆ ਗਿਆ ਪਾਠ ਪੜ੍ਹੋ ਅਤੇ ਸਹੀ ਜਾਂ ਗਲਤ ਚੁਣੋ। ਕਿਸੇ ਨਗਰਪਾਲਿਕਾ ਸੇਵਾ ਨਾਲ ਸੰਪਰਕ ਨਹੀਂ ਕੀਤਾ ਜਾਵੇਗਾ।",
+      "correct_label": "ਸਹੀ", "incorrect_label": "ਗਲਤ"
+    },
+    "cantonese": {
+      "display_name": "Cantonese", "language_code": "yue", "voice_id": "OjkyUe8dIihIFvOisuvM", "direction": "ltr",
+      "text": "呢個係模擬確認。請睇畫面上嘅文字，再揀「正確」或者「不正確」。我哋唔會聯絡任何市政服務部門。",
+      "correct_label": "正確", "incorrect_label": "不正確"
+    },
+    "arabic": {
+      "display_name": "Arabic", "language_code": "ar", "voice_id": "Hvlnv5DwiIO2CQ6oYMZ3", "direction": "rtl",
+      "text": "هذا تأكيد تجريبي. راجع النص المعروض واختر «صحيح» أو «غير صحيح». لن يتم الاتصال بأي جهة بلدية.",
+      "correct_label": "صحيح", "incorrect_label": "غير صحيح"
+    },
+    "mandarin_chinese": {
+      "display_name": "Mandarin Chinese", "language_code": "zh", "voice_id": "4NQthjVhIGGVfL3Si000", "direction": "ltr",
+      "text": "这是模拟确认。请查看屏幕上的文字，再选择“正确”或“不正确”。系统不会联系任何市政服务部门。",
+      "correct_label": "正确", "incorrect_label": "不正确"
+    },
+    "english": {
+      "display_name": "English", "language_code": "en", "voice_id": "6FiCmD8eY5VyjOdG5Zjk", "direction": "ltr",
+      "text": "This is a simulated confirmation. Review the displayed transcript and choose Correct or Incorrect. No municipal service will be contacted.",
+      "correct_label": "Correct", "incorrect_label": "Incorrect"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+.recommendations { margin-top: 1.5rem; min-width: 0; }
+.recommendations h3, .recommendations h4 { font-weight: 650; margin: 1rem 0 .6rem; }
+.recommendations p { margin: .65rem 0; line-height: 1.65; }
+.priority-table-scroll { max-width: 100%; overflow-x: auto; margin: 1rem 0; }
+.priority-table { width: 100%; border-collapse: collapse; text-align: left; font-size: .9rem; }
+.priority-table caption { text-align: left; font-weight: 600; padding-bottom: .75rem; }
+.priority-table th, .priority-table td { padding: .7rem; border-bottom: 1px solid #cbd4ce; vertical-align: top; }
+.priority-table thead { background: #edf3ef; }
+.priority-table button { border: 1px solid #7e978c; border-radius: .4rem; padding: .4rem .6rem; }
+.priority-table button[aria-pressed="true"] { background: #174e3e; color: white; }
+.recommendations a { text-decoration: underline; text-underline-offset: .2rem; }
+.recommendation-detail, .recommendation-pilot { border-top: 1px solid #cbd4ce; margin-top: 1.5rem; padding-top: .5rem; }
+.recommendation-wards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
+.recommendation-ward-list { min-width: 0; }
+.recommendation-note { font-size: .85rem; color: #52615a; }
+.recommendation-evidence-stats { display: flex; flex-wrap: wrap; gap: 1rem 2rem; margin: 1rem 0; }
+.recommendation-evidence-stats dt { font-size: .85rem; }
+.recommendation-evidence-stats dd { font-weight: 650; }
+.recommendations summary { cursor: pointer; font-weight: 600; padding: .5rem 0; }
+.recommendations ul { list-style: disc; padding-left: 1.5rem; line-height: 1.7; }
+.recommendation-sources { margin-top: 1.5rem; }
+.recommendation-sources span { overflow-wrap: anywhere; }
+@media (max-width: 850px) { .recommendation-wards { grid-template-columns: 1fr; } }

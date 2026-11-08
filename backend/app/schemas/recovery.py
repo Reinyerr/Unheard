@@ -50,8 +50,10 @@ class RecoveryResponse(Model):
     max_attempts: Literal[2] = 2
     retry_available: StrictBool
     retry_sample_ids: list[SampleId]
-    prompt_audio_url: None = None
-    tts_status: Literal["unavailable"] = "unavailable"
+    prompt_audio_url: StrictStr | None = None
+    tts_status: Literal["unavailable", "cached"] = "unavailable"
+    prompt_caption: StrictStr | None = None
+    tts_attribution: StrictStr | None = None
     confirmation_prompt: StrictStr | None
     referral_message: StrictStr | None
     simulation_notice: StrictStr
@@ -72,7 +74,8 @@ class CapabilitiesResponse(Model):
     languages: list[LanguageCapability]
     default_source: Literal["saved"] = "saved"
     max_attempts: Literal[2] = 2
-    tts_status: Literal["unavailable"] = "unavailable"
+    tts_status: Literal["unavailable", "cached"] = "unavailable"
+    tts_language_ids: list[LanguageId] = Field(default_factory=list)
     session_ttl_seconds: int = 1800
     max_sessions: int = 128
     simulation_notice: StrictStr
