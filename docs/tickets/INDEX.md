@@ -1,5 +1,31 @@
 # Ticket index — source of truth for implementation
 
+**T-021 Discover follow-up:** removed Explore Urdu at user request; the global
+language dropdown remains the explicit Urdu entry. No dependency/contract change;
+In review with prior gates retained.
+
+**T-021 follow-up:** user-requested removal of visible WER values, unavailable
+notes and WER explanations; CER and saved data/contracts retained. In review.
+
+**T-021 minimalist continuation (2026-11-08):** user-authorized factual copy,
+full-width Discover map, selected-only ward details and recording-derived shared
+waveforms implemented. Existing implementation dependencies are present; prior
+review/rights/audio gates remain open. Verification: see
+[refinement evidence](../test-evidence/minimalist-ui.md). **In review**.
+
+**T-021 (2026-11-08):** [Immersive guided demo](T-021-immersive-guided-demo.md)
+explicitly approved and implemented: dark presentation, one-visible-act Next/Back
+journey with retained state, raised Leaflet ward and SDG 10 framing. **In review**:
+11 frontend tests, 14 browser cases, type/build and diff checks passed. See
+[observed evidence](../test-evidence/guided-demo.md); no prior review gate is closed.
+
+**T-020 SDG map-first continuation (2026-11-08):** user-requested removal of old
+hero/event/server-status copy, SDG 10 / Target 10.2 theme, enlarged map and animated
+ward zoom/popup implemented. Manual localhost inspection observed Urdu Ward 10
+counts/share/base in the popup; reduced-motion alternatives implemented but not
+manually exercised. No automated tests or provider requests. Existing health-panel
+test expectations need future authorized updates; T-020 remains In review.
+
 **One-recording pilot continuation (2026-11-08):** user-authorized eight real
 transcription POSTs completed for ID 1533 in English, Arabic, Punjabi and Mandarin
 (auto/guided HTTP 200). Offline export preserved Urdu's pair and Cantonese's
@@ -73,8 +99,14 @@ T-018/T-019/T-020 were not implemented. Earlier notes below are historical.
 | [T-018](T-018-integrated-local-demo-and-outage.md) | Rehearse full four-act localhost and offline scenarios | P0 | Shared | T-011, T-013, T-015, T-016, T-017 | In review — online/outage checks pass; independent human rehearsal pending |
 | [T-019](T-019-attribution-privacy-and-package-audit.md) | Audit licenses, secrets and publishable assets | P0 | Shared | T-002, T-007, T-013, T-015 | In review — implementation only; manual audit and rights/sign-off pending |
 | [T-020](T-020-ui-accessibility-and-demo-polish.md) | Finish approachable, accessible visual storytelling | P1 | Dev 2 | T-011, T-013, T-015, T-016 | In review — implemented; manual accessibility and two-person rehearsal pending |
+| [T-021](T-021-immersive-guided-demo.md) | Immersive guided demo and raised ward selection | P1 | Dev 2 | Existing T-011–T-016, T-018, T-020 implementations | In review — automated/local visual checks pass; human sign-off pending |
 
 ## Status convention
+
+T-021 received user scope approval before coding. Existing implementation inputs
+were present; unresolved predecessor verification/rights/audio gates were retained,
+not bypassed or certified by the UI redesign. No new implementation ticket is
+unblocked; remaining work is human review/rehearsal and already documented gates.
 
 Latest handoff: T-015 has six exact configured voices, draft multilingual
 prompts, eleven_v3 metadata/preparation CLI and schema-2.0 per-language approval

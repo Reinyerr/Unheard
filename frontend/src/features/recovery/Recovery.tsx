@@ -1,3 +1,4 @@
+import AudioWaveform from '../../components/AudioWaveform';
 import { useEffect, useRef, useState } from 'react';
 import { useSelection } from '../../state/selection';
 import { useResearch } from '../../data/ResearchData';
@@ -10,24 +11,20 @@ import { recoveryPrompt, TTS_MODEL } from './prompts';
 import './recovery.css';
 
 function Recording({ sample }: { sample: Sample }) {
-  const audio = useRef<HTMLAudioElement>(null);
-  const [failed, setFailed] = useState(false);
-  useEffect(() => { const player = audio.current; return () => player?.pause(); }, []);
-  return <div><audio ref={audio} controls preload="none" src={`${import.meta.env.BASE_URL}${sample.audio_path}`} aria-label={`Prerecorded FLEURS clip ${sample.sample_id}`} onError={() => setFailed(true)} />
-    {failed ? <p role="status">Recording playback unavailable. The saved text is still available; listening has not been verified.</p> : null}
+  return <div><AudioWaveform src={`${import.meta.env.BASE_URL}${sample.audio_path}`} label={`Prerecorded FLEURS clip ${sample.sample_id}`} />
     <details><summary>Recording reference transcript · supplied text</summary>
       <p className="speech-transcript" lang={recoveryPrompt(sample.language_id)?.language_code} dir={sample.language_id === 'urdu' || sample.language_id === 'arabic' ? 'rtl' : 'ltr'}>{sample.raw_reference_transcript}</p>
       <p className="speech-note">Dataset reference, separate from the provider transcript you confirm. This text does not establish original-speaker consent.</p>
     </details></div>;
 }
 
-export default function Recovery() {
+export default function Recovery({ active = true }: { active?: boolean }) {
   const { selection } = useSelection();
   // Remount synchronously on language/revision changes: dispose audio, sessions and pending requests.
-  return <Flow key={`${selection.language_id}:${selection.language_revision}`} />;
+  return <Flow key={`${selection.language_id}:${selection.language_revision}`} active={active} />;
 }
 
-function Flow() {
+function Flow({ active }: { active: boolean }) {
   const { selection } = useSelection();
   const { census, experiments } = useResearch();
   const { resource } = useSamples();
@@ -49,6 +46,7 @@ function Flow() {
   const restarting = useRef(false);
   const alive = useRef(true);
   useEffect(() => {
+    if (!active) return;
     if (restarting.current && !session && !uncertain) {
       recordingSelect.current?.focus();
       restarting.current = false;
@@ -156,20 +154,17 @@ function Flow() {
   if (!language?.pilot_selected) return <EmptyState kind="not_tested">This language is outside the prerecorded pilot. No voice support or result is inferred.</EmptyState>;
   const disabled = busy || uncertain;
   return <div className="recovery">
-    <p><strong>Judge-controlled interaction simulation</strong></p><p>{NOTICE}</p>
+    <details className="simulation-disclosure"><summary>Judge-controlled interaction simulation · read the limits</summary><p>{NOTICE}</p></details>
     <p>{language.display_name} · {choices.length} frozen clips ({samples.samples.length} total, seed {samples.selection.seed}) · {connection}.</p>
-    {prompt && session?.state !== 'confirm' ? <details><summary>{prompt.display_name} recovery prompt · configured, unverified</summary>
-      <p dir={prompt.direction === 'rtl' ? 'rtl' : 'ltr'} lang={prompt.language_code}>{prompt.text}</p>
-      <p>Draft authored instruction; language review pending until audio approval. Selected voice: <bdi>{prompt.voice_id}</bdi> · model: {TTS_MODEL}. Configuration alone does not establish account access or voice compatibility.</p></details> : null}
     <p><strong>{route === 'offline' ? 'Offline / browser-only saved-result route' : 'Local backend route'}</strong> · {route === 'offline' ? 'No API session or provider request. Only matching exported actual results are used.' : 'Saved mode is the default. Live transcription requires an explicit selection and may use credits.'}</p>
-    {!session ? <>
+    {!session ? <div className="recovery-settings">
       <label>Demo route<select disabled={busy} value={route} onChange={event => { setRoute(event.target.value as typeof route); setSource('saved'); setUncertain(false); setError(''); }}>
         <option value="backend">Local backend</option><option value="offline">Browser-only saved results</option>
       </select></label>
       <label>Transcription setting<select disabled={busy} value={mode} onChange={event => { setMode(event.target.value as typeof mode); setSource('saved'); }}><option value="auto">Automatic detection</option><option value="guided">Guided language</option></select></label>
       {route === 'backend' ? <label>Result origin<select disabled={busy} value={source} onChange={event => setSource(event.target.value as typeof source)}><option value="saved">Saved actual provider response</option><option value="live" disabled={!capabilities?.live_configured || mode === 'guided' && !capability?.guided_verified}>Live provider request (may incur charges)</option></select></label> : null}
       {source === 'live' ? <p>One live request per attempt, with same-mode saved fallback if available. Key presence does not verify credits or connectivity.</p> : null}
-    </> : null}
+    </div> : null}
     <div ref={outcomePanel} tabIndex={-1} className={`recovery-outcome recovery-outcome-${feedback.tone}`} role="status" aria-live="polite" aria-atomic="true">
       <h3>{feedback.title}</h3><p>{feedback.message}</p>
       <p className="recovery-progress"><strong>State: {busy ? 'Processing request…' : session?.state.replaceAll('_', ' ') ?? 'ready'}</strong>{session ? ` · attempt ${session.attempts} of ${session.max_attempts}` : ''}</p>
@@ -198,6 +193,9 @@ function Flow() {
       <p><strong>Is this transcript correct?</strong> Your choice applies only to this simulation.</p>
       <div className="recovery-actions"><button disabled={disabled} onClick={() => decide('correct')}>{prompt?.correct_label ?? 'Correct'}{language.language_id !== 'english' ? ' (Correct)' : ''}</button><button disabled={disabled} onClick={() => decide('incorrect')}>{prompt?.incorrect_label ?? 'Incorrect'}{language.language_id !== 'english' ? ' (Incorrect)' : ''}</button></div></> : null}
     {session && ['confirm', 'retry_or_refer'].includes(session.state) ? <button disabled={disabled} onClick={() => decide('refer')}>Human-assistance referral option</button> : null}
+    {prompt && session?.state !== 'confirm' ? <details><summary>{prompt.display_name} recovery prompt · configured, unverified</summary>
+      <p dir={prompt.direction === 'rtl' ? 'rtl' : 'ltr'} lang={prompt.language_code}>{prompt.text}</p>
+      <p>Draft authored instruction; language review pending until audio approval. Selected voice: <bdi>{prompt.voice_id}</bdi> · model: {TTS_MODEL}. Configuration alone does not establish account access or voice compatibility.</p></details> : null}
     <button disabled={busy || connection === 'Checking backend…'} onClick={() => setCheck(value => value + 1)}>{connection === 'Checking backend…' ? 'Checking backend…' : 'Refresh backend availability'}</button>
     <details><summary>Recording provenance and limitations</summary><p>{samples.source.attribution} · <a href="https://huggingface.co/datasets/google/fleurs">FLEURS</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.</p><p>{samples.source.modifications}</p><p>Selection SHA-256: <span className="speech-hash">{samples.source.selection_sha256}</span>. FLEURS is not municipal-request or ward-resident speech. Saved browser confirmations require comparable completed outputs without review flags. Backend and browser sessions are separate; this interaction reports no CER improvement.</p></details>
   </div>;

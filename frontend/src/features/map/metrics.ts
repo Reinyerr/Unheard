@@ -2,7 +2,7 @@ import type { Language, LanguageId, MapMetric, Ward } from '../../types/research
 
 export type MapLanguage = LanguageId | 'all';
 export type WardMetricRow = { ward_id: number; count: number | null; share: number | null; base: number | null };
-export const colors = ['#edf8f5', '#c7e8df', '#8dcbb7', '#489f85', '#14664f'];
+export const colors = ['#fde6f1', '#f7b8d6', '#ee7eb4', '#db398a', '#a50b56'];
 export const unavailableColor = '#d5d8db';
 const counts = new Intl.NumberFormat('en-CA');
 const shares = new Intl.NumberFormat('en-CA', { maximumFractionDigits: 2 });

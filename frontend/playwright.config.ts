@@ -3,10 +3,10 @@ import { defineConfig } from '@playwright/test';
 export default defineConfig({
   testDir: './e2e',
   // Full Chromium headless avoids the standalone shell's ICU/GPU crash on macOS.
-  use: { baseURL: 'http://127.0.0.1:5173', channel: 'chromium' },
+  use: { baseURL: 'http://127.0.0.1:5173', channel: 'chromium', launchOptions: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH } : undefined },
   webServer: {
     command: 'node node_modules/vite/bin/vite.js --host 127.0.0.1 --port 5173 --strictPort',
     url: 'http://127.0.0.1:5173',
-    reuseExistingServer: false,
+    reuseExistingServer: !process.env.CI,
   },
 });

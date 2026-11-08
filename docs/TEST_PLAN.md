@@ -75,3 +75,28 @@ Remaining risk:
 ```
 
 **Definition of release-ready**: No release-blocking data-integrity error; a real ElevenLabs integration tested at least once; demonstrated results are verifiably actual; app works locally; offline saved-results route functioning; no public credentials or disallowed audio in repository.
+
+
+## T-021 guided presentation regression — 2026-11-08
+
+See [observed evidence](test-evidence/guided-demo.md). App shell tests now cover
+one accessible act, Next/Back/fragment focus, preservation of language/ward/metric/
+sample/session and inactive audio pause. Obsolete removed-shell health assertions
+were replaced; actual recovery capability checks remain. Browser cases cover
+real Leaflet lift/dimming/clear/base identity after zoom/resize, reduced motion,
+1366×768/1440×900/390×844 layouts, Urdu saved playback/comparison/acceptance/referral,
+missing inputs, stale language state and connection-refused backend fallback.
+Mocks never invent metrics; existing provider preflight remains separate. No
+live-source choice or billed provider request belongs in these UI regressions.
+T-021 does not certify human rehearsal, TTS listening or screen-reader acceptance.
+
+## T-021 waveform / minimalist continuation
+
+`e2e/waveform.spec.ts` exercises real Urdu FLAC decode, nonuniform peak bins,
+native play/pause/resume/end, keyboard seek, midpoint cursor, recording reset,
+recovery player and Web Audio fallback under normal/reduced motion. Existing
+guided tests retain 1366/1440/390 layouts, raised ward selection, map alignment,
+Urdu saved acceptance/referral, state retention and unavailable-source behavior.
+Peak extraction unit fixture checks time bins, silence and multiple channels.
+No fabricated provider outcomes. Independent provider preflight remains in
+`test-evidence/one-recording-pilot.md`; no new billed request for UI-only work.

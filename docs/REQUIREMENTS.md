@@ -61,7 +61,13 @@
 
 ## Deferred/stretch
 
-Neighbourhood choropleth, accented-English experiment, task-intent evaluation, live microphone, Gemini clarification, ElevenLabs conversational Agents, 3D/advanced cinematic transitions, expanded samples, database/authentication, Vultr or public backend deployment.
+Neighbourhood choropleth, accented-English experiment, task-intent evaluation, live microphone, Gemini clarification, ElevenLabs conversational Agents, full 3D rendering/advanced cinematic transitions, expanded samples, database/authentication, Vultr or public backend deployment.
+
+T-021 was explicitly approved on 2026-11-08: the four existing acts may use a
+single-visible-act Next/Back shell, restrained dark styling and a lightweight
+screen-space SVG ward lift within installed Leaflet. Original geometry and all
+data/API contracts remain intact. This bounded presentation change does not
+authorize a new 3D engine, hosting, speech experiment or integration.
 
 ## Constraints and open technical validations
 

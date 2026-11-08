@@ -57,12 +57,12 @@ export default function WardExplorer() {
           onClick={() => setMetric(value)}>{value === 'count' ? 'Speaker count' : 'Share of language base'}</button>)}
       </div></fieldset>
     </div>
-    <div className="ward-context" aria-live="polite">
-      <h3>{context}</h3><p>{coverage}</p>
-      <p><strong>{formatCount(cityTotal)}</strong> supplied city home-language category count · 11 wards · 2021 census</p>
+    <details className="ward-context">
+      <summary>{context} · <strong>{formatCount(cityTotal)}</strong> city home speakers</summary><p>{coverage}</p>
+      <p>11 wards · corrected 2021 census · supplied home-language categories</p>
       {languageId === 'all' ? <p>Gap layer includes only {missing.map(row => row.display_name).join(', ')}. Other tracked languages retain their covered status.</p> : null}
       {language?.census_home_column === null ? <p>This source has no English home-language counts; English is excluded from the tracked non-official census subtotal.</p> : null}
-    </div>
+    </details>
     <div className="ward-layout">
       <div>
         {geometry?.status === 'ready'
@@ -79,13 +79,14 @@ export default function WardExplorer() {
         </div>
         {geometry?.status === 'ready' ? <p className="ward-method">2021 census on a current official boundary snapshot. Vintage, terms and source-overlap cautions are recorded under Sources and boundary limitations below.</p> : null}
       </div>
-      <aside className="ward-detail" aria-label="Selected ward demographics" aria-live="polite">
-        {selected ? <><WardTooltip row={selected} context={context} coverage={coverage} />
-          <button className="ward-clear" onClick={() => selectWard(null)}>Clear ward selection</button></>
-          : <><h3>Choose a ward</h3><p>Click or keyboard-select a boundary, or choose a ward in the table. Each view shows the count, share and census denominator together.</p></>}
-        <p className="ward-detail-note">Ward selection changes demographic context only. Speech experiments use separate, non-local recordings.</p>
-      </aside>
+      {selected ? <aside key={selectedWard ?? 'no-ward'} className={`ward-detail ${selected ? 'ward-detail-selected' : ''}`} aria-label="Selected ward demographics" aria-live="polite">
+        <WardTooltip row={selected} context={context} coverage={coverage} />
+          <button className="ward-clear" onClick={() => selectWard(null)}>Clear ward selection</button>
+        <p className="ward-detail-note">Census context only. Speech recordings are non-local.</p>
+      </aside> : null}
     </div>
+    <details className="ward-table-details" open={geometry?.status === 'unavailable'}>
+    <summary>Verified ward table · all 11 wards</summary>
     <div className="ward-table-wrap" tabIndex={0} role="region" aria-label="Scrollable verified ward census table">
       <table className="ward-table">
         <caption>{geometry?.status === 'unavailable' ? 'Verified ward table — map unavailable' : 'Verified ward counts and shares'}: {context}</caption>
@@ -97,6 +98,7 @@ export default function WardExplorer() {
       </table>
     </div>
     <p className="ward-method">Share = selected category count ÷ population_language_base × 100. Unavailable counts or nonpositive denominators have no percentage. Census categories describe home-language use; coverage measures supplied task recordings.</p>
+    </details>
     <details className="ward-provenance"><summary>Sources and boundary limitations</summary>
       <p>Census: City of Mississauga, corrected 2021 ward profile. Ward 10 uses the corrected source. Language coverage: supplied MInDS-14 and Speech-MASSIVE subsets. Counts and geometry are static local assets.</p>
       <p>Boundaries: <a href="https://data.mississauga.ca/datasets/mississauga::ward-boundaries/about" target="_blank" rel="noreferrer">City of Mississauga Ward Boundaries</a>. No basemap tiles or speech-location markers are loaded.</p>

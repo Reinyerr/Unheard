@@ -54,21 +54,30 @@ export default function Recommendations() {
   const trackedCount = tracked.every(row => row.city_home_speakers !== null) ? tracked.reduce((total, row) => total + (row.city_home_speakers ?? 0), 0) : null;
   return <div className="recommendations">
     <h3>Language evidence gaps first</h3>
-    <p>{data.items.length} tracked categories have no labelled task-request recordings in the supplied MInDS-14 and Speech-MASSIVE subsets: {formatCount(gapCount)} home-language speakers out of {formatCount(trackedCount)} across {tracked.length} tracked non-official categories{trackedCount ? ` (${(100 * gapCount / trackedCount).toFixed(1)}%)` : ''}. This denominator is not the city population.</p>
-    <p>Priorities use missing supplied coverage, then city home-language counts descending; equal counts use canonical language ID. CER never changes this order. Coverage is an evidence gap, not a forecast of recognition failure or a measure of English ability.</p>
-    <PriorityTable data={data} languages={languages} selected={selection.language_id} onSelect={selectLanguage} />
+    <div className="coverage-stats" aria-label="Supplied task-audio coverage gap">
+      <div><strong>{data.items.length}</strong><span>tracked languages without supplied task audio</span></div>
+      <div><strong>{formatCount(gapCount)}</strong><span>home-language speakers in those categories</span></div>
+      <div><strong>{trackedCount ? `${(100 * gapCount / trackedCount).toFixed(1)}%` : 'Unavailable'}</strong><span>of {formatCount(trackedCount)} across {tracked.length} tracked non-official categories</span></div>
+    </div>
+    <p className="recommendation-note">Supplied MInDS-14 and Speech-MASSIVE coverage gap. This denominator is not the city population or a recognition failure rate.</p>
+    <details className="priority-overview" open={!language}><summary>Compare language evaluation priorities</summary>
+      <p>Priorities use missing supplied coverage, then city home-language counts descending; equal counts use canonical language ID. CER never changes this order. Coverage is an evidence gap, not a forecast of recognition failure or a measure of English ability.</p>
+      <PriorityTable data={data} languages={languages} selected={selection.language_id} onSelect={selectLanguage} /></details>
     {language ? <section className="recommendation-detail" aria-label="Selected language research plan">
       <h3>{language.display_name}: {item ? `evaluation priority ${item.rank}` : 'covered in supplied task subsets'}</h3>
       <p>{item ? item.reason : 'Task-request audio is present in the supplied subsets. This language is not in the missing-coverage ranking; supplied coverage does not establish sufficient evaluation.'}</p>
       <p>City home-language count: {formatCount(language.city_home_speakers)} · supplied MInDS-14 clips: {formatCount(language.request_clip_counts.minds14)} · Speech-MASSIVE clips: {formatCount(language.request_clip_counts.speech_massive)}.</p>
       <h4>Plan task-specific evaluation</h4>
-      <p>{item?.suggested_action ?? `Review existing ${language.display_name} task evidence with community partners; collect consented realistic municipal-request recordings where coverage is insufficient.`}</p>
-      <p>Include varied dialects and willing speakers, document consent and sampling limits, then validate confirmation, retry and human-assistance referral safeguards before any service use. No municipal request is executed here.</p>
+      <p className="plan-lead">Collect consented, realistic municipal-request recordings with community partners. Evaluate outcomes before claiming improvement.</p>
+      <details><summary>Full evaluation plan and safeguards</summary><p>{item?.suggested_action ?? `Review existing ${language.display_name} task evidence with community partners; collect consented realistic municipal-request recordings where coverage is insufficient.`}</p>
+      <p>Include varied dialects and willing speakers, document consent and sampling limits, then validate confirmation, retry and human-assistance referral safeguards before any service use. No municipal request is executed here.</p></details>
+      <details className="recruitment-details"><summary>Explore recruitment wards · count and share</summary>
       <h4>Ward context for future recruitment</h4>
       <p>Count and share are independent views of corrected 2021 census categories. Share uses population_language_base. No polygons are required for these tables; geography describes recruitment context, never the location or recognition performance of FLEURS speakers.</p>
       <div className="recommendation-wards"><WardPriorities wards={wards} language={language} metric="count" onSelect={selectWard} /><WardPriorities wards={wards} language={language} metric="share" onSelect={selectWard} /></div>
+      </details>
       {item ? <details><summary>Recommendation limitations</summary><ul>{item.limitations.map(text => <li key={text}>{text}</li>)}</ul></details> : null}
-      <section className="recommendation-pilot" aria-label="Separate experimental evidence"><h3>Separate experimental evidence · {language.display_name}</h3><p>These saved exploratory results do not contribute to language or ward ranks. FLEURS is read speech, not local municipal requests; speakers have no identified Mississauga ward residency.</p><PilotEvidence language={language} /></section>
+      <details className="recommendation-pilot"><summary>Separate experimental evidence · {language.display_name}</summary><h3>Separate experimental evidence · {language.display_name}</h3><p>These saved exploratory results do not contribute to language or ward ranks. FLEURS is read speech, not local municipal requests; speakers have no identified Mississauga ward residency.</p><PilotEvidence language={language} /></details>
     </section> : <EmptyState kind="choose_language">Choose a priority language in the table or use the global selector to view its ward context and separate pilot evidence.</EmptyState>}
     <details className="recommendation-sources"><summary>Sources and ranking provenance</summary>
       <p>{data.source.attribution}. {data.source.task_dataset_attribution}.</p>

@@ -9,13 +9,14 @@ import WardTooltip from '../../components/WardTooltip';
 import { fillColor, formatCount, formatShare, maximum, unavailableColor, type WardMetricRow } from './metrics';
 
 type Props = { geometry: WardGeometry; rows: WardMetricRow[]; metric: MapMetric;
-  selectedWard: number | null; onSelect: (id: number) => void; context: string; coverage: string;
+  selectedWard: number | null; onSelect: (id: number | null) => void; context: string; coverage: string;
   onUnavailable: () => void };
 
 export default function WardMap({ geometry, rows, metric, selectedWard, onSelect, context, coverage, onUnavailable }: Props) {
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<L.Map | null>(null);
   const layers = useRef(new Map<number, L.Path>());
+  const bases = useRef(new Map<number, L.Path>());
   const bounds = useRef<L.LatLngBounds | null>(null);
   const callbacks = useRef({ onSelect, onUnavailable });
   callbacks.current = { onSelect, onUnavailable };
@@ -26,17 +27,29 @@ export default function WardMap({ geometry, rows, metric, selectedWard, onSelect
     let instance: L.Map | undefined;
     let observer: ResizeObserver | undefined;
     try {
-      instance = L.map(container.current, { scrollWheelZoom: false, zoomAnimation: false,
-        fadeAnimation: false, markerZoomAnimation: false, inertia: false, zoomSnap: 0.25, maxZoom: 17 });
-      // Leaflet keyboard panning animates in JavaScript, outside CSS motion rules.
-      // Keep every pan immediate, including keyboard and bounds adjustments.
-      const panBy = instance.panBy.bind(instance);
-      instance.panBy = (offset, options) => panBy(offset, { ...options, animate: false });
+      // Individual SVG translation leaves Leaflet's pane transforms and the
+      // verified source coordinates intact. Canvas cannot provide this effect.
+      instance = L.map(container.current, { renderer: L.svg({ padding: .3 }), scrollWheelZoom: false,
+        zoomAnimation: false, fadeAnimation: false, markerZoomAnimation: false,
+        inertia: false, zoomSnap: .25, maxZoom: 17 });
       map.current = instance;
-      const portals: { id: number; element: HTMLElement }[] = [];
+      const basePane = instance.createPane('wardBases');
+      basePane.style.zIndex = '399';
+      basePane.style.pointerEvents = 'none';
       const collection: FeatureCollection = { type: 'FeatureCollection', features: geometry.features };
+      // Stationary decorative footprint, same geometry, no duplicate hit target.
+      const baseRenderer = L.svg({ pane: 'wardBases', padding: .3 });
+      L.geoJSON(collection, { pane: 'wardBases', interactive: false,
+        style: { renderer: baseRenderer, color: '#791448', fillColor: '#46182f', weight: 2, opacity: 0, fillOpacity: 0 },
+        onEachFeature(feature, layer) {
+          const path = layer as L.Path;
+          bases.current.set(feature.properties.ward_id as number, path);
+          path.on('add', () => path.getElement()?.setAttribute('aria-hidden', 'true'));
+        },
+      }).addTo(instance);
+      const portals: { id: number; element: HTMLElement }[] = [];
       const polygons = L.geoJSON(collection, {
-        style: { color: '#52766b', fillColor: unavailableColor, weight: 1.2, fillOpacity: 0.9 },
+        style: { color: '#93657e', fillColor: unavailableColor, weight: 1.2, fillOpacity: .9, className: 'ward-surface' },
         onEachFeature(feature, layer) {
           const id = feature.properties.ward_id as number;
           const path = layer as L.Path;
@@ -44,7 +57,8 @@ export default function WardMap({ geometry, rows, metric, selectedWard, onSelect
           const element = document.createElement('div');
           portals.push({ id, element });
           path.bindTooltip(element, { sticky: true, className: 'ward-map-tooltip', opacity: 1 });
-          path.on('click', () => callbacks.current.onSelect(id));
+          const select = () => { path.closeTooltip(); callbacks.current.onSelect(id); };
+          path.on('click', select);
           path.on('add', () => {
             const node = path.getElement();
             if (!node) return;
@@ -55,45 +69,58 @@ export default function WardMap({ geometry, rows, metric, selectedWard, onSelect
             node.addEventListener('blur', () => path.closeTooltip());
             node.addEventListener('keydown', event => {
               const key = (event as KeyboardEvent).key;
-              if (key === 'Enter' || key === ' ') {
-                event.preventDefault(); event.stopPropagation(); callbacks.current.onSelect(id);
-              }
-              if (key === 'Escape') path.closeTooltip();
+              if (key === 'Enter' || key === ' ') { event.preventDefault(); event.stopPropagation(); select(); }
+              if (key === 'Escape') { path.closeTooltip(); callbacks.current.onSelect(null); }
             });
           });
         },
       }).addTo(instance);
       bounds.current = polygons.getBounds();
-      instance.fitBounds(bounds.current, { padding: [20, 20], animate: false });
+      instance.fitBounds(bounds.current, { padding: [30, 30], animate: false });
       instance.setMinZoom(instance.getZoom() - 1);
-      instance.setMaxBounds(bounds.current.pad(0.2));
+      instance.setMaxBounds(bounds.current.pad(.4));
       instance.attributionControl.addAttribution('<a href="https://data.mississauga.ca/datasets/mississauga::ward-boundaries/about">City of Mississauga</a>');
       setTargets(portals);
-      observer = new ResizeObserver(() => instance?.invalidateSize({ animate: false }));
+      observer = new ResizeObserver(entries => {
+        // Hidden acts remain mounted; refit only when this map has a real size.
+        if (entries.some(entry => entry.contentRect.width > 0 && entry.contentRect.height > 0)) {
+          instance?.invalidateSize({ animate: false, pan: false });
+          if (bounds.current) instance?.fitBounds(bounds.current, { padding: [30, 30], animate: false });
+        }
+      });
       observer.observe(container.current);
-    } catch {
-      callbacks.current.onUnavailable();
-    }
-    return () => { observer?.disconnect(); instance?.remove(); map.current = null; layers.current.clear(); };
+    } catch { callbacks.current.onUnavailable(); }
+    return () => {
+      observer?.disconnect(); instance?.remove(); map.current = null;
+      layers.current.clear(); bases.current.clear();
+    };
   }, [geometry]);
 
   useEffect(() => {
     const max = maximum(rows, metric);
     for (const row of rows) {
+      const selected = row.ward_id === selectedWard;
+      const muted = selectedWard !== null && !selected;
       const layer = layers.current.get(row.ward_id);
-      layer?.setStyle({ fillColor: fillColor(row, metric, max),
-        color: row.ward_id === selectedWard ? '#a64419' : '#52766b', weight: row.ward_id === selectedWard ? 3 : 1.2 });
+      layer?.setStyle({ fillColor: fillColor(row, metric, max), fillOpacity: muted ? .24 : .94,
+        color: selected ? '#ffe1f1' : muted ? '#584153' : '#ae7594', weight: selected ? 2.5 : 1.2 });
+      bases.current.get(row.ward_id)?.setStyle({ opacity: selected ? 1 : 0, fillOpacity: selected ? 1 : 0 });
       const node = layer?.getElement();
-      node?.setAttribute('aria-pressed', String(row.ward_id === selectedWard));
+      node?.classList.toggle('ward-raised', selected);
+      node?.setAttribute('aria-pressed', String(selected));
       node?.setAttribute('aria-label', `Ward ${row.ward_id}; ${context}; ${formatCount(row.count)} home speakers; share ${formatShare(row.share)}; population language base ${formatCount(row.base)}`);
     }
+    if (selectedWard !== null) layers.current.get(selectedWard)?.bringToFront();
   }, [rows, metric, selectedWard, context, targets]);
 
-  return <div className="ward-map-frame">
+  return <div className="ward-map-frame" data-selected-ward={selectedWard ?? undefined}>
     <div ref={container} className="ward-map-canvas" role="region" aria-label="Mississauga ward census map" />
+    <span className="map-instruction">{selectedWard === null ? 'Select a ward' : `Ward ${selectedWard} selected`}</span>
+    <span className="map-coordinate-label" aria-hidden="true">MISSISSAUGA · 11 WARDS / 2021 CENSUS</span>
     <button className="ward-reset" onClick={() => {
-      if (bounds.current) map.current?.fitBounds(bounds.current, { padding: [20, 20], animate: false });
-    }}>Reset map view</button>
+      onSelect(null);
+      if (bounds.current) map.current?.fitBounds(bounds.current, { padding: [30, 30], animate: false });
+    }}>{selectedWard === null ? 'Reset map view' : 'Clear selection / reset view'}</button>
     {targets.map(({ id, element }) => {
       const row = rows.find(row => row.ward_id === id);
       return row ? createPortal(<WardTooltip row={row} context={context} coverage={coverage} id={`ward-map-tooltip-${id}`} />, element, id) : null;

@@ -1,0 +1,10 @@
+.audio-waveform { max-width: 48rem; margin: 1rem 0; }
+.audio-waveform audio { width: 100%; display: block; margin: 0 0 .6rem; }
+.waveform-track { position: relative; height: 64px; }
+.waveform-track svg { width: 100%; height: 64px; display: block; }
+.waveform-unplayed { fill: #6d6478; }
+.waveform-played { fill: #ff8fbe; }
+.waveform-cursor { stroke: #f6edf4; stroke-width: 1.5; }
+.waveform-track input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.waveform-track:focus-within { outline: 2px solid var(--accent, #a7eee0); outline-offset: 4px; }
+.audio-status { font-size: .72rem; color: var(--muted, #bbafc2); font-variant-numeric: tabular-nums; }

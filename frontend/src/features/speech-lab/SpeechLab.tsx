@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
+import AudioWaveform from '../../components/AudioWaveform';
 import EmptyState, { statusLabels } from '../../components/EmptyState';
 import TranscriptDiff from '../../components/TranscriptDiff';
 import { useResearch } from '../../data/ResearchData';
@@ -8,19 +9,7 @@ import { delta, matchingEvidence, percent, useSamples } from './data';
 import './speech-lab.css';
 
 function AudioClip({ sample }: { sample: Sample }) {
-  const [failed, setFailed] = useState(false);
-  const audio = useRef<HTMLAudioElement>(null);
-  useEffect(() => {
-    const player = audio.current;
-    return () => { player?.pause(); };
-  }, []);
-  return <div className="speech-audio">
-    <audio ref={audio} controls preload="none" aria-label={`FLEURS recording ${sample.sample_id}`} onError={() => setFailed(true)}>
-      <source src={`${import.meta.env.BASE_URL}${sample.audio_path}`} type="audio/flac" onError={() => setFailed(true)} />
-      Audio playback is unsupported in this browser.
-    </audio>
-    {failed ? <EmptyState kind="unavailable">This vetted FLAC file is missing, cannot be loaded, or is unsupported by this browser. Transcripts and saved results remain available.</EmptyState> : null}
-  </div>;
+  return <AudioWaveform src={`${import.meta.env.BASE_URL}${sample.audio_path}`} label={`FLEURS recording ${sample.sample_id}`} />;
 }
 function Mode({ title, outcome, sample, direction, language, flags }: { title: string; outcome: Outcome | undefined;
   sample: Sample; direction: 'rtl' | 'ltr'; language: string; flags: string[] }) {
@@ -35,8 +24,7 @@ function Mode({ title, outcome, sample, direction, language, flags }: { title: s
             : 'No attempted outcome is present in the saved artifact.'}
     </EmptyState> : !outcome ? <EmptyState kind="not_tested">No saved outcome for this sample.</EmptyState> : null}
     {flags.length ? <p className="speech-note">Review flags: {flags.join('; ')}</p> : null}
-    <dl className="speech-stats"><div><dt>CER</dt><dd>{percent(outcome?.cer ?? null)}</dd></div><div><dt>WER</dt><dd>{percent(outcome?.wer ?? null)}</dd></div></dl>
-    {outcome?.wer == null ? <p className="speech-note">WER unavailable: no eligible scored outcome or validated language-specific tokenizer. Current policy supports English whitespace tokens only.</p> : null}
+    <dl className="speech-stats"><div><dt>CER</dt><dd>{percent(outcome?.cer ?? null)}</dd></div></dl>
     {outcome?.transcript_raw !== null && outcome?.transcript_raw !== undefined ? <TranscriptDiff reference={sample.reference_transcript} output={outcome.transcript_raw} direction={direction} language={language} /> : <p>No recorded transcript available.</p>}
   </section>;
 }
@@ -76,8 +64,8 @@ export default function SpeechLab() {
   const flags = reviewFlags(evidence?.source.review_flags);
   return <div className="speech-lab">
     <p><strong>Saved research evidence · no live transcription requests</strong></p>
-    <p className="speech-note">Character error rate (CER) compares text edits with reference characters; lower is better and insertions can exceed 100%. Word error rate (WER) requires a validated tokenizer. Neither measures whether a municipal request was understood.</p>
-    <p>{choices.length} selected {language.display_name} clips · {samples.samples.length} total · seed {samples.selection.seed}. Common FLEURS IDs: {samples.selection.ids.join(', ')}.</p>
+
+    <p>{choices.length} selected {language.display_name} clips · {samples.samples.length} total · seed {samples.selection.seed}. {summary ? `Scored automatic n=${summary.n_auto_completed}; guided n=${summary.n_guided_completed}; paired n=${summary.n_paired}.` : 'Summary unavailable.'}</p>
     <label htmlFor="speech-sample">Recording
       <select id="speech-sample" value={sample?.sample_id ?? ''} onChange={event => selectSample(choices.find(row => row.sample_id === event.target.value) ?? null, selection.language_revision)}>
         <option value="">Choose a recording</option>
@@ -87,15 +75,6 @@ export default function SpeechLab() {
     {experiments.status === 'loading' ? <EmptyState kind="loading">Loading saved experiment evidence.</EmptyState>
       : experiments.status === 'unavailable' ? <EmptyState kind="unavailable" onRetry={reload}>{experiments.message}</EmptyState>
         : !evidence ? <EmptyState kind="unavailable">Sample identity or selection provenance does not match the experiment artifact. Comparisons are withheld.</EmptyState> : null}
-    {summary ? <section aria-label="Language pilot summary" className="speech-summary">
-      <h3>{language.display_name} pilot summary</h3>
-      {scoredClipCount === 1 ? <p><strong>One-recording demonstration.</strong> These results cover one recording, not overall performance for this language.</p> : null}
-      <p>Selected n={summary.n_selected}; scored automatic n={summary.n_auto_completed}; scored guided n={summary.n_guided_completed}; comparable pairs n={summary.n_paired}.</p>
-      <dl className="speech-stats"><div><dt>Mean automatic CER</dt><dd>{percent(summary.mean_auto_cer)}</dd></div><div><dt>Mean guided CER</dt><dd>{percent(summary.mean_guided_cer)}</dd></div><div><dt>Mean paired delta</dt><dd>{delta(summary.mean_delta_cer)}</dd></div></dl>
-      <p>Improved {summary.improved_count} · worsened {summary.worsened_count} · tied {summary.unchanged_count} (comparable pairs only).</p>
-      {Object.keys(summary.unpaired_reasons).length ? <p>Unpaired reasons (clip/status counts may overlap): {Object.entries(summary.unpaired_reasons).map(([status, count]) => `${status}: ${count}`).join('; ')}.</p> : null}
-      <p className="speech-note">Positive delta = automatic CER minus guided CER, so lower guided error; negative means worse. Mode means can use different clips. Tiny partial exploratory sample; no significance, population or ward-level inference.</p>
-    </section> : evidence ? <EmptyState kind="unavailable">No exported language summary is available.</EmptyState> : null}
     {sample ? <section key={sample.sample_id} className="speech-record" aria-label={`Selected recording ${sample.sample_id}`}>
       <h3><bdi>{sample.sample_id}</bdi> · FLEURS ID {sample.fleurs_id}</h3>
       <AudioClip key={sample.sample_id} sample={sample} />
@@ -109,12 +88,23 @@ export default function SpeechLab() {
         {evidence ? <div className="speech-modes"><Mode title="Automatic detection" outcome={record?.auto} sample={sample} direction={direction} language={textLanguage} flags={flags[`${sample.sample_id}:auto`] ?? []} /><Mode title="Guided language" outcome={record?.guided} sample={sample} direction={direction} language={textLanguage} flags={flags[`${sample.sample_id}:guided`] ?? []} /></div> : <p>Saved comparisons are unavailable; the reference and authentic audio remain independent.</p>}
       </div>
     </section> : <EmptyState kind="pending" title="Choose a recording">The complete frozen selection is available above; no clip is chosen based on its outcome.</EmptyState>}
+    <details className="metric-explainer"><summary>How to read the comparison · CER is lower-is-better</summary><p className="speech-note">Character error rate (CER) compares text edits with reference characters; lower is better and insertions can exceed 100%. CER does not measure whether a municipal request was understood.</p></details>
+    {summary ? <details aria-label="Language pilot summary" className="speech-summary"><summary>Language pilot summary · sample counts and limitations</summary>
+      <h3>{language.display_name} pilot summary</h3>
+      {scoredClipCount === 1 ? <p><strong>One-recording demonstration.</strong> These results cover one recording, not overall performance for this language.</p> : null}
+      <p>Selected n={summary.n_selected}; scored automatic n={summary.n_auto_completed}; scored guided n={summary.n_guided_completed}; comparable pairs n={summary.n_paired}.</p>
+      <dl className="speech-stats"><div><dt>Mean automatic CER</dt><dd>{percent(summary.mean_auto_cer)}</dd></div><div><dt>Mean guided CER</dt><dd>{percent(summary.mean_guided_cer)}</dd></div><div><dt>Mean paired delta</dt><dd>{delta(summary.mean_delta_cer)}</dd></div></dl>
+      <p>Improved {summary.improved_count} · worsened {summary.worsened_count} · tied {summary.unchanged_count} (comparable pairs only).</p>
+      {Object.keys(summary.unpaired_reasons).length ? <p>Unpaired reasons (clip/status counts may overlap): {Object.entries(summary.unpaired_reasons).map(([status, count]) => `${status}: ${count}`).join('; ')}.</p> : null}
+      <p className="speech-note">Positive delta = automatic CER minus guided CER, so lower guided error; negative means worse. Mode means can use different clips. Tiny partial exploratory sample; no significance, population or ward-level inference.</p>
+    </details> : evidence ? <EmptyState kind="unavailable">No exported language summary is available.</EmptyState> : null}
     <details className="speech-sources"><summary>Speech sources, model and metric policy</summary>
       <p>{samples.source.attribution}. <a href="https://huggingface.co/datasets/google/fleurs">FLEURS source</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.</p>
       <p>{samples.source.modifications}</p><p>{samples.source.limitations}</p>
+      <p>Common FLEURS IDs: {samples.selection.ids.join(', ')}.</p>
       <p>Manifest exported: {samples.generated_at_utc} · selection SHA-256: <span className="speech-hash">{samples.source.selection_sha256}</span></p>
       {evidence ? <><p>Provider {evidence.model.provider} · model {evidence.model.model_id ?? 'unavailable'} · API {evidence.model.api_version ?? 'unavailable'} · results exported {evidence.generated_at_utc}. Provider model-alias weight revisions are unknown.</p>
-        <p>{evidence.source.normalization}</p><p>{evidence.source.cer_units}</p><p>{evidence.source.wer_policy}</p><p>{evidence.source.script_policy}</p><p>{evidence.source.limitations}</p></> : null}
+        <p>{evidence.source.normalization}</p><p>{evidence.source.cer_units}</p><p>{evidence.source.script_policy}</p><p>{evidence.source.limitations}</p></> : null}
       <p>Curated local audio only; public-package attribution/licence audit remains pending. FLEURS recordings are not municipal requests and have no identified Mississauga ward residency.</p>
     </details>
   </div>;

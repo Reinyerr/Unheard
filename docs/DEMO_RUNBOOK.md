@@ -1,5 +1,27 @@
 # Local four-act demonstration runbook — T-018
 
+## T-021 current navigation — 2026-11-08
+
+The approved redesign now shows one act at a time. Use the persistent **Next** /
+**Back** controls or numbered progress buttons; scrolling is only within the
+current act (or page on mobile). Language, ward, sample and recovery session stay
+selected across navigation, and inactive audio pauses. The explicit **Explore
+Urdu** control retains the all-language start/reset policy. Existing fragment
+links, including recovery's Continue to recommendations, open the correct act.
+
+On Discover, select Ward 10 to show its raised SVG surface, dimmed neighbors,
+readable census panel and Clear selection. This replaces the older zoom/popup
+presentation described below. Table, source and boundary details are expandable.
+For the saved rehearsal choose Urdu 1533 in Investigate, then Browser-only saved
+results in Demonstrate. Approved TTS remains unavailable; use displayed text.
+The rejected 1537 retry has no usable saved outcome and honestly ends in referral.
+
+Opening: “Language should never be a barrier to being heard.” Final: SDG 10 is
+the goal UNHEARD aligns with, not UN endorsement or proven reduced inequality.
+See [T-021 evidence](test-evidence/guided-demo.md) for actual verification and the
+complete reproduction steps. Historical timings/evidence below do not certify
+the new design's two-person rehearsal; that remains pending.
+
 Run from the repository root on `feature/final-integration`. This is a localhost
 research prototype. Use the same computer's browser at http://127.0.0.1:5173;
 other devices cannot reach this loopback address. Team submission work is D-024.
@@ -156,7 +178,7 @@ T-018 remains In review until both have passed; T-019/T-020 are outside this wor
 
 Implementation only, 2026-11-07; the following timings are rehearsal targets,
 not measured results. The initial all-language view remains required by FR-A2.
-Choose **Start Urdu walkthrough** to select Urdu and focus Discover; this does
+Select **Urdu** in the persistent language dropdown; this does
 not start playback, choose a recording or make a provider request. The selector
 and **Reset selection** retain optional exploration across all tracked languages.
 
@@ -176,7 +198,7 @@ Manual review (not performed in the T-020 implementation session):
 1. Start the frontend with `npm --prefix frontend run dev`. FastAPI is optional
    for the browser-only route; for local API review use the key-disabled startup
    command above. No live transcription or TTS generation is required.
-2. With keyboard only: use the skip link, Urdu walkthrough link, language selector,
+2. With keyboard only: use the skip link, language selector,
    each act link, metric buttons and ward table; select Urdu 1533, follow **Read
    reference transcript** and **Compare saved transcriptions**, then reach recovery
    and recommendations with **Next**. Confirm visible focus and no keyboard trap.
@@ -203,3 +225,28 @@ Manual review (not performed in the T-020 implementation session):
 T-020 remains In review until manual keyboard/reading/motion and two-person
 explanation acceptance is observed. No tests, build, browser interaction, audio
 listening or contrast measurement was performed for this implementation handoff.
+
+### Updated map-first entry (2026-11-08)
+
+The landing page now opens with SDG 10 / Target 10.2 context, language controls
+and the enlarged map; the previous hero and global server-health panel are
+removed. Choose a language, then click a ward (or select it with Enter/Space or
+from the table): it zooms to that ward and shows count/share/census base in a
+popup. Close the popup or use Reset map view to return to city bounds and clear
+selection. With system reduced motion enabled, selection fits immediately and
+reveals without animation. Validate narrow-screen popup scrolling/close and
+motion changes manually. The all-language initial layer still means only the
+eight supplied coverage-gap categories, not all residents or measured failures.
+Urdu is available in the persistent language dropdown; accessibility help follows
+the map/table. Other acts
+and the browser-only saved route remain available through the act navigation.
+
+### Minimalist T-021 refinement (2026-11-08)
+
+Discover now opens with “Language coverage by ward”; the earlier exact slogan
+check is superseded. Select directly on the full-width map; demographic details
+appear only after selection. In Investigate and Demonstrate, native audio controls
+and the recording-derived waveform share the same playback position. Pause,
+resume, pointer/keyboard seek and end should agree. Missing waveform decode leaves
+native controls available. Keep sample counts, methodology and source details
+available below the main interaction. See [verification](test-evidence/minimalist-ui.md).

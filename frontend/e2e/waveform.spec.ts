@@ -1,0 +1,57 @@
+import { expect, test } from '@playwright/test';
+for (const reducedMotion of ['no-preference', 'reduce'] as const) {
+  test(`Urdu waveform sync and keyboard seeking (${reducedMotion})`, async ({ page }) => {
+    await page.emulateMedia({ reducedMotion });
+    await page.route('http://127.0.0.1:8000/**', route => route.abort('connectionrefused'));
+    await page.goto('/');
+    await expect(page.getByText('Choose a ward', { exact: true })).toHaveCount(0);
+    await expect(page.getByRole('complementary', { name: 'Selected ward demographics' })).toHaveCount(0);
+    await expect(page.getByRole('region', { name: 'Mississauga ward census map' })).toBeVisible();
+    expect((await page.getByRole('region', { name: 'Mississauga ward census map' }).boundingBox())!.width).toBeGreaterThan(1000);
+    await page.getByRole('combobox', { name: 'Selected language', exact: true }).selectOption('urdu');
+    await page.getByRole('button', { name: 'Next: Investigate' }).click();
+    await page.getByRole('combobox', { name: 'Recording', exact: true }).selectOption('urdu-1533');
+    const audio = page.getByLabel('FLEURS recording urdu-1533', { exact: true });
+    const player = page.locator('#investigate .audio-waveform');
+    const seek = player.getByRole('slider');
+    await expect(seek).toBeEnabled();
+    const heights = await player.locator('.waveform-unplayed rect').evaluateAll(nodes => nodes.map(node => Number(node.getAttribute('height'))));
+    expect(heights.length).toBe(160);
+    expect(new Set(heights).size).toBeGreaterThan(50);
+    await audio.evaluate(async (node: HTMLAudioElement) => node.play());
+    await expect(player).toHaveAttribute('data-playback-state', 'Playing');
+    await expect.poll(async () => Number(await seek.inputValue())).toBeGreaterThan(.2);
+    await audio.evaluate((node: HTMLAudioElement) => node.pause());
+    await expect(player).toHaveAttribute('data-playback-state', 'Paused');
+    const paused = await seek.inputValue();
+    await page.waitForTimeout(200);
+    expect(await seek.inputValue()).toBe(paused);
+    await seek.focus(); await seek.press('Home'); await seek.press('ArrowRight');
+    await expect.poll(() => audio.evaluate((node: HTMLAudioElement) => node.currentTime)).toBeCloseTo(.01, 2);
+    await audio.evaluate((node: HTMLAudioElement) => { node.currentTime = node.duration / 2; });
+    await expect.poll(async () => Number(await player.locator('clipPath rect').getAttribute('width'))).toBeCloseTo(320, 0);
+    await audio.evaluate((node: HTMLAudioElement) => { node.currentTime = node.duration - 1; });
+    await expect.poll(() => audio.evaluate((node: HTMLAudioElement) => node.seeking)).toBe(false);
+    await audio.evaluate(async (node: HTMLAudioElement) => node.play());
+    await expect(player).toHaveAttribute('data-playback-state', 'Ended');
+    await expect.poll(async () => Number(await player.locator('clipPath rect').getAttribute('width'))).toBeCloseTo(640, 0);
+    await page.getByRole('combobox', { name: 'Recording', exact: true }).selectOption('urdu-1537');
+    await expect(page.getByLabel('FLEURS recording urdu-1533', { exact: true })).toHaveCount(0);
+    await expect(player.getByRole('slider')).toHaveValue('0');
+    await page.getByRole('button', { name: 'Next: Demonstrate' }).click();
+    await page.getByLabel('Demo route').selectOption('offline');
+    await page.getByLabel('Prerecorded sample').selectOption('urdu-1533');
+    await expect(page.locator('#demonstrate .waveform-unplayed rect')).toHaveCount(160);
+  });
+}
+test('unsupported Web Audio retains native playback', async ({ page }) => {
+  await page.addInitScript(() => { Object.defineProperty(window, 'AudioContext', { value: undefined }); });
+  await page.goto('/');
+  await page.getByRole('combobox', { name: 'Selected language', exact: true }).selectOption('urdu');
+  await page.getByRole('button', { name: 'Next: Investigate' }).click();
+  await page.getByRole('combobox', { name: 'Recording', exact: true }).selectOption('urdu-1533');
+  await expect(page.getByText('Waveform unavailable. Use the audio controls.')).toBeVisible();
+  const audio = page.getByLabel('FLEURS recording urdu-1533', { exact: true });
+  await audio.evaluate(async (node: HTMLAudioElement) => node.play());
+  await expect.poll(() => audio.evaluate((node: HTMLAudioElement) => node.currentTime)).toBeGreaterThan(0);
+});
