@@ -11,8 +11,8 @@
 | [T-005](T-005-coverage-and-recommendation-ranking.md) | Build coverage model and language-first ranks | P0 | Dev 1 | T-002, T-003, T-004 | In review |
 | [T-006](T-006-ward-geometry-validation.md) | Source and validate real Mississauga ward polygons | P0 | Dev 2 | T-002, T-003 | TODO |
 | [T-007](T-007-reproducible-fleurs-sampling.md) | Generate 48-record FLEURS sample manifest | P0 | Dev 1 | T-002, T-003 | In review |
-| [T-008](T-008-elevenlabs-scribe-preflight.md) | Validate real Scribe requests, language hints and credits | P0 | Dev 1 | T-001, T-003, T-007 | TODO |
-| [T-009](T-009-paired-transcription-runner.md) | Run cached paired ElevenLabs pilot and track failures | P0 | Dev 1 | T-007, T-008, T-010 | TODO |
+| [T-008](T-008-elevenlabs-scribe-preflight.md) | Validate real Scribe requests, language hints and credits | P0 | Dev 1 | T-001, T-003, T-007 | Blocked |
+| [T-009](T-009-paired-transcription-runner.md) | Run cached paired ElevenLabs pilot and track failures | P0 | Dev 1 | T-007, T-008, T-010 | Blocked |
 | [T-010](T-010-cer-wer-and-paired-analysis.md) | Calculate multilingual CER/WER and paired summaries | P0 | Dev 1 | T-003, T-007, T-008 | TODO |
 | [T-011](T-011-ward-map-and-metric-toggle.md) | Implement corrected ward map and count/share toggle | P0 | Dev 2 | T-003, T-004, T-006 | TODO |
 | [T-012](T-012-global-selection-and-empty-states.md) | Connect modules with safe global language selection | P0 | Dev 2 | T-003, T-004, T-005 | TODO |
@@ -41,8 +41,19 @@ Start T-001 → T-002 → T-003, then data branch T-004/T-005 and speech branch 
 
 T-005 now provides all 15 language identities/coverage rows and eight missing-audio
 priorities, with independent count/share recruitment guidance. T-003/T-004/T-005
-review gates remain open. T-007 supplies frozen sample inputs and retains its review gate. T-008 is the
-next ready Dev 1 implementation ticket (T-001 exists, T-003/T-007 implemented); T-012's implementation inputs are also
+review gates remain open. T-007 supplies frozen sample inputs and retains its review gate.
+T-008 adapter/preflight is now implemented, but live verification is blocked by the
+missing server API key. T-012's implementation inputs are also
 available for Dev 2. T-011 still requires T-006; T-016 still requires T-011/T-012.
 The T-003 build guard rejects the partial root artifact bundle until the real
 experiment export arrives through its assigned ticket. None were fabricated.
+
+T-009 prerequisite inspection (2026-11-07, updated after T-008 implementation):
+blocked by absent real T-008 preflight evidence and absent T-010 metrics/export implementation. No runner was
+implemented. Dev 1 unblock order remains T-008 → T-010 → T-009; T-007's frozen
+manifest is present but does not establish verified provider behavior.
+
+T-008 command exited 1 with `missing_api_key`; ignored latest/per-run logs record
+zero remote attempts and not_tested guidance. No tests were created/run. Finish
+the small live T-008 preflight first, then T-010 is the next Dev 1 ticket; T-009
+still requires both. No real language support, transcripts or credits are verified.

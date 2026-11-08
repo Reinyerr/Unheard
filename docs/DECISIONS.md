@@ -68,3 +68,14 @@ timestamp. Changed frozen inputs are rejected without a reselection override.
 The public export uses the existing `Samples` contract. Curated FLEURS assets
 retain attribution, source/license links and modification notice; no other source
 audio is approved and no provider outcomes are generated. T-019 remains open.
+
+## Implementation clarification — T-008 (2026-11-07)
+
+No public-contract or product-scope amendment. Local-only `preflight_log.json`
+and per-run reports (`schema_version: "1.0"`) record exact options, frozen
+selection/audio hashes, attempts, response evidence, numeric allowance snapshots
+and guidance-parameter acceptance. Raw response files are ignored and known-key
+redacted. Documented provider hints are candidates until real HTTP evidence;
+acceptance does not establish script comparability or quality. No retries/cache
+are introduced here; T-009 owns those. Missing server credentials are a blocked
+configuration state with zero attempts and not_tested guidance, never a metric.

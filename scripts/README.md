@@ -176,3 +176,56 @@ clips. Header validation is not full decoding/acoustic review. n=8 and script/
 gender differences limit generalization; no ward residence inference is allowed.
 No outcomes/metrics are generated. T-008 is next; the frontend build guard still
 needs the real experiment artifact. No automated tests were created or run.
+
+## Small live Scribe preflight (T-008)
+
+Uses the existing backend `httpx` dependency and the frozen T-007 manifest/audio.
+It reads the exported server environment only; it does not load `.env` or accept
+keys on the command line. From the root in zsh:
+
+```sh
+read -rs 'ELEVENLABS_API_KEY?ElevenLabs API key: '
+export ELEVENLABS_API_KEY
+python3 scripts/preflight_scribe.py
+```
+
+Default: first frozen ID for Urdu and Cantonese, auto and guided (4 POSTs), plus
+two small subscription GETs if the run completes. Each POST uses identical
+audio/options apart from the guided candidate `language_code`. Documented model
+alias is `scribe_v2`; fixed endpoint is HTTPS API v1. No automatic fallback,
+retries, metrics or batch experiment runner. Optional explicit subset:
+
+```sh
+python3 scripts/preflight_scribe.py --languages english arabic punjabi mandarin_chinese
+```
+
+That subset makes eight POSTs. Each invocation can bill again; there is no
+experiment cache yet. Rate/credential/permission/quota failures stop further
+POSTs; partial results remain. Network timeouts have unknown provider billing;
+do not assume an error means no charge. Remaining/unselected guidance is
+not_tested, never implicitly supported. Numeric allowance snapshots may be
+unavailable with restricted key permissions and do not certify pilot affordability.
+
+The adapter takes only allowlisted sample IDs, validates frozen identities and
+audio hashes/size/signature, and exposes an injectable HTTP client for later
+mocking. Local `ScribeAttempt` includes raw text, statuses, options, timestamps,
+request IDs, safe rate/error metadata and retryability. The adapter does not
+retry; T-009 can later use these results. Empty successful transcript is distinct
+from HTTP failure. Explicit guided language rejection is unsupported; generic
+HTTP errors are technical_error; malformed success is incompatible_output.
+Script/translation review is deferred to T-010, with no metrics filled in here.
+
+Inspect ignored `data/local/preflight_log.json` and the corresponding
+`data/local/preflight_runs/<run_id>/` report/raw response files. Reports are
+incrementally saved; each invocation creates separate evidence and replaces the
+latest log from the start. No headers containing credentials or full account
+profiles are saved. Known-key text is redacted; stdout contains only IDs/status.
+Treat raw transcripts as local research evidence, not frontend assets.
+
+Exit 0 (`recorded`) means an automatic transcript and accepted/rejected guidance
+evidence were captured for selected probes; independently inspect response
+quality/language and request settings before sign-off. Exit 1 means blocked or
+incomplete; exit 2 means argument error. Missing key is a configuration error,
+not a failed recognition or zero CER. This implementation's observed execution
+was blocked by missing key, with no network/provider requests. No tests were
+written/run. Finish live verification before T-010, then T-009.

@@ -1,6 +1,6 @@
 # T-009 — Run cached paired ElevenLabs pilot and track failures
 
-**Status:** TODO (not implemented)  
+**Status:** Blocked — T-008 and T-010 prerequisites are not implemented.
 **Priority:** P0  
 **Owner:** Dev 1  
 **Depends on:** `T-007`, `T-008`, `T-010`  
@@ -64,3 +64,26 @@ for sample in samples:
 - [ ] `INDEX.md` status changed only after reviewer verifies it; next dependency unblocked.
 
 **Evidence to record:** local command, date, short result/log, relevant commit, any contract amendment, demonstration steps and blocked tickets.
+
+## Prerequisite check — 2026-11-07
+
+Checked on `feature/data-backend`. T-007's sampler and frozen local manifest
+exist; its review/acceptance gate remains open. T-008 and T-010 are still TODO:
+
+- Missing `backend/app/services/elevenlabs_adapter.py`,
+  `scripts/preflight_scribe.py` and `data/local/preflight_log.json`; no verified
+  model/options, guided-language support or real response/error evidence exists.
+- Missing `scripts/calculate_metrics.py` and the real
+  `frontend/public/data/experiments.v1.json` exporter/output required by T-010.
+
+The ticket/index statuses and source inventory confirm these missing prerequisites.
+Per AGENTS.md's one-ready-ticket rule, no runner, guessed adapter interface,
+provider responses or metrics were invented. No tests were written/run, no API
+requests made, and no UI/shared-contract or unrelated ticket changes made.
+Only this blocker record and `INDEX.md` were updated.
+
+Unblock sequence: implement T-008 and record actual preflight evidence, then
+implement T-010 using that verified sample/interface, then resume T-009.
+Next ready Dev 1 implementation ticket is T-008, subject to existing T-003/T-007
+review gates. There is no T-009 run command yet because its implementation cannot
+start under the current prerequisites; do not mark this ticket implemented/verified.
