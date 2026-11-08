@@ -9,14 +9,15 @@ for (const viewport of [{ width: 1280, height: 900 }, { width: 375, height: 812 
     await page.setViewportSize(viewport);
     await page.goto('/');
     const offline = process.env.EXPECT_BACKEND === 'offline';
-    await expect(page.getByRole('status')).toContainText(offline ? 'Backend unavailable' : 'Backend connected');
+    const health = page.getByRole('complementary', { name: 'Local workspace' });
+    await expect(health).toContainText(offline ? 'Backend unavailable' : 'Backend connected');
     if (offline) {
       await expect(page.getByText(/Start FastAPI/)).toBeVisible();
       await page.getByRole('button', { name: 'Retry connection' }).click();
-      await expect(page.getByRole('status')).toContainText('Backend unavailable');
+      await expect(health).toContainText('Backend unavailable');
     }
-    await expect(page.getByText('Research data not loaded')).toBeVisible();
-    await expect(page.getByText('Planned', { exact: true })).toHaveCount(4);
+    await expect(page.getByLabel('Selected language')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Ward 10', exact: true })).toBeVisible();
     await page.getByRole('link', { name: '04 Recommend' }).click();
     await expect(page).toHaveURL(/#recommend$/);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

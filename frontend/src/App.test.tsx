@@ -3,18 +3,22 @@ import { describe, expect, it, vi } from 'vitest';
 import App, { API_BASE_URL } from './App';
 
 describe('bootstrap shell (mocked health responses)', () => {
-  it('connects using the health contract and leaves research explicitly pending', async () => {
+  it('connects using the health contract without accepting invalid research payloads', async () => {
     const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ status: 'ok', mode: 'local' }) });
     vi.stubGlobal('fetch', fetchMock);
     render(<App />);
     expect(await screen.findByText('Backend connected')).toBeInTheDocument();
     expect(fetchMock).toHaveBeenCalledWith(`${API_BASE_URL}/health`, expect.objectContaining({ signal: expect.any(AbortSignal) }));
-    expect(screen.getByText('Research data not loaded')).toBeInTheDocument();
-    expect(screen.getAllByText('Planned')).toHaveLength(4);
+    expect(await screen.findAllByText(/Verified census\/coverage assets could not be loaded/)).not.toHaveLength(0);
+    expect(screen.getByRole('navigation', { name: 'Research journey' })).toBeInTheDocument();
   });
 
   it('offers an actionable retry after network failure and recovers', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockRejectedValueOnce(new Error('offline')).mockResolvedValueOnce({ ok: true, json: async () => ({ status: 'ok', mode: 'local' }) }));
+    let healthCalls = 0;
+    vi.stubGlobal('fetch', vi.fn(async (url: string) => {
+      if (url !== `${API_BASE_URL}/health` || healthCalls++ === 0) throw new Error('offline');
+      return { ok: true, json: async () => ({ status: 'ok', mode: 'local' }) };
+    }));
     render(<App />);
     expect(await screen.findByText('Backend unavailable')).toBeInTheDocument();
     expect(screen.getByText(/Start FastAPI/)).toBeInTheDocument();

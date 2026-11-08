@@ -1,0 +1,4 @@
+# These files participate in byte-for-byte provenance checks. Preserve the
+# recorded LF bytes on Windows as well as Unix; never weaken runtime hashes.
+shared/language_map.json text eol=lf
+frontend/public/data/mississauga_wards.geojson text eol=lf
