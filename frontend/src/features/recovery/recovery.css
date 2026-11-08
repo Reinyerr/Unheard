@@ -9,3 +9,17 @@
 .recovery h3, .recovery summary { font-weight: 650; margin-top: 1rem; }
 .recovery details { border-top: 1px solid #cbd4ce; margin-top: 1.5rem; padding-top: 1rem; }
 .recovery a { text-decoration: underline; }
+.recovery-outcome { margin: 1.25rem 0; padding: 1.25rem; border: 2px solid #52766b; border-radius: .75rem; background: #edf3ef; scroll-margin-top: 1.5rem; }
+.recovery-outcome h3 { margin-top: 0; font-size: 1.25rem; line-height: 1.5; }
+.recovery-outcome:focus { outline: 3px solid #a64419; outline-offset: 4px; }
+.recovery-outcome-success { border-color: #17604b; background: #e4f1e8; }
+.recovery-outcome-warning { border-color: #8b5729; background: #fff5e8; }
+.recovery .recovery-progress, .recovery-result-details { font-size: .85rem; line-height: 1.7; }
+.recovery-next { margin: 1rem 0 .5rem; }
+.recovery-continue { display: inline-block; border: 2px solid #17604b; border-radius: .5rem; background: #174e3e; color: white; padding: .75rem 1rem; font-weight: 650; text-underline-offset: .2rem; }
+.recovery-continue:hover { background: #0f3b2e; }
+.recovery-continue:focus-visible { outline: 3px solid #a64419; outline-offset: 4px; }
+@media (forced-colors: active) {
+  .recovery-outcome { border-color: CanvasText; }
+  .recovery-outcome:focus, .recovery-continue:focus-visible { outline-color: Highlight; }
+}

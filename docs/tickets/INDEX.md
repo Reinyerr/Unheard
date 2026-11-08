@@ -1,5 +1,11 @@
 # Ticket index — source of truth for implementation
 
+**T-020 recovery feedback continuation (2026-11-08):** prominent per-action
+outcomes, processing feedback, focused/announced results and a terminal
+recommendations link added at the user's request. Recovery rules/contracts and
+research artifacts unchanged. Build/typecheck passed; automated tests and manual
+interaction/accessibility checks not run. T-020 remains In review.
+
 **Latest T-020 implementation handoff (2026-11-07):** Dev 2 accessibility and
 demo polish implemented: act questions/limits, explicit Urdu walkthrough entry,
 keyboard jump targets/table regions, shared motion/focus/reading styles and

@@ -113,3 +113,29 @@ assets and competent-language listening review outside this implementation.
 Next ready implementation ticket: none in T-001–T-020; remaining work is review,
 manual verification and the already recorded data/audio/rights blockers. No new
 ticket or scope expansion is introduced.
+
+## Recovery feedback continuation — 2026-11-08
+
+User reported no clear response after Correct/Incorrect and authorized the
+proposed fix. Recovery.tsx and recovery.css now give visible instructions and
+outcomes for ready, processing, confirmation, acceptance, retry, referral and
+uncertain backend responses. Focus moves to the announced outcome after an
+action; restarting a separate saved simulation focuses the recording selector.
+Accepted/referral sessions offer **Continue to recommendations**. Decisions stay
+disabled during a backend request; refreshing availability shows Checking.
+No state-machine/API/schema, retry budget, research data or audio approval changes.
+Existing uncommitted experiment and PriorityTable edits were preserved.
+
+`npm --prefix frontend run build` passed TypeScript and production build;
+existing Vite future native-loader and chunk-size warnings remain. No automated
+tests, browser interaction, screen-reader check, listening or provider calls ran.
+
+Manual review: in Act 3 choose browser-only saved results and a usable clip.
+Start → review message; Correct → accepted banner and recommendations link;
+restart → recording selector focus. Start another session, Incorrect → explicit
+one-retry instruction; use a different clip → confirmation or explicit failure/
+referral as supported by actual results. Reject a second usable transcript →
+referral with no further retry. Follow the recommendations link with keyboard.
+For key-disabled backend requests, inspect processing/disabled controls and
+unknown-response recovery without automatically replaying requests. Verify focus
+and spoken announcements manually. T-020 remains In review, not Done.

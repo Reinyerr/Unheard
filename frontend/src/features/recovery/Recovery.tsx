@@ -39,16 +39,29 @@ function Flow() {
   const [sampleId, setSampleId] = useState('');
   const [session, setSession] = useState<Session | null>(null);
   const [busy, setBusy] = useState(false);
+  const [pendingMessage, setPendingMessage] = useState('Processing…');
   const [error, setError] = useState('');
   const [uncertain, setUncertain] = useState(false);
   const [check, setCheck] = useState(0);
   const pending = useRef<AbortController | null>(null);
+  const outcomePanel = useRef<HTMLDivElement>(null);
+  const recordingSelect = useRef<HTMLSelectElement>(null);
+  const restarting = useRef(false);
   const alive = useRef(true);
+  useEffect(() => {
+    if (restarting.current && !session && !uncertain) {
+      recordingSelect.current?.focus();
+      restarting.current = false;
+    } else if (!busy && (session || uncertain || error)) {
+      outcomePanel.current?.focus();
+    }
+  }, [session, uncertain, error, busy]);
   useEffect(() => { alive.current = true; return () => { alive.current = false; pending.current?.abort(); }; }, []);
   useEffect(() => {
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), 7000);
     let active = true;
+    setConnection('Checking backend…');
     void request('capabilities', controller.signal).then(value => {
       const parsed = capabilitiesSchema.parse(value);
       if (active) { setCapabilities(parsed.available ? parsed : null); setConnection(parsed.available ? 'Backend available' : 'Backend data unavailable'); }
@@ -71,6 +84,9 @@ function Flow() {
     const controller = new AbortController();
     pending.current = controller;
     const timeout = window.setTimeout(() => controller.abort(), 45000);
+    setPendingMessage(path === 'decision' ? 'Saving your choice…'
+      : path === 'retry' ? 'Checking the next recording…'
+        : source === 'live' ? 'Transcribing the recording…' : 'Preparing the saved transcript…');
     setBusy(true); setError('');
     try {
       const value = await request(path, controller.signal, body);
@@ -114,6 +130,26 @@ function Flow() {
       referral_message: state === 'referral' || state === 'retry_or_refer' ? REFERRAL : null });
   }
 
+  function restart() {
+    restarting.current = true;
+    setSession(null); setSampleId(''); setError(''); setUncertain(false);
+    setRoute('offline'); setSource('saved');
+  }
+
+  const finished = session?.state === 'accepted' || session?.state === 'referral';
+  const feedback = busy ? { title: pendingMessage, message: 'Please wait. The controls are disabled while this request finishes.', tone: 'pending' }
+    : uncertain ? { title: 'We couldn’t confirm the result.', message: 'The backend request may have completed. Don’t repeat it automatically. You can start a separate saved browser simulation below.', tone: 'warning' }
+      : session?.state === 'accepted' ? { title: 'Transcript accepted.', message: 'You confirmed this text in the demo. No service request was sent. Continue to recommendations or start a separate saved simulation.', tone: 'success' }
+        : session?.state === 'referral' ? { title: 'Consider human assistance.', message: 'This simulation has ended. No representative was contacted. Continue to recommendations or start a separate saved simulation.', tone: 'warning' }
+          : session?.state === 'retry_or_refer' ? {
+            title: session.retry_available ? 'Let’s try once more.' : 'No retry is available.',
+            message: session.retry_available
+              ? `${session.transcript ? 'You marked the transcript incorrect.' : 'No usable transcript was available.'} Choose a different recording below for your one remaining attempt, or choose human assistance.`
+              : 'Choose the human-assistance referral option to finish this simulation.', tone: 'warning' }
+            : session?.state === 'confirm' ? { title: 'Review what the AI heard.', message: `Read the ${session.attempts > 1 ? 'new ' : ''}transcript below, then choose Correct or Incorrect. ${session.attempts >= session.max_attempts ? 'This is the final attempt.' : 'You can retry once if it is incorrect.'}`, tone: 'review' }
+              : error ? { title: 'The simulation could not start.', message: 'Review the error below. You can choose another recording or the browser-only saved route.', tone: 'warning' }
+                : { title: 'Ready to try the confirmation demo.', message: 'Choose a recording, then start the simulation. You will review the transcript before accepting it.', tone: 'ready' };
+
   if (selection.language_id === 'all') return <EmptyState kind="choose_language">Select a pilot language above to start a simulated confirmation.</EmptyState>;
   if (census.status === 'loading' || resource.status === 'loading') return <EmptyState kind="loading" />;
   if (census.status !== 'ready' || !samples) return <EmptyState kind="unavailable">Verified language/sample assets are unavailable.</EmptyState>;
@@ -134,30 +170,35 @@ function Flow() {
       {route === 'backend' ? <label>Result origin<select disabled={busy} value={source} onChange={event => setSource(event.target.value as typeof source)}><option value="saved">Saved actual provider response</option><option value="live" disabled={!capabilities?.live_configured || mode === 'guided' && !capability?.guided_verified}>Live provider request (may incur charges)</option></select></label> : null}
       {source === 'live' ? <p>One live request per attempt, with same-mode saved fallback if available. Key presence does not verify credits or connectivity.</p> : null}
     </> : null}
-    <div role="status" aria-live="polite"><p><strong>State: {busy ? 'Processing request…' : session?.state.replaceAll('_', ' ') ?? 'ready'}</strong>{session ? ` · attempt ${session.attempts} of ${session.max_attempts}` : ''}</p>
-      {session ? <p>Result: {statusLabels[session.transcription_status]} · origin: {session.source ?? 'no outcome'} · {session.mode}. {session.fallback_reason ? `Fallback: ${session.fallback_reason}.` : ''}</p> : null}
-      {session?.state === 'accepted' ? <p>Explicitly accepted by the current user in this simulation. No service action was performed.</p> : null}
-      {session?.referral_message ? <p>{session.referral_message}</p> : null}
+    <div ref={outcomePanel} tabIndex={-1} className={`recovery-outcome recovery-outcome-${feedback.tone}`} role="status" aria-live="polite" aria-atomic="true">
+      <h3>{feedback.title}</h3><p>{feedback.message}</p>
+      <p className="recovery-progress"><strong>State: {busy ? 'Processing request…' : session?.state.replaceAll('_', ' ') ?? 'ready'}</strong>{session ? ` · attempt ${session.attempts} of ${session.max_attempts}` : ''}</p>
     </div>
+    {finished && !busy && !uncertain ? <div className="recovery-next"><a className="recovery-continue" href="#recommend">Continue to recommendations</a></div> : null}
+    {finished || uncertain ? <button disabled={busy} onClick={restart}>Start separate saved browser simulation</button> : null}
+    {session ? <div className="recovery-result-details">
+      <p>Result: {statusLabels[session.transcription_status]} · origin: {session.source ?? 'no outcome'} · {session.mode}. {session.fallback_reason ? `Fallback: ${session.fallback_reason}.` : ''}</p>
+      {session?.referral_message ? <p>{session.referral_message}</p> : null}
+    </div> : null}
     {error ? <p role="alert">{error}</p> : null}
     {route === 'offline' && !evidence ? <EmptyState kind="unavailable">Matching saved experiment evidence is unavailable. No transcript can be substituted.</EmptyState> : null}
     {!session || session.retry_available ? <>
-      <label>{session ? 'Different recording for the single simulated retry' : 'Prerecorded sample'}<select value={sampleId} disabled={disabled} onChange={event => setSampleId(event.target.value)}>
+      <label>{session ? 'Different recording for the single simulated retry' : 'Prerecorded sample'}<select ref={recordingSelect} value={sampleId} disabled={disabled} onChange={event => setSampleId(event.target.value)}>
         <option value="">Choose a recording</option>{eligible.map(row => {
           const outcome = evidence?.records.find(record => record.sample_id === row.sample_id)?.[mode];
           return <option value={row.sample_id} key={row.sample_id}>{row.sample_id} · {route === 'backend' && capability?.saved_sample_ids_by_mode[mode].includes(row.sample_id) ? 'usable saved result' : outcome ? statusLabels[outcome.status] : 'saved result unavailable'}</option>;
         })}
       </select></label><p>Missing results remain explicit; a different clip is a simulated retry, not proof of speech correction.</p>
-      <button disabled={disabled || !sampleId || route === 'offline' && !evidence || route === 'backend' && !capability} onClick={attempt}>{session ? 'Try Different Sample' : source === 'live' ? 'Start live transcription (uses credits)' : 'Start saved simulation'}</button>
+      <button disabled={disabled || !sampleId || route === 'offline' && !evidence || route === 'backend' && !capability} onClick={attempt}>{busy ? 'Processing…' : session ? 'Try Different Sample' : source === 'live' ? 'Start live transcription (uses credits)' : 'Start saved simulation'}</button>
     </> : null}
     {sample ? <section key={sample.sample_id} aria-label="Current demo recording"><h3>{sample.sample_id} · FLEURS ID {sample.fleurs_id}</h3><Recording sample={sample} />
       {session?.transcript ? <><h3>Actual {session.source} transcript</h3><p className="speech-transcript" dir={language.language_id === 'urdu' || language.language_id === 'arabic' ? 'rtl' : 'ltr'} lang={language.dataset_language_code}>{session.transcript}</p></> : null}
     </section> : null}
-    {session?.state === 'confirm' && !busy ? <><PromptAudio key={`${session.session_id}:${session.sample_id}`} language={language.language_id} />
+    {session?.state === 'confirm' ? <>{!busy ? <PromptAudio key={`${session.session_id}:${session.sample_id}`} language={language.language_id} /> : null}
+      <p><strong>Is this transcript correct?</strong> Your choice applies only to this simulation.</p>
       <div className="recovery-actions"><button disabled={disabled} onClick={() => decide('correct')}>{prompt?.correct_label ?? 'Correct'}{language.language_id !== 'english' ? ' (Correct)' : ''}</button><button disabled={disabled} onClick={() => decide('incorrect')}>{prompt?.incorrect_label ?? 'Incorrect'}{language.language_id !== 'english' ? ' (Incorrect)' : ''}</button></div></> : null}
     {session && ['confirm', 'retry_or_refer'].includes(session.state) ? <button disabled={disabled} onClick={() => decide('refer')}>Human-assistance referral option</button> : null}
-    {session && ['accepted', 'referral'].includes(session.state) || uncertain ? <button disabled={busy} onClick={() => { setSession(null); setSampleId(''); setError(''); setUncertain(false); setRoute('offline'); setSource('saved'); }}>Start separate saved browser simulation</button> : null}
-    <button disabled={busy} onClick={() => setCheck(value => value + 1)}>Refresh backend availability</button>
+    <button disabled={busy || connection === 'Checking backend…'} onClick={() => setCheck(value => value + 1)}>{connection === 'Checking backend…' ? 'Checking backend…' : 'Refresh backend availability'}</button>
     <details><summary>Recording provenance and limitations</summary><p>{samples.source.attribution} · <a href="https://huggingface.co/datasets/google/fleurs">FLEURS</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.</p><p>{samples.source.modifications}</p><p>Selection SHA-256: <span className="speech-hash">{samples.source.selection_sha256}</span>. FLEURS is not municipal-request or ward-resident speech. Saved browser confirmations require comparable completed outputs without review flags. Backend and browser sessions are separate; this interaction reports no CER improvement.</p></details>
   </div>;
 }
