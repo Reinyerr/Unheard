@@ -1,6 +1,6 @@
 # T-016 — Implement research-backed language/ward recommendations
 
-**Status:** TODO (not implemented)  
+**Status:** In review (implemented; acceptance incomplete)
 **Priority:** P0  
 **Owner:** Dev 2  
 **Depends on:** `T-005`, `T-011`, `T-012`  
@@ -60,3 +60,51 @@ const missing = languages
 - [ ] `INDEX.md` status changed only after reviewer verifies it; next dependency unblocked.
 
 **Evidence to record:** local command, date, short result/log, relevant commit, any contract amendment, demonstration steps and blocked tickets.
+
+## Implementation evidence — 2026-11-07
+
+Prerequisites T-005/T-011/T-012 are implemented and In review: actual generated
+recommendations/coverage/corrected ward assets, shared ward count/share functions
+and global selection. No backend, shared schema, generated dataset or dependency
+change. No new raw data or fixtures.
+
+Recommendations renders the eight exported language priorities in rank order;
+coverage precedes population and CER is never a ranking input. Runtime checks
+require matching corrected census source hash, coverage/rank/count agreement and
+count-ranked suggested ward IDs. Mismatch withholds ranks with an explicit error.
+Selecting a table language updates global selection. Selected language details
+show source-generated actions, consent/dialect/speaker/safeguard guidance, and
+separate top-three count/share tables derived from all 11 corrected ward rows.
+Shares use positive population_language_base; unavailable values are excluded,
+unrounded values rank, ascending ward ID breaks ties. Each table retains count,
+share and denominator; no geometry fetch is needed. Ward links select census
+context without modifying speech membership. Covered languages retain demographic
+and separate saved pilot evidence, without a missing-coverage rank/badge.
+
+The separate pilot section shows actual scored/paired n, mean CER and paired
+delta, missing/exclusion reasons and limitations; null metrics stay unavailable.
+Source details retain census/task provenance, input hash, row counts, export time
+and licence caveats. No provider request, combined score, forecast failure or
+municipal service action is introduced.
+
+Observed manual browser review with backend unavailable: eight-language order is
+Urdu, Punjabi, Cantonese, Tagalog, Tamil, Hindi, Gujarati, Bengali; Urdu first at
+22,535. Coverage context shows 79,940 / 153,480 across 14 tracked non-official
+categories (52.1%), not city population. Urdu has top count/share wards 10/6/11;
+Ward 10 retains 4,520 / 6.12% / 73,830. Selecting Arabic changes ward details,
+shows covered status and separate unavailable scored evidence, while preserving
+the eight-language priority order. Local ignored screenshot:
+`.cache/t016-priorities.jpg`.
+
+`npm --prefix frontend run build` passed TypeScript, existing asset build guard
+and Vite. No automated tests created/run by user instruction. Full acceptance is
+not verified: independent ranking audit, deliberate missing/invalid artifacts,
+geometry outage, full keyboard/mobile and audio-geo regression checks remain
+unrun. Existing config-loader and bundle-size warnings are nonblocking.
+
+Manual commands: `npm --prefix frontend run dev` and
+`npm --prefix frontend run build`. Open localhost:5173/#recommend; select Urdu,
+Cantonese (different count/share lists), Tamil (Not tested) and covered Arabic.
+Follow a ward link to census, then return to verify language context. Review
+failure/geometry-outage branches before sign-off. Next: T-015 (shared UI/TTS;
+backend TTS preflight/cached voice remains required). Stop here.

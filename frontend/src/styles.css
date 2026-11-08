@@ -15,3 +15,20 @@ button:disabled { cursor: wait; }
 .journey-link:hover, button:hover:not(:disabled) { background: #dfe8dc; }
 .skip-link { position: absolute; left: 1rem; top: -5rem; padding: .8rem; background: white; z-index: 10; }
 .skip-link:focus { top: 1rem; }
+.global-selection { display: flex; flex-wrap: wrap; align-items: end; gap: 1rem; padding: 1.25rem; margin-bottom: 1.5rem; border: 1px solid #c3d0c1; border-radius: .8rem; background: #eaf0e9; }
+.global-selection > div:first-child { flex: 1 1 17rem; }
+.global-selection h2 { font-weight: 700; }
+.global-selection p { font-size: .8rem; line-height: 1.6; margin-top: .3rem; }
+.global-selection label { display: grid; gap: .4rem; flex: 1 1 13rem; min-width: 0; font-size: .85rem; font-weight: 650; }
+.global-selection select { padding: .65rem; border: 1px solid #8da69a; border-radius: .5rem; background: white; max-width: 100%; }
+.global-selection > button, .empty-state button { border: 1px solid #8da69a; border-radius: .5rem; background: white; padding: .6rem .8rem; font-size: .8rem; }
+.empty-state { margin-top: 1rem; padding: 1rem; border: 1px dashed #b7c7bd; border-radius: .6rem; font-size: .85rem; line-height: 1.7; }
+.empty-state h3, .selection-evidence h3 { font-weight: 650; }
+.empty-state-description { margin-top: .3rem; }
+.empty-state button { margin-top: .65rem; }
+.empty-state-technical_error, .empty-state-incompatible_output, .empty-state-unavailable { border-color: #bba08b; background: #faf4ed; }
+.selection-evidence { margin-top: 1rem; font-size: .85rem; line-height: 1.7; }
+.selection-evidence p { margin-top: .5rem; }
+.selection-evidence dl { margin: .75rem 0; }
+.selection-evidence dl > div { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; border-top: 1px solid #d8dfd5; padding: .35rem 0; }
+.selection-evidence dd { font-variant-numeric: tabular-nums; }

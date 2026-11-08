@@ -1,4 +1,11 @@
 import { useEffect, useState } from 'react';
+import WardExplorer from './features/map/WardExplorer';
+import SpeechLab from './features/speech-lab/SpeechLab';
+import Recommendations from './features/recommendations/Recommendations';
+import LanguageSelector from './components/LanguageSelector';
+import Recovery from './features/recovery/Recovery';
+import { SelectionProvider } from './state/selection';
+import { ResearchProvider } from './data/ResearchData';
 
 type Connection = 'checking' | 'connected' | 'unavailable';
 export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000').replace(/\/$/, '');
@@ -10,6 +17,10 @@ const modules = [
 ];
 
 export default function App() {
+  return <SelectionProvider><ResearchProvider><AppContent /></ResearchProvider></SelectionProvider>;
+}
+
+function AppContent() {
   const [connection, setConnection] = useState<Connection>('checking');
   const [attempt, setAttempt] = useState(0);
 
@@ -56,23 +67,24 @@ export default function App() {
             <p className="eyebrow" id="workspace-status">Local workspace</p>
             <div role="status" aria-live="polite" className="mt-4">
               <p className="font-semibold">{connection === 'checking' ? 'Checking backend…' : connection === 'connected' ? 'Backend connected' : 'Backend unavailable'}</p>
-              <p className="mt-2 text-sm leading-relaxed text-stone-600">{connection === 'unavailable' ? `Start FastAPI at ${API_BASE_URL}, check the URL and CORS settings, then retry. You can still explore the shell.` : connection === 'connected' ? 'The local health service is responding. Speech services have not been configured or tested.' : 'Contacting the local health service. No speech API requests are made.'}</p>
+              <p className="mt-2 text-sm leading-relaxed text-stone-600">{connection === 'unavailable' ? `Start FastAPI at ${API_BASE_URL}, check the URL and CORS settings, then retry. The static ward census explorer remains available.` : connection === 'connected' ? 'The local health service is responding. Census exploration loads independently from verified static assets.' : 'Contacting the local health service. No speech API requests are made.'}</p>
             </div>
             <button className="mt-4 rounded-lg border border-emerald-900 px-4 py-2 text-sm font-semibold disabled:opacity-50" disabled={connection === 'checking'} onClick={() => setAttempt(value => value + 1)}>Retry connection</button>
           </aside>
         </section>
+        <LanguageSelector />
         <nav aria-label="Research journey" className="mb-8 flex flex-wrap gap-3">
           {modules.map((module, index) => <a className="journey-link" key={module.id} href={`#${module.id}`}><span className="mr-2 text-stone-500">0{index + 1}</span>{' '}{module.act}</a>)}
         </nav>
-        <section className="mb-8 rounded-xl border border-dashed border-stone-400 p-5" aria-labelledby="data-status">
-          <h2 id="data-status" className="font-semibold">Research data not loaded</h2>
-          <p className="mt-1 text-sm leading-relaxed text-stone-600">Source audit and data generation are pending. No datasets, sample counts, transcriptions, or experimental findings are available in this bootstrap.</p>
-        </section>
         <div className="grid gap-5 md:grid-cols-2">
-          {modules.map((module, index) => <section key={module.id} id={module.id} className="module-card scroll-mt-6" aria-labelledby={`${module.id}-title`}>
-            <div className="flex items-center justify-between gap-4"><p className="eyebrow">0{index + 1} / {module.act}</p><span className="rounded-full bg-stone-100 px-3 py-1 text-xs text-stone-600">Planned</span></div>
+          {modules.map((module, index) => <section key={module.id} id={module.id} className="module-card scroll-mt-6 min-w-0 md:col-span-2" aria-labelledby={`${module.id}-title`}>
+            <div className="flex items-center justify-between gap-4"><p className="eyebrow">0{index + 1} / {module.act}</p><span className="rounded-full bg-stone-100 px-3 py-1 text-xs text-stone-600">{module.id === 'discover' ? '2021 census' : module.id === 'investigate' ? 'Saved evidence' : module.id === 'recommend' ? 'Evaluation priorities' : 'Simulation'}</span></div>
             <h2 id={`${module.id}-title`} className="mt-6 text-2xl font-semibold tracking-tight">{module.title}</h2>
             <p className="mt-3 leading-relaxed text-stone-600">{module.description}</p>
+            {module.id === 'discover' ? <WardExplorer /> : null}
+            {module.id === 'investigate' ? <SpeechLab /> : null}
+            {module.id === 'recommend' ? <Recommendations /> : null}
+            {module.id === 'demonstrate' ? <Recovery /> : null}
           </section>)}
         </div>
       </main>

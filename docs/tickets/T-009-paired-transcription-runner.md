@@ -1,6 +1,6 @@
 # T-009 — Run cached paired ElevenLabs pilot and track failures
 
-**Status:** TODO (not implemented)  
+**Status:** In review — runner implemented; offline real-cache export observed; full live pilot/tests not run.
 **Priority:** P0  
 **Owner:** Dev 1  
 **Depends on:** `T-007`, `T-008`, `T-010`  
@@ -64,3 +64,117 @@ for sample in samples:
 - [ ] `INDEX.md` status changed only after reviewer verifies it; next dependency unblocked.
 
 **Evidence to record:** local command, date, short result/log, relevant commit, any contract amendment, demonstration steps and blocked tickets.
+
+## Prerequisite check — 2026-11-07
+
+Checked on `feature/data-backend`. T-007's sampler and frozen local manifest
+exist; its review/acceptance gate remains open. T-008 and T-010 are still TODO:
+
+- Missing `backend/app/services/elevenlabs_adapter.py`,
+  `scripts/preflight_scribe.py` and `data/local/preflight_log.json`; no verified
+  model/options, guided-language support or real response/error evidence exists.
+- Missing `scripts/calculate_metrics.py` and the real
+  `frontend/public/data/experiments.v1.json` exporter/output required by T-010.
+
+The ticket/index statuses and source inventory confirm these missing prerequisites.
+Per AGENTS.md's one-ready-ticket rule, no runner, guessed adapter interface,
+provider responses or metrics were invented. No tests were written/run, no API
+requests made, and no UI/shared-contract or unrelated ticket changes made.
+Only this blocker record and `INDEX.md` were updated.
+
+Unblock sequence: implement T-008 and record actual preflight evidence, then
+implement T-010 using that verified sample/interface, then resume T-009.
+Next ready Dev 1 implementation ticket is T-008, subject to existing T-003/T-007
+review gates. There is no T-009 run command yet because its implementation cannot
+start under the current prerequisites; do not mark this ticket implemented/verified.
+
+
+Dependency update after T-010 implementation: the missing-prerequisite notes
+above are historical. T-008 real small-preflight evidence and T-010 metrics/export
+now exist; T-009 is ready for implementation subject to their review gates and
+remaining guidance/credit/script validation for a full pilot. No runner was added.
+
+
+## Implementation evidence — 2026-11-07
+
+On `feature/data-backend`, T-007 frozen selection, T-008 real preflight/adapter,
+and T-010 metrics/export implementation exist. Their review gates remain open.
+The earlier missing-prerequisite notes above are historical. Prior uncommitted
+work was preserved; no commit created.
+
+Created `scripts/run_experiments.py`, ignored local
+`data/local/experiment_cache/`, `data/local/raw_scribe_responses/`,
+`data/processed/experiment_attempts.json` and per-run snapshots in
+`data/processed/experiment_runs/`. Regenerated the public experiments artifact
+through T-010, with all unattempted modes explicit. Adapter change extracts its
+unchanged request settings into a shared pure function so cache keys exactly
+match uploads. T-010 integration preserves cached review_flags and removes its
+preflight-only limitation wording for future full runs. No public schema/enums,
+React components, new dependencies, new samples or unrelated features changed.
+
+Observed production command:
+
+```sh
+python3 scripts/run_experiments.py
+```
+
+Exit 0, status partial, zero new POSTs. Imported the four actual T-008 modes,
+then subsequent production invocations reused cached evidence while integrating
+final report/export changes. Final report lists 96 planned modes, four terminal
+outcomes (three completed, one incompatible_output), 92 not_tested, and selected
+n=8 per language. Urdu has two completed modes; Cantonese has one completed
+and one script-excluded mode. Original provider completions are recorded
+separately (four); no failed outcome becomes a metric. T-010 full-bundle production
+validation succeeded; raw response copies, immutable attempt envelopes and
+checksum-bound cache histories were generated. No automated tests/test files or
+new remote requests were run. This is not acceptance-test sign-off.
+
+Runner behavior:
+
+- Frozen language/ID order, content-hash/model/endpoint/canonical-options cache;
+  preflight model/audio/settings/raw evidence verified before import. Completed,
+  incompatible and unsupported cached results are reused, not re-purchased.
+- Guided sends require actual accepted preflight/cache evidence for that
+  language/model/hint. Urdu/Cantonese currently have it; other guidance remains
+  not_tested and is skipped without automatic-mode fallback. API acceptance does
+  not certify output quality or script comparability.
+- Live sends require --live and a server environment key. Default new-POST cap is
+  96 including retries; --max-requests allows a smaller budget. Max three sends
+  per pending mode per invocation, transient errors only, bounded exponential
+  backoff/Retry-After. Delays over 30 seconds pause for later resume. Permanent,
+  unsupported and incompatible results are not retried. Prior technical failures
+  require explicit --retry-failed and must be marked retryable.
+- Credential/permission/quota failures stop the run; exhausted 429 stops further
+  sends. Each response is retained before incremental terminal reporting. Partial
+  results remain valid. There is no provider idempotency guarantee: timeout retries
+  can bill again even when no successful response was received.
+- Exclusive local process lock prevents competing runners. Before a POST, persist
+  an in-flight journal. An interrupted/unknown call blocks replay and metrics
+  replacement until the user inspects provider/local evidence; no automatic lock
+  clearing or forced replay. Known completed cache entries remain reusable.
+- Final input report contains exactly one terminal entry per observed sample/mode,
+  a separate complete 96-mode state list, per-language counts, guidance evidence,
+  run config, import hashes/events, script hashes and immutable history links.
+  Missing outcomes are not_tested, not fabricated technical errors or zero CER.
+  Per-run reports stop changing after completion; the latest report is replaceable.
+
+Manual offline command is above. For an explicitly budgeted live continuation,
+configure the exported key and run:
+
+```sh
+python3 scripts/run_experiments.py --live --max-requests 12
+```
+
+Use --languages for a language subset (all eight frozen IDs remain fixed). For
+full guided coverage first use the existing T-008 preflight for the four missing
+languages and import its report; commands and resume/recovery guidance are in
+scripts/README.md. Runner automatically invokes the existing T-010 exporter for
+valid complete/partial/paused evidence; no key is needed for offline export.
+
+Known limits: the full live pilot, paid cache-hit replay, crash/retry/quota paths,
+independent metrics and Urdu/cached-demo regression are unverified. No tests or
+frontend build were run. Subscription credit allowance remains unavailable from
+the earlier HTTP 401 response. Additional guidance is not verified; there is no
+claim of 96 successful requests or significance. T-009 stays In review, not Done.
+Next ready Dev 1 implementation: T-014 (T-001/T-003/T-008 interfaces/evidence exist),
+subject to their review gates. No later ticket was implemented.

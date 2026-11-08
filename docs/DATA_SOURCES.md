@@ -21,7 +21,7 @@
 
 **Corrected math:** 8 categories have `has_service_request_audio=False`: Urdu 22,535; Punjabi 15,025; Cantonese 10,765; Tagalog 10,695; Tamil 7,420; Hindi 6,640; Gujarati 4,345; Bengali 2,515. Sum = **79,940**. Sum of all 14 *tracked non-official* category counts = **153,480**. Ratio = **52.08496% ≈52.1%**. None of these are a citywide count of persons who cannot use English or a predictive failure count.
 
-**Pilot input availability:** six selected languages (`English`, `Urdu`, `Punjabi`, `Cantonese`, `Arabic`, `Mandarin Chinese`) have 40 FLEURS clips each and share the same 40 IDs. Sampling manifest is **not yet generated**. Urdu, Punjabi and Arabic are recorded by female speakers only within this pack, making any demographic generalization inappropriate.
+**Pilot input availability:** six selected languages (`English`, `Urdu`, `Punjabi`, `Cantonese`, `Arabic`, `Mandarin Chinese`) have 40 FLEURS clips each and share the same 40 IDs. T-007 now freezes eight common IDs (48 samples); see the note below. Urdu, Punjabi and Arabic are recorded by female speakers only within this pack, making any demographic generalization inappropriate.
 
 ## Geographic caution
 
@@ -194,3 +194,70 @@ preserve English/Bengali missing fields, distinguish Cantonese/Mandarin, and kee
 local source-manifest schema separate from public research contracts. Public
 asset licensing, geometry acquisition, sampling and speech API validation retain
 their later-ticket gates. No T-003 implementation was included here.
+
+
+## T-007 curated FLEURS selection — 2026-11-07
+
+The sampler selected eight common IDs with seed 2026 across English, Urdu,
+Punjabi, Cantonese, Arabic and Mandarin Chinese. The 48 reference records are in
+`frontend/public/data/samples.v1.json`; full frozen asset provenance is local in
+ignored `data/processed/sampling_manifest.json`. Selected IDs are
+1533, 1537, 1566, 1587, 1608, 1632, 1635 and 1651.
+
+Narrow asset review used the unchanged supplied LICENSES.md hash and T-002's
+upstream corroboration of FLEURS CC BY 4.0. These 48 clips were copied locally,
+byte-for-byte, to their metadata-relative audio paths, with authors/source/license
+and modification notice in the public JSON and `audio/FLEURS_ATTRIBUTION.txt`.
+References retain the supplied strings verbatim; original pack conversion history
+remains unknown. No other dataset audio/transcripts were exported. Prior T-002
+statements about zero copied/approved assets describe that audit's historical
+state; this review covers only the T-007 selection. The later T-019 package audit
+remains open. Audio and local manifest are still Git-ignored.
+
+Production generation checked all metadata audio references/header durations and
+selected file hashes. Full decoding/listening, independent reproducibility checks
+and acceptance tests remain unperformed; no API experiment was run. T-007 is In
+review and the pilot remains exploratory with the documented script/gender limits.
+
+
+## T-006 official ward geometry acquisition — 2026-11-07
+
+Provider: City of Mississauga / ArcGIS owner MississaugaData. Dataset:
+[Ward Boundaries](https://data.mississauga.ca/datasets/mississauga::ward-boundaries/about),
+[item f1cad02b3a40422dac2ea99b59cc36a5](https://www.arcgis.com/home/item.html?id=f1cad02b3a40422dac2ea99b59cc36a5),
+[actual FeatureServer layer 2](https://services6.arcgis.com/hM5ymMLbxIyWTjn2/arcgis/rest/services/Ward_Boundaries/FeatureServer/2).
+The metadata WARD field is a string; 11 observed features normalize exactly to
+integer ward_id 1–11 and match the real corrected T-004 export without changing
+any census numbers. Item publisher/service identity and input hashes are retained.
+
+Raw item/service/layer/query snapshots and retrieval evidence remain ignored in
+data/raw/ward_geometry. Published local artifacts are mississauga_wards.geojson
+and ward_geometry_status.json under frontend/public/data. Source metadata and
+attribution are included in both. Selected properties omit civic contact/name/
+photo fields. No source CSV/audio/fixtures or backend code changed.
+
+Source layer CRS is Web Mercator EPSG:3857 (102100 alias). ArcGIS queried with
+outSR=4326 returned longitude/latitude plus a legacy EPSG:4326 crs member. That
+specific member is verified and removed for RFC 7946-style output. Coordinate
+values/ring order are retained; no simplification, repair or hand drawing.
+GEOS/Shapely validates individual polygon topology, finite bounds and rings;
+WGS84 bounds match the layer's projected extent. Three source overlap slivers
+are exposed in source_overlap_diagnostics (7/1, 3/1, 8/2), not repaired. Valid
+individual polygons and ID joins do not certify disjoint or gap-free coverage.
+
+Vintage evidence: the City's [municipal map layer](https://ext.maps.mississauga.ca/Geocortex/Essentials/REST/sites/eMaps/map/mapservices/57/layers/2)
+is explicitly Municipal Wards (2006-). ArcGIS metadata was updated in June 2024;
+this downloaded snapshot is not an independently verified immutable 2021 geometry
+edition. Retain this caveat alongside any visualization of 2021 census counts.
+No geographic speech-recognition inference is allowed.
+
+The dataset links [City Terms of Use](https://smartcity.mississauga.ca/wp-content/uploads/2021/04/CityofMississauga_TermsofUse.pdf).
+Retrieval returned HTTP 403, so the precise linked licence has not been reviewed.
+Attribution: Contains information provided by the City of Mississauga; Ward
+Boundaries. Local prototype only pending T-019 redistribution review; no public
+hosting/distribution approval is implied. Prior municipal licence uncertainties
+remain open. Current hashes, retrieval/modified timestamps and warnings are in
+the generated sidecar; no vintage or permission is inferred from a filename.
+
+Production acquisition/validation succeeded; automated missing-ward/fallback
+checks and visual inspection were skipped by user instruction. T-006 is In review.

@@ -1,0 +1,20 @@
+.speech-lab { margin-top: 1.5rem; min-width: 0; }
+.speech-lab h3, .speech-lab h4 { font-weight: 650; margin: 1rem 0 .6rem; }
+.speech-lab p { margin: .65rem 0; line-height: 1.65; }
+.speech-lab label { display: grid; gap: .5rem; font-weight: 600; margin: 1rem 0; }
+.speech-lab select { width: 100%; max-width: 36rem; border: 1px solid #7e978c; border-radius: .5rem; padding: .65rem; background: white; }
+.speech-summary, .speech-record { margin: 1.25rem 0; padding: 1rem; border: 1px solid #cbd4ce; border-radius: .75rem; }
+.speech-stats { display: flex; flex-wrap: wrap; gap: 1rem 2rem; margin: 1rem 0; }
+.speech-stats dt, .speech-note { font-size: .85rem; color: #52615a; }
+.speech-stats dd { font-weight: 650; }
+.speech-modes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.speech-mode { min-width: 0; border-top: 2px solid #7e978c; padding-top: .5rem; }
+.speech-transcript { unicode-bidi: isolate; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 2 !important; }
+.transcript-diff del { background: #fce2d9; text-decoration: line-through; }
+.transcript-diff ins { background: #d8eee1; text-decoration: underline; }
+.speech-audio audio { display: block; width: 100%; max-width: 38rem; margin: 1rem 0; }
+.speech-sources { margin-top: 1.5rem; border-top: 1px solid #cbd4ce; padding-top: 1rem; }
+.speech-sources summary, .speech-record summary { cursor: pointer; font-weight: 600; }
+.speech-sources a { text-decoration: underline; }
+.speech-hash { overflow-wrap: anywhere; }
+@media (max-width: 700px) { .speech-modes { grid-template-columns: 1fr; } }

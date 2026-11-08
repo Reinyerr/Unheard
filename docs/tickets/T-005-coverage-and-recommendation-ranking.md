@@ -1,6 +1,6 @@
 # T-005 — Build coverage model and language-first ranks
 
-**Status:** TODO (not implemented)  
+**Status:** In review — implemented on real data; automated tests skipped at user request.
 **Priority:** P0  
 **Owner:** Dev 1  
 **Depends on:** `T-002`, `T-003`, `T-004`  
@@ -61,3 +61,55 @@ missing = sorted(
 - [ ] `INDEX.md` status changed only after reviewer verifies it; next dependency unblocked.
 
 **Evidence to record:** local command, date, short result/log, relevant commit, any contract amendment, demonstration steps and blocked tickets.
+
+## Implementation evidence — 2026-11-07
+
+Branch `feature/data-backend`; working-tree implementation, no commit created.
+T-002 audit code/evidence, T-003 schemas/shared identities and T-004 census
+pipeline/real ward export are present. T-003/T-004 remain In review, with their
+acceptance verification pending. No prerequisite statuses were promoted.
+
+Created `scripts/prepare_coverage.py`, `frontend/public/data/languages.v1.json`
+and `frontend/public/data/recommendations.v1.json`; updated script instructions
+and ticket index. Existing T-004 work was preserved. No React, shared-schema,
+dependency or unrelated feature changes. No scope/decision amendment required.
+
+The existing contract supports one `suggested_ward_ids` list. It now contains the
+top three wards by home-speaker count; `suggested_action` independently labels
+top-three count and share rankings with values. Shares use language-specific
+counts over `population_language_base`; unavailable bases are excluded. Numeric
+ward ID breaks ties; share ranking uses unrounded ratios. No new contract fields
+or blended risk scores were introduced.
+
+Executed production generation with available Python 3.14.7/Pydantic 2.13.5
+(the pinned backend environment was not installed during this task):
+
+```sh
+python3 scripts/prepare_coverage.py --source '/Users/rainierjorgejorda/Downloads/Mississuaga File/Mississauga_Unheard_ElevenLabs_Track'
+```
+
+Observed exit 0: 15 language rows, six pilot selections and eight ranked
+recommendations. Urdu is rank 1 (22,535); order continues Punjabi, Cantonese,
+Tagalog, Tamil, Hindi, Gujarati, Bengali. Missing-category subtotal is 79,940
+of 153,480 across 14 tracked non-official categories. Urdu count-ranked wards
+are 10, 6, 11. Production generation revalidates the corrected source and checks
+the existing ward export's values/input hashes before schema-validating outputs.
+English's census population remains null; covered languages have no unmeasured
+recommendation. Source provenance records attribution, hashes, counts and limits.
+
+No automated tests/test files were created or run. Production schema/source guards
+are not acceptance-test sign-off; all acceptance checkboxes remain open. Manual
+review instructions are in `scripts/README.md`, including independent count/share
+recalculation and total/rank inspection. No frontend build, pinned-environment
+verification or Urdu/cached demo regression was performed.
+
+Known limits: municipal redistribution terms remain unresolved; local prototype
+only pending the license gate. The unchanged T-003 frontend build guard requires
+all five artifacts, while this checkout has only census/coverage/recommendations.
+Sampling and experiment assets must come from their assigned tickets. The two
+output files are individually replaced atomically, not a multi-file transaction;
+rerun after any write error before consumption.
+
+Next ready Dev 1 implementation: T-007, subject to existing T-003 review. T-012
+also has its implementation inputs for Dev 2; T-016 still needs T-011/T-012. No
+other ticket was implemented and T-005 is not marked Done.

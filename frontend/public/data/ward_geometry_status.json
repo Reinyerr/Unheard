@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "generated_at_utc": "2026-11-08T00:51:55.375842+00:00",
+  "status": "validated",
+  "map_ready": true,
+  "geometry_file": "mississauga_wards.geojson",
+  "geometry_sha256": "9c0e21b2d486b6ed53d2ca4f2b1fb4a5b9a4cb3cf43dcfcf41513f61f6feccb4",
+  "ward_ids": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "source": {
+    "publisher": "City of Mississauga / MississaugaData",
+    "attribution": "Contains information provided by the City of Mississauga; Ward Boundaries",
+    "catalogue_url": "https://data.mississauga.ca/datasets/mississauga::ward-boundaries/about",
+    "item_id": "f1cad02b3a40422dac2ea99b59cc36a5",
+    "layer_url": "https://services6.arcgis.com/hM5ymMLbxIyWTjn2/arcgis/rest/services/Ward_Boundaries/FeatureServer/2",
+    "query_url": "https://services6.arcgis.com/hM5ymMLbxIyWTjn2/arcgis/rest/services/Ward_Boundaries/FeatureServer/2/query?where=1%3D1&outFields=*&outSR=4326&f=geojson",
+    "terms_url": "https://smartcity.mississauga.ca/wp-content/uploads/2021/04/CityofMississauga_TermsofUse.pdf",
+    "terms_retrieval": "unavailable (HTTPError; HTTP 403); terms not verified",
+    "redistribution_status": "Unverified linked terms; local prototype use only pending T-019 review",
+    "retrieved_at_utc": "2026-11-08T00:48:26.909630+00:00",
+    "item_modified_at_utc": "2024-06-27T18:38:18+00:00",
+    "layer_data_edited_at_utc": "2024-06-27T18:06:59.699000+00:00",
+    "scheme_vintage": "City municipal map labels Municipal Wards (2006-); current official layer snapshot, not a verified immutable 2021 snapshot",
+    "vintage_evidence_url": "https://ext.maps.mississauga.ca/Geocortex/Essentials/REST/sites/eMaps/map/mapservices/57/layers/2?f=json",
+    "input_crs": "EPSG:3857",
+    "output_crs": "OGC:CRS84 / WGS84 longitude,latitude (ArcGIS outSR=4326)",
+    "modifications": "Server WGS84 export; verified legacy EPSG:4326 crs member removed for RFC 7946; coordinates/rings preserved without simplification/repair; properties reduced to canonical ward_id and original source_ward; features sorted",
+    "source_files_sha256": {
+      "item.json": "1c6ea5641d5d6fc264be900bf9c2ab0664ff7445c67019d8de0c46af30b0c380",
+      "service.json": "4ec8249d9a35d2ac733ce2505984fb52462045625301b012b3afcdc6b3998edf",
+      "layer.json": "4e922dc94b763d0dfe9e863d64075e8bfa41c6bb98a11fa7d1fa51894622cf9d",
+      "wards.geojson": "44f12c203dcbdbebfda60b0a3b9685a7c41fb7b0f6cf95f467d71f479ceaeeb0",
+      "vintage.json": "9c61c4bd0431a7a99234b5f4af5f67f35ce540f00eb2b17997ab36c64bdb9ac7"
+    },
+    "census_artifact_sha256": "605ff1aa611d4c1ff602e4ef4ae76948defefe7db7b4984677f2cd7b5706fa1a",
+    "validator_sha256": "32db0be6a2fda2c16ddda73c6b9965fbc6abe1cd7b3cc0b68cbbda48aa0ef266",
+    "shapely_version": "2.1.2",
+    "geos_version": "3.13.1",
+    "feature_count": 11,
+    "census_ward_count": 11,
+    "source_overlap_diagnostics": [
+      {
+        "ward_ids": [
+          7,
+          1
+        ],
+        "intersection_square_degrees": 3.3334501820512945e-09,
+        "fraction_of_smaller_polygon": 1.8492331745876548e-06
+      },
+      {
+        "ward_ids": [
+          3,
+          1
+        ],
+        "intersection_square_degrees": 6.828161958324403e-10,
+        "fraction_of_smaller_polygon": 3.697961267507429e-07
+      },
+      {
+        "ward_ids": [
+          8,
+          2
+        ],
+        "intersection_square_degrees": 3.62245563653702e-11,
+        "fraction_of_smaller_polygon": 1.1788827780087344e-08
+      }
+    ],
+    "limitations": "Individual polygon validity/ID matching does not certify disjoint city coverage, a historical boundary-change audit or geographic speech performance; source overlap diagnostics retained and linked licence unresolved"
+  },
+  "warnings": [
+    "City municipal map labels Municipal Wards (2006-); current official layer snapshot, not a verified immutable 2021 snapshot",
+    "Unverified linked terms; local prototype use only pending T-019 review",
+    "Official source has 3 interior-overlap pairs; coordinates retained without repair. See source diagnostics."
+  ]
+}

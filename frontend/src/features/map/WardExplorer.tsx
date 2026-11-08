@@ -1,0 +1,106 @@
+import { useEffect, useMemo, useState } from 'react';
+import WardTooltip from '../../components/WardTooltip';
+import { loadWardGeometry, type WardGeometryResult } from '../../data/wardGeometry';
+import { useResearch } from '../../data/ResearchData';
+import { useSelection } from '../../state/selection';
+import EmptyState from '../../components/EmptyState';
+import { colors, coverageLabel, formatCount, formatShare, languageContext, maximum, wardRow } from './metrics';
+import WardMap from './WardMap';
+import './map.css';
+
+export default function WardExplorer() {
+  const { census, reload } = useResearch();
+  const data = census.status === 'ready' ? census.data : null;
+  const { selection, selectWard, setMetric } = useSelection();
+  const languageId = selection.language_id;
+  const metric = selection.map_metric;
+  const selectedWard = selection.ward_id;
+  const [geometry, setGeometry] = useState<WardGeometryResult | null>(null);
+
+  useEffect(() => {
+    if (!data) { setGeometry(null); return; }
+    const wards = data.wards;
+    const controller = new AbortController();
+    let active = true;
+    setGeometry(null);
+    const timeout = window.setTimeout(() => controller.abort(), 15000);
+    async function load() {
+      try {
+        const boundaries = await loadWardGeometry(wards, controller.signal);
+        if (active) setGeometry(boundaries);
+      } catch {
+        if (active) setGeometry({ status: 'unavailable', geometry: null, message: 'Verified boundaries are unavailable. Use the ward table below.' });
+      } finally { window.clearTimeout(timeout); }
+    }
+    void load();
+    return () => { active = false; window.clearTimeout(timeout); controller.abort(); };
+  }, [data]);
+
+  const language = data?.languages.languages.find(row => row.language_id === languageId);
+  const context = languageContext(language);
+  const coverage = coverageLabel(language);
+  const rows = useMemo(() => data ? data.wards.wards.map(ward => wardRow(ward, languageId)).sort((a, b) => a.ward_id - b.ward_id) : [], [data, languageId]);
+  if (census.status === 'unavailable') return <EmptyState kind="unavailable" onRetry={reload}>{census.message} No demographic values are displayed.</EmptyState>;
+  if (!data) return <EmptyState kind="loading">Loading corrected census and coverage data.</EmptyState>;
+  const missing = data.languages.languages.filter(row => data.wards.missing_request_language_ids.includes(row.language_id));
+  const selected = rows.find(row => row.ward_id === selectedWard);
+  const max = maximum(rows, metric);
+  const cityCounts = missing.map(row => row.city_home_speakers);
+  const cityTotal = languageId === 'all'
+    ? cityCounts.every((value): value is number => value !== null) ? cityCounts.reduce((sum, count) => sum + count, 0) : null
+    : language?.city_home_speakers ?? null;
+
+  return <div className="ward-explorer">
+    <div className="ward-controls">
+      <fieldset><legend>Map metric</legend><div className="ward-metric-buttons">
+        {(['count', 'share'] as const).map(value => <button key={value} type="button" aria-pressed={metric === value}
+          onClick={() => setMetric(value)}>{value === 'count' ? 'Speaker count' : 'Share of language base'}</button>)}
+      </div></fieldset>
+    </div>
+    <div className="ward-context" aria-live="polite">
+      <h3>{context}</h3><p>{coverage}</p>
+      <p><strong>{formatCount(cityTotal)}</strong> supplied city home-language category count · 11 wards · 2021 census</p>
+      {languageId === 'all' ? <p>Gap layer includes only {missing.map(row => row.display_name).join(', ')}. Other tracked languages retain their covered status.</p> : null}
+      {language?.census_home_column === null ? <p>This source has no English home-language counts; English is excluded from the tracked non-official census subtotal.</p> : null}
+    </div>
+    <div className="ward-layout">
+      <div>
+        {geometry?.status === 'ready'
+          ? <WardMap geometry={geometry.geometry} rows={rows} metric={metric} selectedWard={selectedWard}
+              onSelect={selectWard} context={context} coverage={coverage}
+              onUnavailable={() => setGeometry({ status: 'unavailable', geometry: null, message: 'Map rendering is unavailable. Use the verified ward table below.' })} />
+          : <div className="ward-map-fallback" role="status">{geometry?.status === 'unavailable' ? geometry.message : 'Loading verified ward boundaries. The census table below is available independently.'}</div>}
+        <div className="ward-legend" aria-label={`Color scale: ${metric === 'count' ? 'home-speaker count' : 'share of population language base'}`}>
+          {max === null ? <p>No available values for this selection. Gray indicates unavailable data.</p> : <>
+            <div className="ward-legend-ramp" aria-hidden="true">{colors.map(color => <span key={color} style={{ backgroundColor: color }} />)}</div>
+            <p>0 → {metric === 'count' ? formatCount(max) : formatShare(max)} {metric === 'count' ? 'home speakers' : 'of language base'} · gray = unavailable</p>
+            <p>Five equal color intervals for this selection. The scale updates with language and metric.</p>
+          </>}
+        </div>
+        {geometry?.status === 'ready' ? <p className="ward-method">2021 census on a current official boundary snapshot. Vintage, terms and source-overlap cautions are recorded under Sources and boundary limitations below.</p> : null}
+      </div>
+      <aside className="ward-detail" aria-label="Selected ward demographics" aria-live="polite">
+        {selected ? <><WardTooltip row={selected} context={context} coverage={coverage} />
+          <button className="ward-clear" onClick={() => selectWard(null)}>Clear ward selection</button></>
+          : <><h3>Choose a ward</h3><p>Click or keyboard-select a boundary, or choose a ward in the table. Each view shows the count, share and census denominator together.</p></>}
+        <p className="ward-detail-note">Ward selection changes demographic context only. Speech experiments use separate, non-local recordings.</p>
+      </aside>
+    </div>
+    <div className="ward-table-wrap" tabIndex={0} role="region" aria-label="Scrollable verified ward census table">
+      <table className="ward-table">
+        <caption>{geometry?.status === 'unavailable' ? 'Verified ward table — map unavailable' : 'Verified ward counts and shares'}: {context}</caption>
+        <thead><tr><th scope="col">Ward</th><th scope="col">Home speakers</th><th scope="col">Share</th><th scope="col">Language base</th></tr></thead>
+        <tbody>{rows.map(row => <tr key={row.ward_id} className={selectedWard === row.ward_id ? 'ward-row-selected' : undefined}>
+          <th scope="row"><button aria-pressed={selectedWard === row.ward_id} onClick={() => selectWard(row.ward_id)}>Ward {row.ward_id}</button></th>
+          <td>{formatCount(row.count)}</td><td>{formatShare(row.share)}</td><td>{formatCount(row.base)}</td>
+        </tr>)}</tbody>
+      </table>
+    </div>
+    <p className="ward-method">Share = selected category count ÷ population_language_base × 100. Unavailable counts or nonpositive denominators have no percentage. Census categories describe home-language use; coverage measures supplied task recordings.</p>
+    <details className="ward-provenance"><summary>Sources and boundary limitations</summary>
+      <p>Census: City of Mississauga, corrected 2021 ward profile. Ward 10 uses the corrected source. Language coverage: supplied MInDS-14 and Speech-MASSIVE subsets. Counts and geometry are static local assets.</p>
+      <p>Boundaries: <a href="https://data.mississauga.ca/datasets/mississauga::ward-boundaries/about" target="_blank" rel="noreferrer">City of Mississauga Ward Boundaries</a>. No basemap tiles or speech-location markers are loaded.</p>
+      {geometry?.status === 'ready' ? <ul>{geometry.warnings.map(warning => <li key={warning}>{warning}</li>)}</ul> : <p>Geometry is not displayed until the T-006 validation/status/hash checks pass.</p>}
+    </details>
+  </div>;
+}

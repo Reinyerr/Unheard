@@ -1,0 +1,6 @@
+Google; Conneau et al. (2022), FLEURS: Few-shot Learning Evaluation of Universal Representations of Speech
+Source: https://huggingface.co/datasets/google/fleurs
+License: CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/
+Modifications: Selected 48 supplied FLAC files copied byte-for-byte; references preserved verbatim; no resampling, translation or normalization. Pack conversion history unknown.
+Selection SHA-256: 59f8c23640f271eefa5787fdedd3833e0091af14e40e448e1f4c8a58584d886c
+Only the 48 sample paths listed in data/samples.v1.json are part of this selection.
