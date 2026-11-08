@@ -12,7 +12,7 @@ function WardPriorities({ wards, language, metric, onSelect }: { wards: Wards; l
   return <section className="recommendation-ward-list" aria-label={`Top wards by ${metric}`}>
     <h4>{metric === 'count' ? 'Most home-language speakers' : 'Highest home-language share'}</h4>
     <p>{metric === 'count' ? 'Recruitment volume: count descending.' : 'Concentration: unrounded count ÷ population_language_base descending.'} Equal values use ascending ward ID.</p>
-    {rows.length ? <div className="priority-table-scroll"><table className="priority-table">
+    {rows.length ? <div className="priority-table-scroll" role="region" tabIndex={0} aria-label={`Scrollable top wards by ${metric}`}><table className="priority-table">
       <caption>{language.display_name} · top {rows.length} wards by {metric}</caption>
       <thead><tr><th scope="col">Ward</th><th scope="col">Home speakers</th><th scope="col">Share</th><th scope="col">Language base</th></tr></thead>
       <tbody>{rows.map(row => <tr key={row.ward_id}><th scope="row"><a href="#discover" onClick={() => onSelect(row.ward_id)}>Ward {row.ward_id}</a></th><td>{formatCount(row.count)}</td><td>{formatShare(row.share)}</td><td>{formatCount(row.base)}</td></tr>)}</tbody>

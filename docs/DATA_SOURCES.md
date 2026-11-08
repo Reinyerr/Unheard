@@ -261,3 +261,29 @@ the generated sidecar; no vintage or permission is inferred from a filename.
 
 Production acquisition/validation succeeded; automated missing-ward/fallback
 checks and visual inspection were skipped by user instruction. T-006 is In review.
+
+## T-019 package implementation handoff — 2026-11-07
+
+The consolidated [attribution and clip ledger](attributions.md) now identifies all
+48 selected FLEURS paths and modifications, municipal sources, metadata-only task
+coverage, excluded noncommercial sources and TTS/account review requirements.
+Bank/assistant examples are evidence of supplied evaluation coverage, not actual
+Mississauga 311 calls. Source references and public contracts are unchanged.
+
+`scripts/audit_publishable_assets.py` implements a read-only index/worktree and
+public/dist audit. It reuses the existing frozen selection and prompt validators;
+unknown media, raw/bulk data, suspected secrets, selected personal metadata fields,
+missing attribution/assets and unapproved prompt caches produce blocking findings.
+A public target additionally blocks unresolved City terms and provider-account
+output rights. Generated reports are audit evidence, never legal or listening
+approval; no artifacts are rewritten or packaged. Current Git history/remotes,
+manual language review and generation-time account/voice rights need separate review.
+
+Implementation only at the user's request: **no automated tests were written or
+run; the new audit command and build were not run**. Read-only inspection found
+136 indexed paths and zero indexed ZIP/FLAC/MP3/WAV paths before T-019 changes;
+this is not a complete secret scan or acceptance pass. Existing local TTS contains
+no approved audio. Applicable municipal redistribution terms and TTS/account
+permissions remain unresolved; earlier licence and key-rotation caveats still apply.
+Keep source ZIP outside the repository and raw evidence under ignored local data.
+T-019 is In review pending manual audit results and reviewer sign-off, not Done.

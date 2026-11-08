@@ -14,7 +14,11 @@ function Recording({ sample }: { sample: Sample }) {
   const [failed, setFailed] = useState(false);
   useEffect(() => { const player = audio.current; return () => player?.pause(); }, []);
   return <div><audio ref={audio} controls preload="none" src={`${import.meta.env.BASE_URL}${sample.audio_path}`} aria-label={`Prerecorded FLEURS clip ${sample.sample_id}`} onError={() => setFailed(true)} />
-    {failed ? <p role="status">Recording playback unavailable. The saved text is still available; listening has not been verified.</p> : null}</div>;
+    {failed ? <p role="status">Recording playback unavailable. The saved text is still available; listening has not been verified.</p> : null}
+    <details><summary>Recording reference transcript · supplied text</summary>
+      <p className="speech-transcript" lang={recoveryPrompt(sample.language_id)?.language_code} dir={sample.language_id === 'urdu' || sample.language_id === 'arabic' ? 'rtl' : 'ltr'}>{sample.raw_reference_transcript}</p>
+      <p className="speech-note">Dataset reference, separate from the provider transcript you confirm. This text does not establish original-speaker consent.</p>
+    </details></div>;
 }
 
 export default function Recovery() {

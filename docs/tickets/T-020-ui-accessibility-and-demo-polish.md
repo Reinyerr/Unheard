@@ -1,6 +1,6 @@
 # T-020 — Finish approachable, accessible visual storytelling
 
-**Status:** TODO (not implemented)  
+**Status:** In review — implementation only; manual accessibility and two-person rehearsal pending.
 **Priority:** P1  
 **Owner:** Dev 2  
 **Depends on:** `T-011`, `T-013`, `T-015`, `T-016`  
@@ -61,3 +61,55 @@ Make the evidence understandable without letting animations displace credibility
 - [ ] `INDEX.md` status changed only after reviewer verifies it; next dependency unblocked.
 
 **Evidence to record:** local command, date, short result/log, relevant commit, any contract amendment, demonstration steps and blocked tickets.
+
+## Implementation handoff — 2026-11-07
+
+Continued `feature/final-integration` from `b7759d3` plus existing uncommitted
+T-018/T-019 work, which was preserved. T-011/T-013/T-015/T-016 code prerequisites
+exist; T-018 recorded the real Urdu vertical slice and basic integration. Their
+review gates remain open, including T-015's unavailable approved TTS audio.
+
+Implemented only frontend accessibility/storytelling and rehearsal guidance:
+
+- `App.tsx`: one question and visible limit per act, focusable fragment targets,
+  explicit Urdu walkthrough entry, next-act and language-selection links.
+- `components/AccessibilityNotice.tsx`, `styles/accessibility.css`, `main.tsx`:
+  keyboard/audio/reading instructions, focus/target sizing, narrow-screen and RTL
+  reading styles, reduced motion and forced-colour focus/selection affordances.
+- `components/LanguageSelector.tsx`, `components/PriorityTable.tsx`,
+  `features/recommendations/Recommendations.tsx`: reliable selection jump target
+  and keyboard-focusable scroll regions with accessible labels.
+- `features/speech-lab/SpeechLab.tsx`: plain CER/WER interpretation and native
+  focusable reference/comparison jump links.
+- `features/recovery/Recovery.tsx`: supplied recording reference text with
+  language/direction, clearly separate from the transcript being confirmed.
+- `features/map/WardMap.tsx`: immediate JavaScript panning and no inertia, retaining
+  keyboard selection and existing zoom/fallback behavior.
+- `docs/DEMO_RUNBOOK.md`: 3:45 target narrative, exact manual review steps and
+  outstanding evidence. `docs/DECISIONS.md` and ticket index record the handoff.
+
+Initial/reset selection remains all languages per FR-A2; the user's explicit
+Urdu entry satisfies the guided path without silently changing accepted defaults.
+No autoplay, new metrics/assets, source edits, backend/API changes or public
+contract changes. Missing data, saved/live labels and text-only prompts remain.
+
+No automated tests were written/run; no build, browser, screen-reader, contrast,
+listening or two-person presentation check ran, per implementation-only scope.
+Acceptance boxes remain open; previous T-018 results do not verify these changes.
+
+Manual startup from repository root:
+
+```sh
+npm --prefix frontend run dev
+# Optional local backend, in a separate terminal; keep live provider key disabled:
+ELEVENLABS_API_KEY='' backend/.venv/bin/python -m uvicorn app.main:app --app-dir backend --host 127.0.0.1 --port 8000 --workers 1
+```
+
+Open http://127.0.0.1:5173 and follow the T-020 section of DEMO_RUNBOOK.md. Run
+keyboard/RTL/zoom/reduced-motion/screen-reader review and both developers' timed
+explanations before reviewer sign-off. Actual TTS playback still requires approved
+assets and competent-language listening review outside this implementation.
+
+Next ready implementation ticket: none in T-001–T-020; remaining work is review,
+manual verification and the already recorded data/audio/rights blockers. No new
+ticket or scope expansion is introduced.

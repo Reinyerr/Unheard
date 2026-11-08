@@ -277,3 +277,27 @@ removed; a real exposed credential must be rotated separately. No server key is
 configured. Metadata-only CLI recorded blocked_missing_credentials, zero requests;
 no audio generated/approved. Build/syntax passed; no automated tests. New manual
 multilingual/Urdu recovery/audio/outage acceptance remains open, so not Done.
+
+## Implementation clarification — T-019 (2026-11-07; review pending)
+
+No product-scope or public JSON/API contract change. The new read-only package
+audit emits a local report (schema_version 1.0) with target local/public, timestamp,
+Git HEAD, frozen selection hash/count, inspected counts, audio inventory and
+path/code findings. It never packages files or changes approval metadata. Existing
+frozen FLEURS and TTS validators govern asset identity/local approval; public
+redistribution is a separate manual rights decision. Unresolved applicable City
+terms and provider-account output rights deliberately block the public target.
+Current index/worktree/public/dist inspection is not Git-history review or legal
+clearance. No tests/build/audit command ran under this implementation-only request.
+
+## Implementation clarification — T-020 (2026-11-07; review pending)
+
+No public contract, data, metric, API or recovery-rule change. FR-A2's initial
+all-language selection and reset remain intact; the explicit Urdu walkthrough
+link is the guided entry required by T-020, not an automatic language override.
+It does not choose clips or trigger audio/provider requests. Shared accessibility
+styles, focusable native fragment targets, act questions/limits, scrollable table
+regions and supplied recovery reference text improve the existing four acts.
+Map pans are immediate with inertia disabled; CSS reduced-motion rules apply
+throughout. No tests/build/manual browser or listening review ran, so accessibility
+and two-person presentation acceptance remain pending rather than certified.
