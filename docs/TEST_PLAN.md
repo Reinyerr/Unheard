@@ -1,6 +1,16 @@
 # Verification plan — correctness before visuals
 
-**Status:** planned tests; nothing asserted as passing. See D-020.
+**Status:** T-017 automated regression checks verified locally on 2026-11-07;
+remote CI, independent live review and full T-018 rehearsal remain open. See D-020
+and [T-017 command/results evidence](tickets/T-017-ci-and-regression-tests.md).
+
+Observed: 69 Python tests, 13 frontend unit tests, 2 offline and 2 online existing
+browser smoke cases passed; no skips. Export/schema/source validation and frontend
+type/build checks passed. DATA-01..04, GEO-01..02, SAMPLE-01, CER-01..03,
+PAIR-01..02 and critical recovery/TTS/UI gates have automated checks; seeded
+selection and source reconciliation also have a separate optional real-source
+preflight. Browser smoke does not claim DEMO-01 or full OFFLINE-01 acceptance.
+All external providers are mocked in unit tests; no API credits are used in CI.
 
 ## Test levels / suggested tools
 

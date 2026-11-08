@@ -1,5 +1,13 @@
 # Ticket index — source of truth for implementation
 
+**Latest T-017 handoff (2026-11-07):** implementation dependencies T-001–T-016
+are merged per the user. T-017 now has 69 passing Python tests, 13 passing frontend
+tests, 2 offline and 2 online browser smoke cases, passing build/type/export/source
+checks and an offline GitHub Actions workflow. It remains **In review**, not Done:
+the new workflow has not run remotely and independent live-evidence review remains
+open. T-018 is next after that sign-off and its real audio/evidence prerequisites;
+T-018/T-019/T-020 were not implemented. Earlier notes below are historical.
+
 **T-001 and T-002 are Done (verified 2026-11-07).** T-003, T-004, T-005, T-006, T-007, T-009, T-010, T-011, T-012 and T-014 are implemented and In review; tests were explicitly skipped at user request. T-004/T-005 generated real corrected ward, language and recommendation JSON with production schema validation; acceptance and integration sign-off remain pending. T-007 also generated the frozen 48-record FLEURS selection and selected local audio. T-008 has real small-preflight evidence (In review); T-010 exported its measured outcomes with missing modes explicit. The cached runner is implemented with real offline preflight import; the full live paired pilot remains unrun; remaining tickets retain their dependencies.
 
 | Ticket | Feature | Priority | Owner | Depends on | Status |
@@ -20,7 +28,7 @@
 | [T-014](T-014-fastapi-confirmation-state-machine.md) | Implement deterministic confirmation/retry/referral API | P0 | Dev 1 | T-001, T-003, T-008 | In review |
 | [T-015](T-015-spoken-recovery-ui-and-tts.md) | Build the demo confirmation flow and spoken prompts | P0 | Dev 2 (UI) + Dev 1 (TTS) | T-012, T-013, T-014 | In review — six voices configured; account/audio verification blocked |
 | [T-016](T-016-priority-recommendations-ui.md) | Implement research-backed language/ward recommendations | P0 | Dev 2 | T-005, T-011, T-012 | In review — implemented; acceptance incomplete |
-| [T-017](T-017-ci-and-regression-tests.md) | Automate high-risk validation and unit checks | P0 | Shared | T-004, T-005, T-010, T-011, T-012, T-014 | TODO |
+| [T-017](T-017-ci-and-regression-tests.md) | Automate high-risk validation and unit checks | P0 | Shared | T-004, T-005, T-010, T-011, T-012, T-014 | In review — local checks pass; remote CI/reviewer gate pending |
 | [T-018](T-018-integrated-local-demo-and-outage.md) | Rehearse full four-act localhost and offline scenarios | P0 | Shared | T-011, T-013, T-015, T-016, T-017 | TODO |
 | [T-019](T-019-attribution-privacy-and-package-audit.md) | Audit licenses, secrets and publishable assets | P0 | Shared | T-002, T-007, T-013, T-015 | TODO |
 | [T-020](T-020-ui-accessibility-and-demo-polish.md) | Finish approachable, accessible visual storytelling | P1 | Dev 2 | T-011, T-013, T-015, T-016 | TODO |
