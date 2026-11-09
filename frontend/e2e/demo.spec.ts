@@ -21,7 +21,7 @@ test('network-unreachable backend retains the complete saved journey without pro
   await urdu(page);
   await page.getByRole('button', { name: 'Next: Investigate' }).click();
   await page.getByRole('combobox', { name: 'Recording', exact: true }).selectOption('urdu-1533');
-  await expect(page.getByRole('region', { name: 'Automatic detection transcription' }).getByText('10.6%', { exact: true })).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Without a language hint transcription' }).getByText('10.6%', { exact: true })).toBeVisible();
   const audio = page.getByLabel('FLEURS recording urdu-1533', { exact: true });
   await audio.evaluate(async (node: HTMLAudioElement) => node.play());
   await expect.poll(() => audio.evaluate((node: HTMLAudioElement) => node.currentTime)).toBeGreaterThan(0);
@@ -46,6 +46,7 @@ test('Urdu three acts: verified coverage, map, audio, metrics, acceptance and re
   const discover = page.locator('#discover');
   const lab = page.locator('#investigate');
   const recovery = page.locator('#demonstrate');
+  await expect(discover.getByText(/Sources and boundary limitations|Keyboard, audio and reading options/)).toHaveCount(0);
   await expect(discover.getByRole('button', { name: /^Ward 10;/ })).toBeVisible();
   await discover.getByRole('button', { name: /^Ward 10;/ }).press('Enter');
   const detail = discover.getByRole('complementary', { name: 'Selected ward demographics' });
@@ -60,15 +61,17 @@ test('Urdu three acts: verified coverage, map, audio, metrics, acceptance and re
   await expect.poll(() => audio.evaluate((node: HTMLAudioElement) => node.currentTime)).toBeGreaterThan(.1);
   await expect.poll(() => audio.evaluate((node: HTMLAudioElement) => node.duration)).toBeGreaterThan(0);
   await audio.evaluate((node: HTMLAudioElement) => node.pause());
-  for (const mode of ['Automatic detection transcription', 'Guided language transcription']) {
+  for (const mode of ['Without a language hint transcription', 'With a language hint transcription']) {
     const panel = lab.getByRole('region', { name: mode });
     await expect(panel.getByText('10.6%', { exact: true })).toBeVisible();
     await expect(panel.getByText('WER', { exact: true })).toHaveCount(0);
     await expect(panel.locator('[dir="rtl"]').first()).toBeVisible();
   }
-  await expect(lab.getByText('0.0 percentage points', { exact: true }).first()).toBeVisible();
-  await lab.getByText('Language pilot summary · sample counts and limitations', { exact: true }).click();
-  await expect(lab.getByText(/Selected n=8; scored automatic n=1; scored guided n=1; comparable pairs n=1/)).toBeVisible();
+  await expect(lab.getByText('No change in error rate', { exact: true })).toBeVisible();
+  await expect(lab.getByText('0.0 percentage points on this recording.')).toBeVisible();
+  await expect(lab.getByText('Language hint: Urdu (urd).')).toBeVisible();
+  await expect(lab.getByText(/Language pilot summary|Speech sources, model and metric policy/)).toHaveCount(0);
+  await page.screenshot({ path: info.outputPath('language-hint-comparison.png'), fullPage: true });
 
   await page.getByRole('button', { name: '03 Demonstrate' }).click();
   await recovery.getByLabel('Demo route').selectOption('offline');
@@ -93,6 +96,11 @@ test('Urdu three acts: verified coverage, map, audio, metrics, acceptance and re
   await page.getByRole('button', { name: 'Return to Discover' }).click();
   await expect(detail.getByText('4,520', { exact: true })).toBeVisible();
   const stats = discover.getByRole('figure', { name: 'Supplied task-audio coverage gap' });
+  await expect(stats.getByText('12.54%', { exact: true })).toBeVisible();
+  await expect(stats.getByText(/9,260 of 73,830/)).toBeVisible();
+  await discover.getByRole('button', { name: /^Ward 1;/ }).press('Enter');
+  await expect(stats.getByText('1.91%', { exact: true })).toBeVisible();
+  await discover.getByRole('button', { name: 'Clear ward selection' }).click();
   await expect(stats.getByText('52.1%', { exact: true })).toBeVisible();
   await expect(stats.getByText(/79,940 of 153,480 across 14 tracked/)).toBeVisible();
   expect(errors).toEqual([]);
@@ -110,17 +118,17 @@ test('language switches clear playback/results; incomplete and incompatible metr
   await expect(lab.getByLabel('FLEURS recording urdu-1533', { exact: true })).toHaveCount(0);
   expect(await oldAudio!.evaluate((node: HTMLAudioElement) => node.paused)).toBe(true);
   await lab.getByRole('combobox', { name: 'Recording', exact: true }).selectOption('arabic-1537');
-  await expect(lab.getByRole('region', { name: 'Automatic detection transcription' }).getByText('Not tested', { exact: true }).first()).toBeVisible();
+  await expect(lab.getByRole('region', { name: 'Without a language hint transcription' }).getByText('Not tested', { exact: true }).first()).toBeVisible();
   await expect(lab.getByText('0.0%', { exact: true })).toHaveCount(0);
   for (const language of ['english', 'punjabi', 'mandarin_chinese']) {
     await page.getByRole('combobox', { name: 'Selected language', exact: true }).selectOption(language);
     await lab.getByRole('combobox', { name: 'Recording', exact: true }).selectOption(`${language}-1537`);
-    await expect(lab.getByRole('region', { name: 'Automatic detection transcription' }).getByText('Not tested', { exact: true }).first()).toBeVisible();
+    await expect(lab.getByRole('region', { name: 'Without a language hint transcription' }).getByText('Not tested', { exact: true }).first()).toBeVisible();
   }
   await page.getByRole('combobox', { name: 'Selected language', exact: true }).selectOption('cantonese');
   await lab.getByRole('combobox', { name: 'Recording', exact: true }).selectOption('cantonese-1533');
-  await expect(lab.getByRole('region', { name: 'Automatic detection transcription' }).getByText(/excluded from comparable metrics/)).toBeVisible();
-  await expect(lab.getByRole('region', { name: 'Guided language transcription' }).getByText('10.0%', { exact: true })).toBeVisible();
+  await expect(lab.getByRole('region', { name: 'Without a language hint transcription' }).getByText(/excluded from comparable metrics/)).toBeVisible();
+  await expect(lab.getByRole('region', { name: 'With a language hint transcription' }).getByText('10.0%', { exact: true })).toBeVisible();
   await page.getByRole('combobox', { name: 'Selected language', exact: true }).selectOption('tamil');
   await expect(lab.getByText('Not tested', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: '03 Demonstrate' }).click();
@@ -136,7 +144,7 @@ test('missing polygons and invalid audio retain verified table and saved text', 
   await page.locator('#investigate').getByRole('combobox', { name: 'Recording', exact: true }).selectOption('urdu-1533');
   await page.getByLabel('FLEURS recording urdu-1533', { exact: true }).evaluate((node: HTMLAudioElement) => { void node.play().catch(() => {}); });
   await expect(page.getByText(/Audio unavailable or unsupported/)).toBeVisible();
-  await expect(page.locator('#investigate').getByRole('region', { name: 'Automatic detection transcription' }).getByText('10.6%', { exact: true })).toBeVisible();
+  await expect(page.locator('#investigate').getByRole('region', { name: 'Without a language hint transcription' }).getByText('10.6%', { exact: true })).toBeVisible();
 });
 
 for (const asset of ['wards', 'samples', 'experiments']) {

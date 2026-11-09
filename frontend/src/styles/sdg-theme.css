@@ -1,15 +1,18 @@
-/* The dark atlas plate anchors the lighter reading and listening surfaces. */
+/* Black canvas with separate surfaces for the atlas and saved comparisons. */
 :root {
-  color-scheme: light;
-  --paper: #eef2f5;
-  --ink: #162230;
-  --muted: #516377;
-  --map: #192c3f;
-  --orchid: #b65991;
-  --plum: #782651;
-  --line: #b5c3d0;
-  --surface: #f9fbfd;
-  --accent: #254e78;
+  color-scheme: dark;
+  --paper: #09090d;
+  --ink: #f4eef5;
+  --muted: #bfb3c7;
+  --map: #151923;
+  --orchid: #d979ad;
+  --plum: #f3a1c9;
+  --line: #493e52;
+  --surface: #1b1721;
+  --control-border: #82718f;
+  --selected: #5b2a46;
+  --hover: #33263a;
+  --accent: #a9e8e4;
   --display: "Source Serif 4", Georgia, serif;
   font-family: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
   background: var(--paper);
@@ -20,7 +23,8 @@ a { color: var(--plum); text-underline-offset: .22em; }
 button:disabled { opacity: .55; cursor: not-allowed; }
 :focus-visible,
 #language-selection:focus, #speech-reference:focus, #speech-comparisons:focus,
-.recovery-outcome:focus {
+.recovery-outcome:focus, .recovery button:focus-visible, .recovery select:focus-visible,
+summary:focus-visible, audio:focus-visible, [role="region"][tabindex="0"]:focus-visible {
   outline: 3px solid var(--accent);
   outline-offset: 3px;
 }
@@ -69,12 +73,13 @@ button:disabled { opacity: .55; cursor: not-allowed; }
 .recovery select, .recovery button, .ward-metric-buttons button, .ward-clear {
   color: var(--ink);
   background: var(--surface);
-  border: 1px solid #8496a9;
+  border: 1px solid var(--control-border);
   border-radius: .35rem;
   font-size: .875rem;
 }
-.global-selection > button:hover, .recovery button:hover:not(:disabled), .ward-clear:hover {
-  background: #e0e8f0;
+.global-selection > button:hover, .recovery button:hover:not(:disabled), .ward-clear:hover,
+.back-button:hover:not(:disabled), .ward-metric-buttons button:hover:not(:disabled), .ward-table button:hover {
+  background: var(--hover);
 }
 .journey-main { flex: 1; min-width: 0; }
 .journey-act { padding: .6rem .2rem 1.75rem; min-width: 0; }
@@ -98,13 +103,13 @@ button:disabled { opacity: .55; cursor: not-allowed; }
   gap: .75rem;
 }
 .primary-button, .back-button {
-  border: 1px solid var(--map);
+  border: 1px solid var(--control-border);
   border-radius: .35rem;
   padding: .6rem 1rem;
   font-weight: 650;
 }
-.primary-button { color: white; background: var(--map); }
-.primary-button:hover:not(:disabled) { background: var(--plum); border-color: var(--plum); }
+.primary-button { color: white; background: var(--selected); border-color: var(--orchid); }
+.primary-button:hover:not(:disabled) { background: #733553; border-color: var(--plum); }
 .back-button { background: var(--surface); }
 
 .ward-explorer { color: var(--ink); margin-top: .65rem; }
@@ -119,12 +124,12 @@ button:disabled { opacity: .55; cursor: not-allowed; }
 .ward-controls legend { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 .ward-metric-buttons { flex-wrap: nowrap; }
 .ward-metric-buttons button { flex: 0 1 auto; }
-.ward-metric-buttons button[aria-pressed=true] { color: white; background: var(--map); border-color: var(--map); }
+.ward-metric-buttons button[aria-pressed=true] { color: white; background: var(--selected); border-color: var(--orchid); }
 .ward-context { margin: 0; padding: .6rem 0; border: 0; max-width: 38rem; }
 .ward-context p { color: var(--muted); }
 .ward-layout { display: block; }
 .ward-map-frame { position: relative; }
-.ward-map-canvas { height: clamp(350px, calc(100svh - 345px), 760px); border-color: var(--map); border-radius: .7rem; }
+.ward-map-canvas { height: clamp(350px, calc(100svh - 345px), 760px); border-color: var(--line); border-radius: .7rem; }
 .ward-map-canvas.leaflet-container { background: var(--map); font-family: inherit; }
 .map-instruction, .map-coordinate-label {
   position: absolute;
@@ -156,7 +161,7 @@ button:disabled { opacity: .55; cursor: not-allowed; }
 .leaflet-control-attribution a { color: #d8e9fc; }
 .ward-map-tooltip { background: var(--surface); color: var(--ink); border-color: var(--line); }
 .ward-legend { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem .7rem; margin: .6rem 0; color: var(--muted); }
-.ward-legend-ramp { width: 8rem; border-color: #8496a9; }
+.ward-legend-ramp { width: 8rem; border-color: var(--control-border); }
 .ward-detail {
   background: var(--surface);
   border-color: var(--line);
@@ -169,7 +174,7 @@ button:disabled { opacity: .55; cursor: not-allowed; }
 .ward-detail-note { color: var(--muted); }
 .ward-table caption { background: var(--surface); }
 .ward-table th, .ward-table td { border-color: var(--line); }
-.ward-row-selected { background: #eedce8; }
+.ward-row-selected { background: var(--selected); }
 .ward-table button[aria-pressed=true] { color: var(--plum); }
 .coverage-figure {
   margin: 1.15rem 0;
@@ -179,19 +184,30 @@ button:disabled { opacity: .55; cursor: not-allowed; }
 .coverage-figure figcaption { display: flex; flex-wrap: wrap; align-items: baseline; gap: .4rem 1.25rem; }
 .coverage-figure strong { color: var(--plum); font: 600 clamp(2rem, 5vw, 3.5rem)/1 var(--display); font-variant-numeric: lining-nums tabular-nums; }
 .coverage-figure h2 { font-weight: 650; }
-.coverage-figure p, .ward-method, .ward-provenance { color: var(--muted); font-size: .82rem; }
-.coverage-bar { height: .65rem; background: #ccd6e0; margin: .75rem 0 .5rem; border-radius: .15rem; overflow: hidden; }
-.coverage-bar span { display: block; height: 100%; background: var(--plum); }
+.coverage-figure p, .ward-method { color: var(--muted); font-size: .82rem; }
+.coverage-bar { height: .65rem; background: #362e42; margin: .75rem 0 .5rem; border-radius: .15rem; overflow: hidden; }
+.coverage-bar span { display: block; height: 100%; background: var(--orchid); }
 
 .speech-lab, .recovery, .empty-state { max-width: 68rem; }
 .speech-lab, .recovery { margin-top: 1rem; }
-.speech-record, .speech-summary { border: 0; border-top: 1px solid var(--line); border-radius: 0; padding: .7rem 0; }
+.speech-record { border: 0; border-top: 1px solid var(--line); border-radius: 0; padding: .7rem 0; }
 .speech-stats dd { font-size: 1.4rem; color: var(--plum); font-variant-numeric: tabular-nums; }
-.speech-mode { border-top-color: var(--orchid); }
+.speech-mode { border-top-color: var(--control-border); }
+.speech-mode + .speech-mode { border-top-color: var(--orchid); }
+.hint-effect {
+  border-inline-start: 3px solid var(--orchid);
+  background: var(--surface);
+  padding: .8rem 1rem;
+  margin-block: 1rem;
+  animation: ward-reveal .22s ease-out both;
+}
+.hint-effect h4, .hint-effect p { margin: 0; }
+.hint-effect h4, .hint-effect p:last-child { color: var(--muted); font-size: .9rem; }
+.hint-effect strong { color: var(--plum); font-size: 1.2rem; }
 .speech-note, .speech-stats dt, .recovery-context { color: var(--muted); }
 .transcript-navigation { margin-top: .5rem; }
 .speech-transcript { max-width: 75ch; }
-.ward-table-details, .ward-provenance, .accessibility-notice, .speech-sources {
+.ward-table-details {
   margin-block: .5rem;
   border: 0;
   border-top: 1px solid var(--line);
@@ -200,6 +216,10 @@ button:disabled { opacity: .55; cursor: not-allowed; }
   background: transparent;
 }
 summary { font-weight: 650; cursor: pointer; }
+.empty-state, .ward-map-fallback { background: var(--surface); border-color: var(--control-border); }
+.empty-state button { color: var(--ink); background: var(--hover); border-color: var(--control-border); }
+.transcript-diff del { color: #ffe0e7; background: #572d3d; }
+.transcript-diff ins { color: #d8fff0; background: #21463d; }
 .audio-waveform {
   background: var(--map);
   color: white;
@@ -215,11 +235,11 @@ summary { font-weight: 650; cursor: pointer; }
 .recovery-settings > p { grid-column: 1 / -1; }
 .recovery .simulation-disclosure { border: 0; margin: .5rem 0; padding: 0; }
 .recovery-outcome { background: var(--surface); border: 1px solid var(--line); border-inline-start: 4px solid var(--accent); }
-.recovery-outcome-success { background: #e6f2ec; border-inline-start-color: #277252; }
-.recovery-outcome-warning { background: #fff5e8; border-inline-start-color: #986131; }
+.recovery-outcome-success { background: #152a25; border-inline-start-color: #74c7a0; }
+.recovery-outcome-warning { background: #312419; border-inline-start-color: #dcad77; }
 .recovery-outcome-success, .recovery-outcome-warning, .recovery-outcome-review { animation: ward-reveal .22s ease-out both; }
-.recovery .recovery-actions button:first-child { background: var(--map); border-color: var(--map); color: white; }
-.recovery .recovery-actions button:first-child:hover:not(:disabled) { background: var(--plum); border-color: var(--plum); }
+.recovery .recovery-actions button:first-child { background: var(--selected); border-color: var(--orchid); color: white; }
+.recovery .recovery-actions button:first-child:hover:not(:disabled) { background: #733553; border-color: var(--plum); }
 .recovery-next { display: flex; flex-wrap: wrap; align-items: center; gap: .55rem; }
 .recovery .recovery-continue { color: var(--plum); background: transparent; border: 0; padding: .55rem .15rem; }
 

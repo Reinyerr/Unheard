@@ -378,3 +378,26 @@ selection, playback, recovery routes and state transitions retain their existing
 behavior. The dark map and waveform surfaces sit within a light reading layout;
 ward, layer and outcome motion follows system reduced-motion settings. No API,
 data, metric or geometry contracts change.
+
+### T-021 dark palette and plain-language comparison
+
+The user restored the dark presentation and removed the standalone boundary,
+accessibility, pilot-summary and metric/source panels from Discover and
+Investigate. The ward table, map attribution, FLEURS credits, sample counts,
+reference transcript and keyboard/audio interactions remain available. The
+comparison calls the two modes “Without a language hint” and “With a language
+hint” and interprets only the exported per-clip paired difference. Data,
+metric and API contracts are unchanged.
+
+### T-021 ward coverage and waveform controls
+
+Discover switches its task-audio coverage figure from the citywide tracked
+categories to the selected ward. For a ward, the numerator covers all eight
+gap categories and the denominator is the ward's census language base. Clearing
+the ward restores the citywide figure. Investigate links to the audio attribution
+file in place of the long credit line.
+
+The shared recording waveform now includes playback, seeking, mute and volume
+controls. Native controls are the fallback when waveform decoding is unavailable.
+Playback still uses the same media element and pauses on navigation. Data, metrics,
+geometry, and backend contracts are unchanged.

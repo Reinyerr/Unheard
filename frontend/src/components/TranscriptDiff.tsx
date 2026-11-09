@@ -29,12 +29,14 @@ export default function TranscriptDiff({ reference, output, direction, language 
 }) {
   const diff = compare(reference, output);
   return <div className="transcript-diff">
-    <p className="speech-note">Raw-text comparison: removed reference graphemes are struck through; added output graphemes are underlined. This display does not calculate CER or translate text.</p>
+    <p className="speech-note">What the model wrote</p>
     {diff ? <>
-      <p className="speech-note">Reference alignment</p>
-      <p className="speech-transcript" dir={direction} lang={language}>{diff.left.map((part, i) => part.changed ? <del key={i}>{part.text}</del> : part.text)}</p>
-      <p className="speech-note">Raw output alignment</p>
       <p className="speech-transcript" dir={direction} lang={language}>{output === '' ? <em>Empty recorded transcript</em> : diff.right.map((part, i) => part.changed ? <ins key={i}>{part.text}</ins> : part.text)}</p>
+      <details>
+        <summary>See what changed in the text</summary>
+        <p className="speech-note">Underlines mark additions above. Strikethroughs mark omissions from the human transcript below. These highlights show raw text differences.</p>
+        <p className="speech-transcript" dir={direction} lang={language}>{diff.left.map((part, i) => part.changed ? <del key={i}>{part.text}</del> : part.text)}</p>
+      </details>
     </> : <><p className="speech-note">Highlighting unavailable for this browser or text length; unchanged raw output follows.</p><p className="speech-transcript" dir={direction} lang={language}>{output === '' ? 'Empty recorded transcript' : output}</p></>}
   </div>;
 }

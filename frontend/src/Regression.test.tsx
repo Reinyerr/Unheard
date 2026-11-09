@@ -49,11 +49,18 @@ it('shows Not tested without zero metrics and clears Urdu playback/comparison on
   const select = screen.getAllByRole('combobox')[1];
   fireEvent.change(select, { target: { value: 'urdu-1533' } });
   expect(screen.getByLabelText('FLEURS recording urdu-1533')).toBeInTheDocument();
-  expect(screen.getByRole('region', { name: 'Automatic detection transcription' })).toBeInTheDocument();
+  expect(screen.getByRole('region', { name: 'Without a language hint transcription' })).toBeInTheDocument();
+  expect(screen.getByText('No change in error rate')).toBeVisible();
   fireEvent.change(language, { target: { value: 'arabic' } });
   expect(screen.queryByLabelText('FLEURS recording urdu-1533')).not.toBeInTheDocument();
-  expect(screen.queryByRole('region', { name: 'Automatic detection transcription' })).not.toBeInTheDocument();
+  expect(screen.queryByRole('region', { name: 'Without a language hint transcription' })).not.toBeInTheDocument();
   expect(HTMLMediaElement.prototype.pause).toHaveBeenCalled();
+  fireEvent.change(language, { target: { value: 'english' } });
+  fireEvent.change(screen.getByLabelText('Recording'), { target: { value: 'english-1533' } });
+  expect(screen.getByText('31.1 percentage points lower with the hint on this recording.')).toBeVisible();
+  fireEvent.change(language, { target: { value: 'cantonese' } });
+  fireEvent.change(screen.getByLabelText('Recording'), { target: { value: 'cantonese-1533' } });
+  expect(screen.getByText('Comparison unavailable')).toBeVisible();
 });
 
 it('rejects stale results while ward selection preserves speech state; formats uncapped metrics', () => {

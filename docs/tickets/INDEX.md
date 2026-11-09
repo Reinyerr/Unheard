@@ -1,5 +1,18 @@
 # Ticket index — source of truth for implementation
 
+**T-021 ward coverage and waveform follow-up:** Discover's coverage figure
+follows ward selection. Recording players expose play/pause and volume alongside
+the waveform, with native controls as the decode fallback. The build, 12 unit
+tests and 16 connected Chromium tests passed, including ward changes, mute,
+volume and native playback fallback. **In review**.
+
+**T-021 dark palette and transcription comparison follow-up:** User-approved
+dark styling, shorter Discover and Investigate views, and plain-language
+comparison of saved results with and without a language hint. **In review**
+with prior gates retained. The frontend build, 12 unit tests and 16 connected
+Chromium checks passed, including a simulated backend disconnection. The
+offline-only check requires FastAPI to be stopped.
+
 **T-021 visual redesign (2026-11-09):** Three-step public journey with a
 map-first layout, citywide coverage figure, and a clear end to the recovery
 simulation. Research exports and backend contracts are intact. **In review**

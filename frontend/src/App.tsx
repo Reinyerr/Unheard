@@ -3,7 +3,6 @@ import WardExplorer from './features/map/WardExplorer';
 import SpeechLab from './features/speech-lab/SpeechLab';
 import LanguageSelector from './components/LanguageSelector';
 import Recovery from './features/recovery/Recovery';
-import AccessibilityNotice from './components/AccessibilityNotice';
 import { SelectionProvider } from './state/selection';
 import { ResearchProvider } from './data/ResearchData';
 import sdg10 from './assets/sdg10-reduced-inequalities.png';
@@ -72,9 +71,7 @@ export function AppContent() {
                 <img src={sdg10} alt="UN Sustainable Development Goal 10: Reduced Inequalities." width="132" height="132" />
                 <span>Aligned with SDG 10</span></a> : null}
             </div>
-            {module.id === 'discover' ? <>
-              <WardExplorer /><AccessibilityNotice />
-            </> : null}
+            {module.id === 'discover' ? <WardExplorer /> : null}
             {module.id === 'investigate' ? <SpeechLab /> : null}
             {module.id === 'demonstrate' ? <Recovery active={step === index} /> : null}
           </section>)}

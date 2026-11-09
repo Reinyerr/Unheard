@@ -2,9 +2,6 @@
 .demo-start { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin-bottom: 1rem; line-height: 1.7; }
 .demo-start-link { background: #174e3e; color: white; font-weight: 650; }
 .demo-start-link:hover { background: #0f3b2e; }
-.accessibility-notice { margin-bottom: 1.5rem; padding: 1rem; border: 1px solid #8da69a; border-radius: .65rem; background: #fffefa; }
-.accessibility-notice summary { cursor: pointer; font-weight: 650; padding-block: .35rem; }
-.accessibility-notice p { margin-top: .75rem; line-height: 1.75; max-width: 75ch; }
 .act-question { margin-top: 1rem; font-size: 1.15rem; line-height: 1.6; font-weight: 650; }
 .act-limit { margin-top: .75rem; padding-inline-start: .8rem; border-inline-start: 3px solid #7e978c; color: #43584e; font-size: .9rem; line-height: 1.75; }
 .act-navigation, .transcript-navigation { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; margin-top: 1.5rem; }

@@ -55,6 +55,9 @@ export default function WardExplorer() {
   const gapShare = gapCount !== null && trackedCount !== null && trackedCount > 0 && gapCount <= trackedCount
     ? gapCount / trackedCount : null;
   const cityTotal = languageId === 'all' ? gapCount : language?.city_home_speakers ?? null;
+  const ward = data.wards.wards.find(row => row.ward_id === selectedWard);
+  const wardGap = ward ? wardRow(ward, 'all') : null;
+  const coverageShare = wardGap ? (wardGap.share === null ? null : wardGap.share / 100) : gapShare;
 
   return <div className="ward-explorer">
     <div className="map-toolbar">
@@ -91,14 +94,15 @@ export default function WardExplorer() {
         <p className="ward-detail-note">Census context only. Speech recordings are non-local.</p>
       </aside> : null}
     </div>
-    <figure className="coverage-figure" aria-label="Supplied task-audio coverage gap">
+    <figure className="coverage-figure" aria-label="Supplied task-audio coverage gap" aria-live="polite">
       <figcaption>
-        <strong>{gapShare === null ? 'Unavailable' : `${(100 * gapShare).toFixed(1)}%`}</strong>
-        <div><h2>Home speakers in categories without supplied task audio</h2>
-          <p>{formatCount(gapCount)} of {formatCount(trackedCount)} across {tracked.length} tracked non-official categories</p></div>
+        <strong>{wardGap ? formatShare(wardGap.share) : gapShare === null ? 'Unavailable' : `${(100 * gapShare).toFixed(1)}%`}</strong>
+        <div><h2>{wardGap ? `Ward ${wardGap.ward_id}` : 'Mississauga'} · Home speakers in categories without supplied task audio</h2>
+          <p>{wardGap
+            ? `${formatCount(wardGap.count)} of ${formatCount(wardGap.base)} in the ward’s census language base`
+            : `${formatCount(gapCount)} of ${formatCount(trackedCount)} across ${tracked.length} tracked non-official categories`}</p></div>
       </figcaption>
-      {gapShare !== null ? <div className="coverage-bar" aria-hidden="true"><span style={{ width: `${gapShare * 100}%` }} /></div> : null}
-      <p>MInDS-14 and Speech-MASSIVE subsets · Dataset coverage only</p>
+      {coverageShare !== null ? <div className="coverage-bar" aria-hidden="true"><span style={{ width: `${Math.min(coverageShare, 1) * 100}%` }} /></div> : null}
     </figure>
     <details className="ward-table-details" open={geometry?.status === 'unavailable'}>
     <summary>Verified ward table · all 11 wards</summary>
@@ -112,13 +116,7 @@ export default function WardExplorer() {
         </tr>)}</tbody>
       </table>
     </div>
-    <p className="ward-method">Ward share uses the census language base. Missing counts or nonpositive bases have no percentage. The map uses five equal intervals for the active layer.</p>
-    </details>
-    <details className="ward-provenance"><summary>Sources and boundary limitations</summary>
-      <p>City of Mississauga corrected 2021 census and supplied MInDS-14 and Speech-MASSIVE coverage. Home language does not establish English proficiency or recognition performance. The citywide coverage denominator includes only the tracked categories.</p>
-      <p>SDG 10 describes the project's focus on inclusion. It does not imply UN endorsement or measured progress.</p>
-      <p>Boundaries: <a href="https://data.mississauga.ca/datasets/mississauga::ward-boundaries/about" target="_blank" rel="noreferrer">City of Mississauga Ward Boundaries</a>. No basemap tiles or speech-location markers are loaded.</p>
-      {geometry?.status === 'ready' ? <ul>{geometry.warnings.map(warning => <li key={warning}>{warning}</li>)}</ul> : <p>Geometry is not displayed until the T-006 validation/status/hash checks pass.</p>}
+    <p className="ward-method">Share uses the census language base. Home language alone does not indicate English proficiency or recognition accuracy. The map uses five equal intervals and a separate boundary snapshot for the corrected 2021 census figures.</p>
     </details>
   </div>;
 }
