@@ -1,186 +1,222 @@
-# UNHEARD — Documentation-first implementation kit
+# UNHEARD
 
-**Sheridan Datathon 2026 · ElevenLabs challenge · two-person team · planning baseline 2026-11-07**
+**Sheridan Datathon 2026 Winner · ElevenLabs Challenge**
 
-> **Status:** T-001 bootstrap and T-002 source audit implemented and verified. The local React shell, FastAPI health service and read-only source audit work; research modules, export pipelines and ElevenLabs experiments remain pending. Do not present sample responses or hypothetical results as real experiments.
+UNHEARD is a voice accessibility research app that explores how multilingual
+voice interfaces could better serve Mississauga residents. It maps gaps in
+supplied speech evaluation datasets, compares real speech-to-text results, and
+demonstrates how a voice interface can let someone correct a misunderstood
+transcript before accepting it. The project gives municipal language-access and
+service-design teams evidence for deciding which languages to evaluate and where
+to recruit participants. It aligns with Sustainable Development Goal 10,
+Reduced Inequalities.
 
-## Mission
+**79,940 of 153,480 home-language speakers across 14 tracked non-official
+language categories (52.1%)** were in eight categories with no labelled
+spoken-request audio in the supplied MInDS-14 and Speech-MASSIVE subsets.
+The 153,480 denominator covers the tracked categories. The coverage gap describes
+what the supplied evaluation material contains. The app reports transcription
+error separately, using a small speech pilot.
 
-UNHEARD is an evidence-based voice accessibility investigation for **municipal language-accessibility and service-design teams**. It identifies underrepresented *task-oriented audio evaluation* languages, tests speech-to-text using authentic FLEURS recordings, and explains where further multilingual service testing should be prioritized. It is **not** a replacement for Mississauga 311.
+## What you can do in the app
 
-**Confirmed insight:** The supplied `language_coverage.csv` has **8** non-official home-language categories with **no labelled spoken-request recordings in the supplied MInDS-14 or Speech-MASSIVE sets**, totalling **79,940** Mississauga residents who report those languages spoken most often at home. That is approximately **52.1% of the 153,480 speakers across the 14 tracked non-official categories**, **not** 52.1% of Mississauga, a voice-AI error rate, or a count of people unable to speak English.
+| Step | What it shows |
+| --- | --- |
+| **Discover** | Explore corrected 2021 census data across Mississauga's 11 wards. Switch between speaker counts and share of the ward's census language base, select a ward to inspect its figures, or use the ward table. The initial map aggregates the eight coverage-gap categories. |
+| **Investigate** | Select a prerecorded FLEURS sample. Listen with native audio controls and a waveform derived from the recording, then compare the reference transcript with saved ElevenLabs Scribe v2 output under automatic detection and language guidance. The lab shows raw transcripts, character error rates, paired differences, and explicit unavailable states. |
+| **Demonstrate** | Review a transcript before accepting it. A rejection offers one retry with a different recording. If the retry fails, the flow suggests seeking human assistance through official channels. This simulation uses prerecorded speech and does not contact any service. |
+| **Recommend** | See which languages to prioritize for future task-request evaluation. The app ranks the eight coverage-gap languages by citywide home-speaker count and independently lists leading wards by count and by share. |
 
-## Getting started
+Use **Next**, **Back**, or the numbered steps to navigate. Selections persist
+across steps, and playback pauses when you leave the current step.
 
-1. Read [AGENTS.md](AGENTS.md), [requirements](docs/REQUIREMENTS.md), [decisions](docs/DECISIONS.md), [architecture](docs/ARCHITECTURE.md), and [contracts](docs/DATA_CONTRACTS.md).
-2. Follow [ROADMAP.md](docs/ROADMAP.md) and [tickets/INDEX.md](docs/tickets/INDEX.md). T-001 and T-002 are verified; T-003 is next, with later work gated by its dependencies.
-3. Do the data/API preflight before assuming any ElevenLabs language-guidance support. Speech endpoints, experiment outputs, and geographic polygons remain **unverified or unimplemented**.
-4. Keep original dataset archives **outside the public repository**. Refer to [DATA_SOURCES.md](docs/DATA_SOURCES.md) for paths, source corrections, and licensing. Do not upload the 468 MB supplied data ZIP or raw audio indiscriminately.
-5. Use [TEST_PLAN.md](docs/TEST_PLAN.md) to verify implementation and [DEMO_RUNBOOK.md](docs/DEMO_RUNBOOK.md) for the local judging flow.
+## Run locally
 
-## System at a glance
+Run the commands from the repository root. The browser demo requires Node.js
+**22.12 or newer** and npm. Use **Python 3.12** for the optional backend, audio
+restoration, or data verification.
 
-- **Frontend:** React + Vite + TypeScript (recommended implementation convention) + Tailwind; Leaflet or MapLibre as one selected map stack; charts via one chosen library.
-- **Backend:** Python + FastAPI for *local* Scribe/TTS integration and confirmation/retry state machine.
-- **Research:** Python scripts generating validated, reproducible **static JSON** for map and experiments; no database/authentication required for MVP.
-- **Deployment:** **Localhost for this hackathon**. Cloudflare Pages for the static frontend *after the hackathon* is a future plan, not a current dependency. A future public FastAPI endpoint needs separate hosting and security controls.
-- **Ownership:** Developer 1 owns data / experiment / backend; Developer 2 owns frontend / visualization; both review integration, test results, and demo. ChatGPT can draft code and debugging guidance, but **your team executes and verifies it**. Your team handles Devpost, GitHub publication, judging materials, and submissions independently.
+### 1. Start the browser demo
 
-## Key documents
+**Windows PowerShell**
 
-| Document | Purpose |
-|---|---|
-| [AGENTS.md](AGENTS.md) | Coding-agent guardrails and ticket workflow |
-| [REQUIREMENTS.md](docs/REQUIREMENTS.md) | Scope, measurable behaviour, non-goals |
-| [DECISIONS.md](docs/DECISIONS.md) | Full 25-question decision record, including amendments |
-| [ROADMAP.md](docs/ROADMAP.md) | Dependency-aware implementation phases and stop rules |
-| [IMPLEMENTATION_PLAYBOOK.md](docs/IMPLEMENTATION_PLAYBOOK.md) | Coding-agent prompts and per-ticket workflow |
-| [ARCHITECTURE.md](docs/ARCHITECTURE.md) | Data flows, component boundaries, failure modes |
-| [DATA_CONTRACTS.md](docs/DATA_CONTRACTS.md) | Proposed versioned data/API schemas with examples |
-| [TEST_PLAN.md](docs/TEST_PLAN.md) | Priority tests and go/no-go checks |
-| [DATA_SOURCES.md](docs/DATA_SOURCES.md) | Verified pack inventory, limitations, attribution |
-| [RISK_REGISTER.md](docs/RISK_REGISTER.md) | Top risks and mitigations |
-| [DEMO_RUNBOOK.md](docs/DEMO_RUNBOOK.md) | Four-act localhost demonstration and fallback |
-| [tickets/INDEX.md](docs/tickets/INDEX.md) | Full task tracker, dependencies, status conventions |
-
-## Project folder conventions
-
-```text
-UNHEARD/
-├── AGENTS.md
-├── README.md
-├── docs/
-│   ├── REQUIREMENTS.md
-│   ├── DECISIONS.md
-│   ├── ROADMAP.md
-│   ├── ARCHITECTURE.md
-│   ├── DATA_CONTRACTS.md
-│   ├── TEST_PLAN.md
-│   ├── IMPLEMENTATION_PLAYBOOK.md
-│   ├── DATA_SOURCES.md
-│   ├── RISK_REGISTER.md
-│   ├── DEMO_RUNBOOK.md
-│   └── tickets/
-│       ├── INDEX.md
-│       ├── TEMPLATE.md
-│       └── T-001-*.md ... T-020-*.md
-├── frontend/                  # Created by T-001
-├── backend/                   # Created by T-001
-├── scripts/                   # Created by T-001
-└── data/                      # Ignored local data; generated safe JSON in frontend/public/data
+```powershell
+npm.cmd --prefix frontend ci
+npm.cmd --prefix frontend run dev
 ```
 
-## Important limitations
+**macOS or Linux**
 
-Do not infer individual residents' English proficiency from home language; assign a FLEURS speaker to a Mississauga ward; equate missing audio in supplied packs with a model's inability to recognize a language; equate CER with intent accuracy; or imply the demo is a real 311 integration. Maintain a distinction between **planned**, **tested**, and **verified** findings.
+```sh
+npm --prefix frontend ci
+npm --prefix frontend run dev
+```
 
-## Windows / VS Code setup (T-001)
+Open <http://127.0.0.1:5173>. The checked-in data powers the ward map,
+recommendations, transcript comparisons, and **Browser-only saved results**
+without FastAPI, an ElevenLabs key, or the original source pack. In
+**Demonstrate**, select **Browser-only saved results** to use that path. Stop
+Vite with Ctrl+C.
 
-Install Node.js 24 LTS and Python 3.12, then open this repository in VS Code.
-Use PowerShell terminals at the repository root. Commands use `npm.cmd` and the
-virtual environment executable directly, so changing PowerShell execution policy
-or activating a virtual environment is unnecessary.
+### 2. Restore audio playback if you have the source pack
+
+A fresh clone includes references and saved results. The FLEURS FLAC files are
+restored locally from the original Sheridan challenge pack ZIP or its exact
+extracted directory. The restoration script checks the frozen selection,
+references, and all 48 file hashes before installing the audio. It leaves the
+research exports intact and makes no provider requests.
+
+**Windows PowerShell**
 
 ```powershell
 py -3.12 -m venv backend/.venv
 backend/.venv/Scripts/python.exe -m pip install -r backend/requirements.txt
-npm.cmd --prefix frontend ci
-Copy-Item .env.example .env
-Copy-Item frontend/.env.example frontend/.env
-New-Item -ItemType Directory -Force data
+backend/.venv/Scripts/python.exe scripts/restore_demo_assets.py --source 'C:/path/to/Mississauga_Unheard_ElevenLabs_Track.zip'
 ```
 
-Copy environment examples only on first setup; preserve existing local values.
-If `py` reports no installed Python, install Python 3.12 and reopen the terminal.
-In VS Code, select `backend/.venv/Scripts/python.exe` as the Python interpreter.
+**macOS or Linux**
 
-Terminal 1, from the repository root:
+```sh
+python3.12 -m venv backend/.venv
+backend/.venv/bin/python -m pip install -r backend/requirements.txt
+backend/.venv/bin/python scripts/restore_demo_assets.py --source '/path/to/Mississauga_Unheard_ElevenLabs_Track.zip'
+```
+
+Replace the example path with your local source. If the source pack is
+unavailable, you can still follow the walkthrough with saved transcripts and
+results.
+
+### 3. Start the optional FastAPI server
+
+Use the Python environment from step 2. Keep Vite running and start FastAPI in
+a second terminal. The defaults work without creating or copying an environment
+file. For a key-free session, make sure no key is set in the shell,
+`backend/.env`, or the repository-root `.env`.
+
+**Windows PowerShell**
 
 ```powershell
-backend/.venv/Scripts/python.exe -m uvicorn app.main:app --app-dir backend --host 127.0.0.1 --port 8000 --reload
+backend/.venv/Scripts/python.exe -m uvicorn app.main:app --app-dir backend --host 127.0.0.1 --port 8000 --workers 1
 ```
 
-Terminal 2, from the repository root:
+**macOS or Linux**
 
-```powershell
-npm.cmd --prefix frontend run dev
+```sh
+backend/.venv/bin/python -m uvicorn app.main:app --app-dir backend --host 127.0.0.1 --port 8000 --workers 1
 ```
 
-Open <http://127.0.0.1:5173>. Health is at <http://127.0.0.1:8000/health> and returns
-`{"status":"ok","mode":"local"}`. Both servers bind only to loopback. Vite fails
-explicitly if port 5173 is occupied instead of silently selecting a port that CORS
-does not allow. Stop each server with Ctrl+C.
+Check [API health](http://127.0.0.1:8000/health) or open the
+[interactive API docs](http://127.0.0.1:8000/docs). Choose **Local backend** in
+**Demonstrate** to use the server. Backend saved mode requires matching local raw
+response evidence, which is separate from the browser exports and audio
+restoration. Use **Browser-only saved results** when that evidence is unavailable.
 
-The backend loads root `.env`; `UNHEARD_CORS_ORIGINS` is a comma-separated list of
-exact HTTP localhost/127.0.0.1 origins with ports. The frontend loads
-`frontend/.env`; `VITE_API_BASE_URL` defaults to `http://127.0.0.1:8000`. Restart
-the relevant server after environment edits. Never place secrets in `VITE_`
-variables: they are public browser configuration. `ELEVENLABS_API_KEY` and
-`UNHEARD_DATA_ROOT` are not needed by the health service and may remain empty.
+| Setting | Where it is read | Purpose |
+| --- | --- | --- |
+| `VITE_API_BASE_URL` | `frontend/.env` | Optional browser API URL. Defaults to `http://127.0.0.1:8000`. |
+| `UNHEARD_CORS_ORIGINS` | Server environment | Comma-separated exact HTTP loopback origins. Defaults to localhost and 127.0.0.1 on port 5173. |
+| `ELEVENLABS_API_KEY` | Server environment | Optional credential for explicitly selected live transcription, which may incur charges. Keep it out of browser configuration and version control. |
+| `UNHEARD_DATA_ROOT` | Shell for data scripts that support it | Optional local source-pack path. An explicit `--source` is used in the commands above. |
 
-No key or source archive is needed for bootstrap. Keep the original archive
-outside the repository; `data/` is ignored local scratch storage. Only reviewed,
-generated JSON belongs in `frontend/public/data/`, currently an empty directory.
-Raw audio, source tables, archives, credentials, environments, and caches are
-ignored. License review is required before deliberately adding any audio later.
+FastAPI reads shell variables first, then `backend/.env`, then the root
+`.env` for missing values. Restart the relevant server after editing its
+configuration. The local recovery API keeps sessions in one worker's memory, so
+restarting it clears those sessions. Live guided mode depends on verified
+language guidance. The checked-in demo displays confirmation instructions as
+text. Spoken instructions require separately approved cached prompt audio.
+See the [backend guide](backend/README.md) for recovery endpoints and provider
+configuration.
 
-## Tests and local integration preflight
+## Walk through the saved Urdu example
 
-For the T-002 source audit (no extraction, speech API requests or public exports):
+1. In **Discover**, choose **Urdu** and select **Ward 10**. Switch between
+   speaker count and share. The corrected ward record shows **4,520** Urdu home
+   speakers, or **6.12%** of its **73,830** census language base.
+2. In **Investigate**, select sample **1533**. Read the reference and the
+   automatic and guided transcripts. Both saved modes have **10.6% character
+   error rate** on this recording. Play the source clip if audio is restored.
+3. In **Demonstrate**, choose **Browser-only saved results**, **Automatic
+   detection**, and sample **1533**. Start the simulation and choose **Correct**
+   to accept the transcript. In a separate simulation, choose **Incorrect** and
+   retry with sample **1537**. That clip has no saved result, so the app shows a
+   referral after the second attempt.
+4. In **Recommend**, see why Urdu ranks first. It has the largest home-speaker
+   count among the eight categories missing supplied task-request audio.
+   Compare ward rankings by speaker count and by share.
 
-```powershell
-backend/.venv/Scripts/python.exe scripts/audit_sources.py --source data/raw/Mississauga_Unheard_ElevenLabs_Track.zip
-backend/.venv/Scripts/python.exe -m pytest scripts/tests -q
+## Data and methods
+
+- **Census and coverage.** The map uses the supplied
+  `ward_language_profile_2021_corrected.csv` and calculates ward shares with
+  `population_language_base`.
+  The eight coverage-gap categories are Urdu, Punjabi, Cantonese, Tagalog,
+  Tamil, Hindi, Gujarati, and Bengali. The gap uses coverage counts from the
+  supplied MInDS-14 and Speech-MASSIVE subsets. Their examples cover banking
+  requests and assistant commands. Home-language counts provide demographic
+  context and cannot establish an individual's English proficiency.
+- **Speech sample.** The frozen FLEURS selection uses seed `2026` and eight
+  common sentence IDs across English, Urdu, Punjabi, Cantonese, Arabic, and
+  Mandarin Chinese, for 48 clips. The committed pilot records both modes for
+  sentence ID 1533 in all six languages. Eleven of the twelve mode outcomes
+  have scores, yielding five comparable pairs. Cantonese automatic output was
+  excluded as incompatible. The other seven selected IDs per language have
+  explicit untested outcomes in the saved export.
+- **Scoring.** Character error rate (CER) is the number of character insertions,
+  deletions, and substitutions needed to match the normalized reference,
+  divided by the reference length. The project compares modes on the same
+  clip by subtracting guided CER from automatic CER. A positive difference
+  means fewer character errors with guidance on that clip. Word error rate
+  uses English tokenization only. Missing, unsupported, failed, and
+  incompatible outcomes remain separate from numeric scores.
+- **Interpretation.** FLEURS is a read-speech dataset independent of the ward
+  data. Ward rankings describe where future recruitment could focus, while
+  the pilot describes transcription on specific recordings. The saved sample
+  is too small to generalize the effect of language guidance. CER measures text
+  differences and does not measure whether a municipal request was understood
+  or resolved.
+
+## Project structure
+
+| Path | Role |
+| --- | --- |
+| [`frontend/`](frontend/) | React, TypeScript, and Vite interface with a Leaflet ward map, recording playback, and the browser-only simulation. |
+| [`frontend/public/data/`](frontend/public/data/) | Versioned census, sample, experiment, and recommendation JSON, plus ward geometry. These files let the research views run independently of the API. |
+| [`backend/`](backend/) | FastAPI health, capabilities, and recovery endpoints, with optional ElevenLabs Scribe v2 transcription for the frozen recordings. |
+| [`scripts/`](scripts/) | Source audits, census and coverage exports, fixed-seed sampling, audio restoration, experiment execution, and metrics. |
+| [`shared/`](shared/) | Canonical language mappings and confirmation prompt definitions. |
+| [`docs/`](docs/) | Research sources, data contracts, architecture, and demo verification. |
+
+## Build and verify
+
+With frontend dependencies installed, run the following from the repository
+root. On Windows PowerShell, use `npm.cmd` in place of `npm` and
+`backend/.venv/Scripts/python.exe` in place of `backend/.venv/bin/python`.
+
+```sh
+npm --prefix frontend test
+npm --prefix frontend run build
+backend/.venv/bin/python -m pytest backend/tests scripts/tests -q
 ```
 
-Supply the actual local ZIP path or exact extracted pack root; a clone does not
-include the archive. See [audit instructions](scripts/README.md) and
-[observed source audit](docs/DATA_SOURCES.md). The generated
-`data/processed/source_manifest.json` stays ignored and records failure explicitly
-when required files or values are missing.
+The production frontend build is written to `frontend/dist/`. To serve it
+locally, stop the development server and run
+`npm --prefix frontend run preview`.
 
-```powershell
-Push-Location backend
-.venv/Scripts/python.exe -m pytest -q
-Pop-Location
-npm.cmd --prefix frontend test
-npm.cmd --prefix frontend run build
-```
+To validate the checked-in exports against the source pack, run
+`backend/.venv/bin/python scripts/validate_exports.py --source /path/to/Mississauga_Unheard_ElevenLabs_Track.zip`
+with your local source path. For the full Playwright walkthrough, restore the
+audio, install Chromium with `npm --prefix frontend exec -- playwright install chromium`,
+then stop the manually started Vite server before running
+`npm --prefix frontend run test:e2e`. The suite starts Vite itself. See the
+[demo runbook](docs/DEMO_RUNBOOK.md) for backend and outage configurations and
+the [scripts guide](scripts/README.md) for reproducing the data pipeline.
 
-Backend tests verify the health contract, startup without a key and exact CORS
-configuration. Frontend unit tests use explicitly mocked health responses for
-success, unavailable service, retry, bad responses and timeout. Dependencies are
-pinned in `backend/requirements.txt` and `frontend/package-lock.json`.
+## Sources and attribution
 
-For the separate real browser preflight, install Chromium once:
-
-```powershell
-$env:PLAYWRIGHT_BROWSERS_PATH="$PWD/.cache/ms-playwright"
-frontend/node_modules/.bin/playwright.cmd install chromium
-```
-
-Leave FastAPI running, stop any manually started Vite instance, then run:
-
-```powershell
-Remove-Item Env:EXPECT_BACKEND -ErrorAction SilentlyContinue
-npm.cmd --prefix frontend run test:e2e
-```
-
-Playwright starts and stops Vite itself. Stop FastAPI, then verify actual outage:
-
-```powershell
-$env:EXPECT_BACKEND="offline"
-npm.cmd --prefix frontend run test:e2e
-Remove-Item Env:EXPECT_BACKEND
-```
-
-Both runs check desktop/mobile layouts, health status, module navigation, no
-horizontal overflow and no JavaScript page errors. Screenshots are saved in
-ignored `frontend/test-results/`. For manual verification, stop FastAPI, press
-**Retry connection**, and confirm the actionable unavailable message while the
-shell remains usable; restart FastAPI and retry to reconnect. Research remains
-explicitly pending in both modes. The full Urdu/cached-results demo is a later
-ticket and cannot yet be rehearsed.
-
-If npm cannot write its default cache in a restricted workspace, set
-`$env:npm_config_cache="$PWD/.cache/npm"` before installing from the repository root.
+The Mississauga challenge pack supplies the corrected census aggregates,
+coverage metadata, and ward geography. The boundary snapshot carries source
+and redistribution caveats. FLEURS is attributed to Google and Conneau et al.
+(2022) under CC BY 4.0. MInDS-14 and Speech-MASSIVE contribute coverage counts.
+See the [source inventory and usage terms](docs/DATA_SOURCES.md), the
+[attributions](docs/attributions.md), and the
+[FLEURS audio attribution](frontend/public/audio/FLEURS_ATTRIBUTION.txt).
