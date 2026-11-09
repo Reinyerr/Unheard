@@ -363,3 +363,41 @@ At the user's explicit request, remove Discover's Explore Urdu shortcut. This
 supersedes the earlier dedicated Urdu-entry button requirement; Urdu remains an
 explicit choice in the persistent language dropdown. All-language initial/reset
 selection, guided order and data/API contracts remain unchanged.
+
+## T-021 three-step visual redesign — 2026-11-09
+
+The user approved Discover → Investigate → Demonstrate as the public journey,
+superseding the four-act presentation in D-023. Recommend is no longer mounted
+in the journey. Its datasets, ranking implementation and export contracts remain
+available for research. The old fragment opens Discover. The recovery simulation
+ends on acceptance or referral and links back to the map.
+
+Discover carries the citywide supplied task-audio coverage finding using the
+validated census and coverage artifacts. Ward selection, count/share, sample
+selection, playback, recovery routes and state transitions retain their existing
+behavior. The dark map and waveform surfaces sit within a light reading layout;
+ward, layer and outcome motion follows system reduced-motion settings. No API,
+data, metric or geometry contracts change.
+
+### T-021 dark palette and plain-language comparison
+
+The user restored the dark presentation and removed the standalone boundary,
+accessibility, pilot-summary and metric/source panels from Discover and
+Investigate. The ward table, map attribution, FLEURS credits, sample counts,
+reference transcript and keyboard/audio interactions remain available. The
+comparison calls the two modes “Without a language hint” and “With a language
+hint” and interprets only the exported per-clip paired difference. Data,
+metric and API contracts are unchanged.
+
+### T-021 ward coverage and waveform controls
+
+Discover switches its task-audio coverage figure from the citywide tracked
+categories to the selected ward. For a ward, the numerator covers all eight
+gap categories and the denominator is the ward's census language base. Clearing
+the ward restores the citywide figure. Investigate links to the audio attribution
+file in place of the long credit line.
+
+The shared recording waveform now includes playback, seeking, mute and volume
+controls. Native controls are the fallback when waveform decoding is unavailable.
+Playback still uses the same media element and pauses on navigation. Data, metrics,
+geometry, and backend contracts are unchanged.

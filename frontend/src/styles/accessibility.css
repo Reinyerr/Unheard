@@ -2,14 +2,11 @@
 .demo-start { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin-bottom: 1rem; line-height: 1.7; }
 .demo-start-link { background: #174e3e; color: white; font-weight: 650; }
 .demo-start-link:hover { background: #0f3b2e; }
-.accessibility-notice { margin-bottom: 1.5rem; padding: 1rem; border: 1px solid #8da69a; border-radius: .65rem; background: #fffefa; }
-.accessibility-notice summary { cursor: pointer; font-weight: 650; padding-block: .35rem; }
-.accessibility-notice p { margin-top: .75rem; line-height: 1.75; max-width: 75ch; }
 .act-question { margin-top: 1rem; font-size: 1.15rem; line-height: 1.6; font-weight: 650; }
 .act-limit { margin-top: .75rem; padding-inline-start: .8rem; border-inline-start: 3px solid #7e978c; color: #43584e; font-size: .9rem; line-height: 1.75; }
-.act-navigation, .transcript-navigation { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; margin-top: 1.5rem; }
+.act-navigation { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; margin-top: 1.5rem; }
 .act-navigation { border-top: 1px solid #cbd4ce; padding-top: 1rem; }
-.act-navigation a, .transcript-navigation a { padding-block: .5rem; text-decoration: underline; text-underline-offset: .2rem; font-weight: 600; }
+.act-navigation a { padding-block: .5rem; text-decoration: underline; text-underline-offset: .2rem; font-weight: 600; }
 .module-card:focus, #language-selection:focus, #speech-reference:focus, #speech-comparisons:focus { outline: 3px solid #a64419; outline-offset: 4px; }
 button:disabled { cursor: not-allowed; }
 summary:focus-visible, audio:focus-visible, [role="region"][tabindex="0"]:focus-visible { outline: 3px solid #a64419; outline-offset: 4px; }

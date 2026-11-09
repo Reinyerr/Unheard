@@ -39,21 +39,30 @@ it('selects a ward in the labelled geometry fallback and retains count/share/bas
   expect(detail.getByText('4,520')).toBeInTheDocument();
 });
 
-it('shows Not tested without zero metrics and clears Urdu playback/comparison on Arabic selection', () => {
+it('automatically shows the featured recording and keeps incompatible comparisons unavailable', () => {
   render(<SelectionProvider><LanguageSelector /><SpeechLab /></SelectionProvider>);
   const language = screen.getByLabelText('Selected language');
   fireEvent.change(language, { target: { value: 'tamil' } });
-  expect(screen.getByText('Not tested')).toBeInTheDocument();
+  expect(screen.getByText('Select a language above to hear its featured recording.')).toBeVisible();
   expect(screen.queryByText('0.0%')).not.toBeInTheDocument();
   fireEvent.change(language, { target: { value: 'urdu' } });
-  const select = screen.getAllByRole('combobox')[1];
-  fireEvent.change(select, { target: { value: 'urdu-1533' } });
+  expect(screen.getAllByRole('combobox')).toHaveLength(1);
   expect(screen.getByLabelText('FLEURS recording urdu-1533')).toBeInTheDocument();
-  expect(screen.getByRole('region', { name: 'Automatic detection transcription' })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: 'Reference text' })).toBeVisible();
+  expect(screen.queryByRole('link', { name: /Read reference transcript|Compare saved transcriptions/i })).not.toBeInTheDocument();
+  const comparison = within(screen.getByRole('region', { name: 'Comparison' }));
+  expect(comparison.getByRole('heading', { name: 'Did the hint help?' })).toBeVisible();
+  expect(comparison.queryByText(/Character error rate is the number/)).not.toBeInTheDocument();
+  expect(screen.getByRole('region', { name: 'Without a language hint transcription' })).toBeInTheDocument();
+  expect(screen.getByText('No change in error rate')).toBeVisible();
   fireEvent.change(language, { target: { value: 'arabic' } });
   expect(screen.queryByLabelText('FLEURS recording urdu-1533')).not.toBeInTheDocument();
-  expect(screen.queryByRole('region', { name: 'Automatic detection transcription' })).not.toBeInTheDocument();
+  expect(screen.getByLabelText('FLEURS recording arabic-1533')).toBeInTheDocument();
   expect(HTMLMediaElement.prototype.pause).toHaveBeenCalled();
+  fireEvent.change(language, { target: { value: 'english' } });
+  expect(screen.getByText('31.1 percentage points lower with the hint on this recording.')).toBeVisible();
+  fireEvent.change(language, { target: { value: 'cantonese' } });
+  expect(screen.getByText('Comparison unavailable')).toBeVisible();
 });
 
 it('rejects stale results while ward selection preserves speech state; formats uncapped metrics', () => {

@@ -135,18 +135,18 @@ function Flow({ active }: { active: boolean }) {
   }
 
   const finished = session?.state === 'accepted' || session?.state === 'referral';
-  const feedback = busy ? { title: pendingMessage, message: 'Please wait. The controls are disabled while this request finishes.', tone: 'pending' }
+  const feedback = busy ? { title: pendingMessage, message: '', tone: 'pending' }
     : uncertain ? { title: 'We couldn’t confirm the result.', message: 'The backend request may have completed. Don’t repeat it automatically. You can start a separate saved browser simulation below.', tone: 'warning' }
-      : session?.state === 'accepted' ? { title: 'Transcript accepted.', message: 'You confirmed this text in the demo. No service request was sent. Continue to recommendations or start a separate saved simulation.', tone: 'success' }
-        : session?.state === 'referral' ? { title: 'Consider human assistance.', message: 'This simulation has ended. No representative was contacted. Continue to recommendations or start a separate saved simulation.', tone: 'warning' }
+      : session?.state === 'accepted' ? { title: 'Transcript accepted.', message: 'You confirmed the text in this simulation. No service request was sent.', tone: 'success' }
+        : session?.state === 'referral' ? { title: 'Consider human assistance.', message: '', tone: 'warning' }
           : session?.state === 'retry_or_refer' ? {
             title: session.retry_available ? 'Let’s try once more.' : 'No retry is available.',
             message: session.retry_available
               ? `${session.transcript ? 'You marked the transcript incorrect.' : 'No usable transcript was available.'} Choose a different recording below for your one remaining attempt, or choose human assistance.`
               : 'Choose the human-assistance referral option to finish this simulation.', tone: 'warning' }
-            : session?.state === 'confirm' ? { title: 'Review what the AI heard.', message: `Read the ${session.attempts > 1 ? 'new ' : ''}transcript below, then choose Correct or Incorrect. ${session.attempts >= session.max_attempts ? 'This is the final attempt.' : 'You can retry once if it is incorrect.'}`, tone: 'review' }
+            : session?.state === 'confirm' ? { title: 'Review what the AI heard.', message: session.attempts >= session.max_attempts ? 'This is the final attempt.' : 'One retry is available.', tone: 'review' }
               : error ? { title: 'The simulation could not start.', message: 'Review the error below. You can choose another recording or the browser-only saved route.', tone: 'warning' }
-                : { title: 'Ready to try the confirmation demo.', message: 'Choose a recording, then start the simulation. You will review the transcript before accepting it.', tone: 'ready' };
+                : { title: 'Choose a recording to begin.', message: '', tone: 'ready' };
 
   if (selection.language_id === 'all') return <EmptyState kind="choose_language">Select a pilot language above to start a simulated confirmation.</EmptyState>;
   if (census.status === 'loading' || resource.status === 'loading') return <EmptyState kind="loading" />;
@@ -154,9 +154,8 @@ function Flow({ active }: { active: boolean }) {
   if (!language?.pilot_selected) return <EmptyState kind="not_tested">This language is outside the prerecorded pilot. No voice support or result is inferred.</EmptyState>;
   const disabled = busy || uncertain;
   return <div className="recovery">
-    <details className="simulation-disclosure"><summary>Judge-controlled interaction simulation · read the limits</summary><p>{NOTICE}</p></details>
-    <p>{language.display_name} · {choices.length} frozen clips ({samples.samples.length} total, seed {samples.selection.seed}) · {connection}.</p>
-    <p><strong>{route === 'offline' ? 'Offline / browser-only saved-result route' : 'Local backend route'}</strong> · {route === 'offline' ? 'No API session or provider request. Only matching exported actual results are used.' : 'Saved mode is the default. Live transcription requires an explicit selection and may use credits.'}</p>
+    <p className="recovery-context">{language.display_name} · {choices.length} recordings · {connection}</p>
+    <details className="simulation-disclosure"><summary>Judge-controlled interaction simulation</summary><p>{NOTICE}</p></details>
     {!session ? <div className="recovery-settings">
       <label>Demo route<select disabled={busy} value={route} onChange={event => { setRoute(event.target.value as typeof route); setSource('saved'); setUncertain(false); setError(''); }}>
         <option value="backend">Local backend</option><option value="offline">Browser-only saved results</option>
@@ -166,11 +165,13 @@ function Flow({ active }: { active: boolean }) {
       {source === 'live' ? <p>One live request per attempt, with same-mode saved fallback if available. Key presence does not verify credits or connectivity.</p> : null}
     </div> : null}
     <div ref={outcomePanel} tabIndex={-1} className={`recovery-outcome recovery-outcome-${feedback.tone}`} role="status" aria-live="polite" aria-atomic="true">
-      <h3>{feedback.title}</h3><p>{feedback.message}</p>
+      <h3>{feedback.title}</h3>{feedback.message ? <p>{feedback.message}</p> : null}
       <p className="recovery-progress"><strong>State: {busy ? 'Processing request…' : session?.state.replaceAll('_', ' ') ?? 'ready'}</strong>{session ? ` · attempt ${session.attempts} of ${session.max_attempts}` : ''}</p>
     </div>
-    {finished && !busy && !uncertain ? <div className="recovery-next"><a className="recovery-continue" href="#recommend">Continue to recommendations</a></div> : null}
-    {finished || uncertain ? <button disabled={busy} onClick={restart}>Start separate saved browser simulation</button> : null}
+    {finished || uncertain ? <div className="recovery-next">
+      <button disabled={busy} onClick={restart}>Start separate saved browser simulation</button>
+      {finished && !busy && !uncertain ? <a className="recovery-continue" href="#discover">Return to ward map</a> : null}
+    </div> : null}
     {session ? <div className="recovery-result-details">
       <p>Result: {statusLabels[session.transcription_status]} · origin: {session.source ?? 'no outcome'} · {session.mode}. {session.fallback_reason ? `Fallback: ${session.fallback_reason}.` : ''}</p>
       {session?.referral_message ? <p>{session.referral_message}</p> : null}
@@ -183,7 +184,7 @@ function Flow({ active }: { active: boolean }) {
           const outcome = evidence?.records.find(record => record.sample_id === row.sample_id)?.[mode];
           return <option value={row.sample_id} key={row.sample_id}>{row.sample_id} · {route === 'backend' && capability?.saved_sample_ids_by_mode[mode].includes(row.sample_id) ? 'usable saved result' : outcome ? statusLabels[outcome.status] : 'saved result unavailable'}</option>;
         })}
-      </select></label><p>Missing results remain explicit; a different clip is a simulated retry, not proof of speech correction.</p>
+      </select></label>
       <button disabled={disabled || !sampleId || route === 'offline' && !evidence || route === 'backend' && !capability} onClick={attempt}>{busy ? 'Processing…' : session ? 'Try Different Sample' : source === 'live' ? 'Start live transcription (uses credits)' : 'Start saved simulation'}</button>
     </> : null}
     {sample ? <section key={sample.sample_id} aria-label="Current demo recording"><h3>{sample.sample_id} · FLEURS ID {sample.fleurs_id}</h3><Recording sample={sample} />
@@ -197,6 +198,6 @@ function Flow({ active }: { active: boolean }) {
       <p dir={prompt.direction === 'rtl' ? 'rtl' : 'ltr'} lang={prompt.language_code}>{prompt.text}</p>
       <p>Draft authored instruction; language review pending until audio approval. Selected voice: <bdi>{prompt.voice_id}</bdi> · model: {TTS_MODEL}. Configuration alone does not establish account access or voice compatibility.</p></details> : null}
     <button disabled={busy || connection === 'Checking backend…'} onClick={() => setCheck(value => value + 1)}>{connection === 'Checking backend…' ? 'Checking backend…' : 'Refresh backend availability'}</button>
-    <details><summary>Recording provenance and limitations</summary><p>{samples.source.attribution} · <a href="https://huggingface.co/datasets/google/fleurs">FLEURS</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.</p><p>{samples.source.modifications}</p><p>Selection SHA-256: <span className="speech-hash">{samples.source.selection_sha256}</span>. FLEURS is not municipal-request or ward-resident speech. Saved browser confirmations require comparable completed outputs without review flags. Backend and browser sessions are separate; this interaction reports no CER improvement.</p></details>
+    <details><summary>Recording provenance and limitations</summary><p>{samples.source.attribution} · <a href="https://huggingface.co/datasets/google/fleurs">FLEURS</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.</p><p>{samples.source.modifications}</p><p>{samples.samples.length} selected clips, seed {samples.selection.seed}. Selection SHA-256: <span className="speech-hash">{samples.source.selection_sha256}</span>.</p><p>FLEURS is non-local read speech. A retry uses a different clip for simulation. Browser sessions use matching saved outputs without review flags and run independently of backend sessions.</p></details>
   </div>;
 }

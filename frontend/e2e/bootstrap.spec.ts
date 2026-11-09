@@ -24,7 +24,6 @@ for (const viewport of [{ width: 1366, height: 768 }, { width: 1440, height: 900
     for (const value of ['4,520', '6.12%', '73,830']) await expect(detail.getByText(value, { exact: true })).toBeVisible();
     await page.getByRole('button', { name: 'Next: Investigate' }).click();
     await expect(page.getByRole('heading', { name: 'Hear What AI Hears' })).toBeFocused();
-    await page.getByRole('combobox', { name: 'Recording', exact: true }).selectOption('urdu-1533');
     const player = page.getByLabel('FLEURS recording urdu-1533', { exact: true });
     await player.evaluate(async (node: HTMLAudioElement) => node.play());
     await page.getByRole('button', { name: 'Next: Demonstrate' }).click();
@@ -33,12 +32,12 @@ for (const viewport of [{ width: 1366, height: 768 }, { width: 1440, height: 900
     await page.getByLabel('Prerecorded sample').selectOption('urdu-1533');
     await page.getByRole('button', { name: 'Start saved simulation' }).click();
     await expect(page.getByText('State: confirm', { exact: true })).toBeVisible();
-    await page.getByRole('button', { name: 'Next: Recommend' }).click();
-    await expect(page.getByText(/Priorities for future language evaluation/)).toBeVisible();
-    await page.getByRole('button', { name: '← Back' }).click();
+    await page.getByRole('button', { name: 'Return to Discover' }).click();
+    await expect(ward).toHaveClass(/ward-raised/);
+    await page.getByRole('button', { name: '03 Demonstrate' }).click();
     await expect(page.getByText('State: confirm', { exact: true })).toBeVisible();
     await page.getByRole('button', { name: '← Back' }).click();
-    await expect(page.getByRole('combobox', { name: 'Recording', exact: true })).toHaveValue('urdu-1533');
+    await expect(player).toBeAttached();
     await page.getByRole('button', { name: '← Back' }).click();
     await expect(ward).toHaveClass(/ward-raised/);
     await page.screenshot({ path: info.outputPath(`raised-ward-${viewport.width}.png`), fullPage: true });

@@ -1,5 +1,43 @@
 # Ticket index — source of truth for implementation
 
+**T-021 language copy follow-up:** Simplified the Investigate language prompts
+and removed the Discover map toolbar's coverage disclosure. **In review**.
+
+**T-021 Investigate pilot selection follow-up:** Investigate shows only the six
+pilot languages in the picker and automatically opens the featured FLEURS
+recording (1533) for the selected language. The player appears without a
+recording heading or sample-count line. The full language and recording
+datasets remain available to the other views. **In review**.
+
+**T-009 six-language pilot continuation (2026-11-09):** Live completion is
+blocked by approval for the ElevenLabs upload. All 48 recordings were selected
+and played in Chromium, and the existing Urdu browser-only simulation reached
+acceptance. The published pilot still has 84 untested modes.
+[Execution and verification](T-009-paired-transcription-runner.md#six-language-pilot-continuation--2026-11-09).
+
+**T-021 Investigate reference follow-up:** The official transcript appears
+under **Reference text** without jump links or a duplicate metric-input
+disclosure. The hint comparison and its scoring inputs are retained.
+**In review**.
+
+**T-021 ward coverage and waveform follow-up:** Discover's coverage figure
+follows ward selection. Recording players expose play/pause and volume alongside
+the waveform, with native controls as the decode fallback. The build, 12 unit
+tests and 16 connected Chromium tests passed, including ward changes, mute,
+volume and native playback fallback. **In review**.
+
+**T-021 dark palette and transcription comparison follow-up:** User-approved
+dark styling, shorter Discover and Investigate views, and plain-language
+comparison of saved results with and without a language hint. **In review**
+with prior gates retained. The frontend build, 12 unit tests and 16 connected
+Chromium checks passed, including a simulated backend disconnection. The
+offline-only check requires FastAPI to be stopped.
+
+**T-021 visual redesign (2026-11-09):** Three-step public journey with a
+map-first layout, citywide coverage figure, and a clear end to the recovery
+simulation. Research exports and backend contracts are intact. **In review**
+with prior human sign-off gates retained.
+
 **T-021 Discover follow-up:** removed Explore Urdu at user request; the global
 language dropdown remains the explicit Urdu entry. No dependency/contract change;
 In review with prior gates retained.
