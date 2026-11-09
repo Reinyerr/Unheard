@@ -59,7 +59,7 @@ export function AppContent() {
           </button>)}
         </nav>
       </header>
-      <LanguageSelector />
+      <LanguageSelector pilotOnly={modules[step].id === 'investigate'} />
       <main id="main" tabIndex={-1} className="journey-main">
         <div ref={stage} className="journey-stage">
           {modules.map((module, index) => <section key={module.id} id={module.id} hidden={step !== index}

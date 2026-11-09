@@ -178,3 +178,34 @@ the earlier HTTP 401 response. Additional guidance is not verified; there is no
 claim of 96 successful requests or significance. T-009 stays In review, not Done.
 Next ready Dev 1 implementation: T-014 (T-001/T-003/T-008 interfaces/evidence exist),
 subject to their review gates. No later ticket was implemented.
+
+## Six-language pilot continuation — 2026-11-09
+
+The Windows checkout had all 48 attributed FLEURS FLACs, the frozen manifest
+and the published one-recording results. All 48 audio files matched the
+manifest's size and SHA-256 checks. The ignored raw responses and cache for the
+earlier run were absent. Rebuilding the local saved demo cache would require
+up to 96 Scribe v2 requests, including 12 for the previously tested recording
+ID. The sampling seed is 2026 and the selection hash is
+`59f8c23640f271eefa5787fdedd3833e0091af14e40e448e1f4c8a58584d886c`.
+
+The six-language preflight recorded 12 transport errors with no HTTP response
+under the network sandbox. Automatic approval review rejected escalation
+pending explicit authorization to send the recordings to ElevenLabs and use
+account credits. No new provider outcomes were verified. The public export
+continues to show 11 scored modes, one incompatible mode and 84 untested modes.
+
+The export validator passed for 48 samples and 96 explicit mode states.
+The frontend build, all 12 frontend unit tests and all 10 Python metric tests
+passed. The wider Python suite did not finish in the sandbox. A Chromium check of
+the built application served workspace assets via Playwright request routing
+with FastAPI unreachable. It selected each of the eight recordings per language
+and verified that playback advanced for all 48. A separate check selected Urdu
+recording 1533 in Demonstrate using Browser-only saved results and reached
+acceptance after confirming the transcript. To reproduce playback manually,
+open Investigate, select one of the six pilot languages, and use Recording and
+Play recording. For the Urdu check, continue to Demonstrate and choose the
+browser-only route and recording 1533.
+
+No schema or pilot scope change. T-009 remains in review, with live completion
+blocked pending explicit authorization for the bounded upload.

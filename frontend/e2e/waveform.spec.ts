@@ -10,7 +10,6 @@ for (const reducedMotion of ['no-preference', 'reduce'] as const) {
     expect((await page.getByRole('region', { name: 'Mississauga ward census map' }).boundingBox())!.width).toBeGreaterThan(1000);
     await page.getByRole('combobox', { name: 'Selected language', exact: true }).selectOption('urdu');
     await page.getByRole('button', { name: 'Next: Investigate' }).click();
-    await page.getByRole('combobox', { name: 'Recording', exact: true }).selectOption('urdu-1533');
     const audio = page.getByLabel('FLEURS recording urdu-1533', { exact: true });
     const player = page.locator('#investigate .audio-waveform');
     const seek = player.getByRole('slider', { name: /Playback position/ });
@@ -42,9 +41,11 @@ for (const reducedMotion of ['no-preference', 'reduce'] as const) {
     await player.getByRole('button', { name: 'Play recording' }).click();
     await expect(player).toHaveAttribute('data-playback-state', 'Ended');
     await expect.poll(async () => Number(await player.locator('clipPath rect').getAttribute('width'))).toBeCloseTo(640, 0);
-    await page.getByRole('combobox', { name: 'Recording', exact: true }).selectOption('urdu-1537');
+    const language = page.getByRole('combobox', { name: 'Selected language', exact: true });
+    await language.selectOption('arabic');
     await expect(page.getByLabel('FLEURS recording urdu-1533', { exact: true })).toHaveCount(0);
     await expect(seek).toHaveValue('0');
+    await language.selectOption('urdu');
     await page.getByRole('button', { name: 'Next: Demonstrate' }).click();
     await page.getByLabel('Demo route').selectOption('offline');
     await page.getByLabel('Prerecorded sample').selectOption('urdu-1533');
@@ -56,7 +57,6 @@ test('unsupported Web Audio retains native playback', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('combobox', { name: 'Selected language', exact: true }).selectOption('urdu');
   await page.getByRole('button', { name: 'Next: Investigate' }).click();
-  await page.getByRole('combobox', { name: 'Recording', exact: true }).selectOption('urdu-1533');
   await expect(page.getByText('Waveform unavailable. Use the audio controls.')).toBeVisible();
   const audio = page.getByLabel('FLEURS recording urdu-1533', { exact: true });
   await expect(audio).toBeVisible();

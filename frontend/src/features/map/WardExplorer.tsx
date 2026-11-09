@@ -54,7 +54,6 @@ export default function WardExplorer() {
     ? trackedCounts.reduce((sum, count) => sum + count, 0) : null;
   const gapShare = gapCount !== null && trackedCount !== null && trackedCount > 0 && gapCount <= trackedCount
     ? gapCount / trackedCount : null;
-  const cityTotal = languageId === 'all' ? gapCount : language?.city_home_speakers ?? null;
   const ward = data.wards.wards.find(row => row.ward_id === selectedWard);
   const wardGap = ward ? wardRow(ward, 'all') : null;
   const coverageShare = wardGap ? (wardGap.share === null ? null : wardGap.share / 100) : gapShare;
@@ -67,12 +66,6 @@ export default function WardExplorer() {
             onClick={() => setMetric(value)}>{value === 'count' ? 'Speaker count' : 'Share of language base'}</button>)}
         </div></fieldset>
       </div>
-      <details className="ward-context">
-        <summary>{languageId === 'all' ? `Coverage gap layer · ${missing.length} categories` : `${language?.display_name} · ${language?.coverage_status === 'has_task_audio' ? 'Supplied audio present' : 'Supplied audio gap'}`}</summary>
-        <p>{formatCount(cityTotal)} city home-language speakers. {coverage}</p>
-        {languageId === 'all' ? <p>{missing.map(row => row.display_name).join(', ')}.</p> : null}
-        {language?.census_home_column === null ? <p>This source has no English home-language counts; English is excluded from the tracked non-official census subtotal.</p> : null}
-      </details>
     </div>
     <div className="ward-layout">
       <div>

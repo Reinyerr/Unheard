@@ -22,11 +22,16 @@ it('opens with all languages, SDG art and one accessible act; Next/Back focuses 
   expect(screen.queryByText('Language should never be a barrier to being heard.')).not.toBeInTheDocument();
   expect(screen.queryByRole('heading', { name: 'Hear What AI Hears' })).not.toBeInTheDocument();
   fireEvent.click(screen.getByRole('button', { name: 'Next: Investigate' }));
+  const pilotPicker = within(screen.getByRole('combobox', { name: 'Selected language' }));
+  expect(pilotPicker.getByRole('option', { name: 'Choose a language' })).toBeDisabled();
+  expect(pilotPicker.getAllByRole('option').filter(option => !(option as HTMLOptionElement).disabled)
+    .map(option => option.textContent).sort()).toEqual(['Arabic', 'Cantonese', 'English', 'Mandarin Chinese', 'Punjabi', 'Urdu']);
   expect(screen.getByRole('heading', { name: 'Hear What AI Hears' })).toHaveFocus();
   expect(screen.queryByRole('heading', { name: /Language coverage by ward/ })).not.toBeInTheDocument();
   expect(screen.getByRole('button', { name: '02 Investigate' })).toHaveAttribute('aria-current', 'step');
   fireEvent.click(screen.getByRole('button', { name: '← Back' }));
   expect(screen.getByRole('heading', { name: /Language coverage by ward/ })).toHaveFocus();
+  expect(screen.getByRole('option', { name: 'Bengali' })).toBeInTheDocument();
 });
 
 it('preserves ward, metric, selected recording and recovery session across acts and pauses inactive audio', async () => {
@@ -36,8 +41,8 @@ it('preserves ward, metric, selected recording and recovery session across acts 
   fireEvent.click(await screen.findByRole('button', { name: 'Ward 10' }));
   fireEvent.click(screen.getByRole('button', { name: 'Share of language base' }));
   fireEvent.click(screen.getByRole('button', { name: 'Next: Investigate' }));
-  fireEvent.change(await screen.findByLabelText('Recording'), { target: { value: 'urdu-1533' } });
-  const player = screen.getByLabelText('FLEURS recording urdu-1533');
+  const player = await screen.findByLabelText('FLEURS recording urdu-1533');
+  expect(screen.queryByRole('combobox', { name: /^Recording$/ })).not.toBeInTheDocument();
   const pause = vi.spyOn(player as HTMLAudioElement, 'pause');
   fireEvent.click(screen.getByRole('button', { name: 'Next: Demonstrate' }));
   expect(pause).toHaveBeenCalled();
@@ -49,7 +54,7 @@ it('preserves ward, metric, selected recording and recovery session across acts 
   fireEvent.click(screen.getByRole('button', { name: '03 Demonstrate' }));
   expect(screen.getByText('State: confirm')).toBeVisible();
   fireEvent.click(screen.getByRole('button', { name: '← Back' }));
-  expect(screen.getByLabelText('Recording')).toHaveValue('urdu-1533');
+  expect(screen.getByLabelText('FLEURS recording urdu-1533')).toBeInTheDocument();
   fireEvent.click(screen.getByRole('button', { name: '← Back' }));
   const detail = within(screen.getByRole('complementary', { name: 'Selected ward demographics' }));
   expect(detail.getByText('4,520')).toBeVisible();

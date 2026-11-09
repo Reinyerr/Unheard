@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import AudioWaveform from '../../components/AudioWaveform';
 import EmptyState from '../../components/EmptyState';
 import TranscriptDiff from '../../components/TranscriptDiff';
@@ -51,52 +50,35 @@ function reviewFlags(value: string | undefined): Record<string, string[]> {
   } catch { return {}; }
 }
 export default function SpeechLab() {
-  const { selection, selectSample, acceptResult } = useSelection();
+  const { selection } = useSelection();
   const { census, experiments, reload } = useResearch();
   const { resource, reload: reloadSamples } = useSamples();
   const samples = resource.status === 'ready' ? resource.data : null;
   const evidence = experiments.status === 'ready' && samples && matchingEvidence(samples, experiments.data) ? experiments.data : null;
-  const choices = samples?.samples.filter(sample => sample.language_id === selection.language_id) ?? [];
-  const sample = choices.find(row => row.sample_id === selection.selected_sample?.sample_id);
+  // Feature the same tested FLEURS sentence across the six pilot languages.
+  const sample = samples?.samples.find(row => row.language_id === selection.language_id && row.fleurs_id === 1533);
   const record = sample ? evidence?.records.find(row => row.sample_id === sample.sample_id) : undefined;
-  useEffect(() => {
-    // The render also gates by current language/sample: no previous comparison can flash before this effect.
-    if (selection.selected_result?.sample_id !== record?.sample_id) acceptResult(record ?? null, selection.language_revision);
-  }, [record, selection.selected_result, selection.language_revision, acceptResult]);
   if (census.status === 'loading') return <EmptyState kind="loading" />;
   if (census.status === 'unavailable') return <EmptyState kind="unavailable" onRetry={reload}>{census.message}</EmptyState>;
-  if (selection.language_id === 'all') return <EmptyState kind="choose_language">Select a pilot language above to inspect its frozen sample manifest.</EmptyState>;
   const language = census.data.languages.languages.find(row => row.language_id === selection.language_id);
-  if (!language?.pilot_selected) return <EmptyState kind="not_tested">{language?.display_name ?? 'This language'} is outside the six-language pilot. No recognition metric is inferred.</EmptyState>;
+  if (!language?.pilot_selected) return <EmptyState kind="choose_language">Select a language above to hear its featured recording.</EmptyState>;
   if (resource.status === 'loading') return <EmptyState kind="loading" />;
   if (resource.status === 'unavailable') return <EmptyState kind="unavailable" onRetry={reloadSamples}>{resource.message}</EmptyState>;
-  if (!samples || !choices.length) return <EmptyState kind="unavailable">No vetted samples are available for this language.</EmptyState>;
-  const summary = evidence?.summaries.find(row => row.language_id === selection.language_id);
+  if (!sample) return <EmptyState kind="unavailable">The featured recording is unavailable for this language.</EmptyState>;
   const direction = selection.language_id === 'urdu' || selection.language_id === 'arabic' ? 'rtl' : 'ltr';
   const textLanguage = language.dataset_language_code;
   const flags = reviewFlags(evidence?.source.review_flags);
   return <div className="speech-lab">
-    <label htmlFor="speech-sample">Recording
-      <select id="speech-sample" value={sample?.sample_id ?? ''} onChange={event => selectSample(choices.find(row => row.sample_id === event.target.value) ?? null, selection.language_revision)}>
-        <option value="">Choose a recording</option>
-        {choices.map(row => <option key={row.sample_id} value={row.sample_id}>{row.sample_id} · {row.duration_sec === null ? 'duration unavailable' : `${row.duration_sec.toFixed(2)} s`}</option>)}
-      </select>
-    </label>
-    <p className="speech-note">Saved results · {choices.length} selected {language.display_name} recordings{summary ? ` · ${summary.n_paired} with comparable scores` : ''}</p>
     {experiments.status === 'loading' ? <EmptyState kind="loading">Loading saved experiment evidence.</EmptyState>
       : experiments.status === 'unavailable' ? <EmptyState kind="unavailable" onRetry={reload}>{experiments.message}</EmptyState>
         : !evidence ? <EmptyState kind="unavailable">Sample identity or selection provenance does not match the experiment artifact. Comparisons are withheld.</EmptyState> : null}
-    {sample ? <section key={sample.sample_id} className="speech-record" aria-label={`Selected recording ${sample.sample_id}`}>
-      <h3>FLEURS recording <bdi>{sample.fleurs_id}</bdi></h3>
+    <section key={sample.sample_id} className="speech-record" aria-label={`Selected recording ${sample.sample_id}`}>
       <AudioClip key={sample.sample_id} sample={sample} />
-      <nav className="transcript-navigation" aria-label="Selected recording text"><a href="#speech-reference">Read reference transcript</a><a href="#speech-comparisons">Compare saved transcriptions</a></nav>
-      <h4 id="speech-reference" tabIndex={-1}>Human reference · original supplied text</h4>
+      <h4 id="speech-reference" tabIndex={-1}>Reference text</h4>
       <p className="speech-transcript" dir={direction} lang={textLanguage}>{sample.raw_reference_transcript}</p>
-      {sample.reference_transcript !== sample.raw_reference_transcript ? <details><summary>Supplied reference used as metric input</summary><p className="speech-transcript" dir={direction} lang={textLanguage}>{sample.reference_transcript}</p></details> : null}
-      <div id="speech-comparisons" tabIndex={-1} role="region" aria-label="Saved transcription comparisons">
+      <div id="speech-comparisons" className="speech-comparison" tabIndex={-1} role="region" aria-labelledby="speech-comparison-title">
+        <h3 id="speech-comparison-title" className="speech-comparison-title">Comparison</h3>
         {evidence ? <>
-          <h3>Same recording, two ways to transcribe it</h3>
-          <p className="speech-note">Character error rate is the number of character edits per character in the human transcript. Lower is better.</p>
           <HintEffect difference={record?.paired_delta_cer ?? null} />
           <div className="speech-modes">
             <Mode title="Without a language hint" description="The model works out the language on its own." outcome={record?.auto}
@@ -108,6 +90,6 @@ export default function SpeechLab() {
         </> : <p>Saved comparisons are unavailable; the reference and authentic audio remain independent.</p>}
       </div>
       <a className="speech-note" href={`${import.meta.env.BASE_URL}audio/FLEURS_ATTRIBUTION.txt`}>Recording credits</a>
-    </section> : <EmptyState kind="pending" title="Choose a recording">Compare how the model transcribed the same clip with and without a language hint.</EmptyState>}
+    </section>
   </div>;
 }

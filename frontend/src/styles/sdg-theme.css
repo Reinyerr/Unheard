@@ -194,6 +194,8 @@ summary:focus-visible, audio:focus-visible, [role="region"][tabindex="0"]:focus-
 .speech-stats dd { font-size: 1.4rem; color: var(--plum); font-variant-numeric: tabular-nums; }
 .speech-mode { border-top-color: var(--control-border); }
 .speech-mode + .speech-mode { border-top-color: var(--orchid); }
+.speech-comparison { margin-top: 1.75rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+.speech-lab .speech-comparison-title { margin: 0; font: 600 clamp(1.5rem, 3vw, 2.2rem)/1.15 var(--display); }
 .hint-effect {
   border-inline-start: 3px solid var(--orchid);
   background: var(--surface);
@@ -205,7 +207,6 @@ summary:focus-visible, audio:focus-visible, [role="region"][tabindex="0"]:focus-
 .hint-effect h4, .hint-effect p:last-child { color: var(--muted); font-size: .9rem; }
 .hint-effect strong { color: var(--plum); font-size: 1.2rem; }
 .speech-note, .speech-stats dt, .recovery-context { color: var(--muted); }
-.transcript-navigation { margin-top: .5rem; }
 .speech-transcript { max-width: 75ch; }
 .ward-table-details {
   margin-block: .5rem;

@@ -268,3 +268,19 @@ Verify locally by selecting Urdu, Ward 10 and Share of language base; then
 select 1533 in Investigate, play/seek the recording, and use Browser-only saved
 results in Demonstrate. Accept, return to the map and check Ward 10 remains
 selected. Start another simulation to check the retry/referral path.
+
+### Investigate pilot selection follow-up
+
+Investigate limits the language picker to the six pilot languages. Selecting one
+opens its featured recording (FLEURS ID 1533) and saved results automatically.
+The full language picker is available outside Investigate. Entering from
+Discover with a language outside the pilot shows the pilot prompt and retains
+that selection for the return trip. The full sample manifest, audio and
+experiment contracts are unchanged. Cantonese retains the guided score and
+the explicit unavailable comparison.
+
+Verified the production build, 12 frontend unit tests and export validation.
+In Chromium, the built app played the featured recording for each of the six
+languages, retained a Bengali selection when returning to Discover, and
+accepted the Urdu transcript through the browser-only saved demo. The full
+Playwright suite did not complete in the sandbox. T-021 remains In review.
