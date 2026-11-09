@@ -32,21 +32,20 @@ test('network-unreachable backend retains the complete saved journey without pro
   await page.getByRole('button', { name: 'Start saved simulation' }).click();
   await expect(page.getByText('State: confirm', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: /\(Correct\)/ }).click();
-  await page.getByRole('link', { name: 'Continue to recommendations' }).click();
-  await expect(page.getByRole('heading', { name: 'Urdu: evaluation priority 1' })).toBeVisible();
-  await page.getByRole('button', { name: '← Back' }).click();
+  await page.getByRole('link', { name: 'Return to ward map' }).click();
+  await expect(page.getByRole('heading', { name: 'Language coverage by ward' })).toBeVisible();
+  await page.getByRole('button', { name: '03 Demonstrate' }).click();
   await expect(page.getByText('State: accepted', { exact: true })).toBeVisible();
   expect(backendPosts).toBe(0);
 });
 
-test('Urdu four acts: real map/audio/metrics, explicit acceptance, one retry/referral and priorities', async ({ page }, info) => {
+test('Urdu three acts: verified coverage, map, audio, metrics, acceptance and referral', async ({ page }, info) => {
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
   await urdu(page);
   const discover = page.locator('#discover');
   const lab = page.locator('#investigate');
   const recovery = page.locator('#demonstrate');
-  const recommend = page.locator('#recommend');
   await expect(discover.getByRole('button', { name: /^Ward 10;/ })).toBeVisible();
   await discover.getByRole('button', { name: /^Ward 10;/ }).press('Enter');
   const detail = discover.getByRole('complementary', { name: 'Selected ward demographics' });
@@ -90,16 +89,14 @@ test('Urdu four acts: real map/audio/metrics, explicit acceptance, one retry/ref
   await expect(recovery.getByRole('button', { name: 'Try Different Sample' })).toHaveCount(0);
   await expect(recovery.getByText(/has not contacted or connected you/)).toBeVisible();
 
-  await page.getByRole('button', { name: '04 Recommend' }).click();
-  await expect(recommend.getByRole('heading', { name: 'Urdu: evaluation priority 1' })).toBeVisible();
-  const stats = recommend.getByLabel('Supplied task-audio coverage gap');
-  for (const value of ['79,940', '52.1%']) await expect(stats.getByText(value, { exact: true })).toBeVisible();
-  await expect(stats.getByText(/153,480.*14 tracked/)).toBeVisible();
-  await recommend.getByText('Explore recruitment wards · count and share', { exact: true }).click();
-  await expect(recommend.getByRole('region', { name: 'Top wards by count', exact: true }).getByRole('link', { name: 'Ward 10' })).toBeVisible();
-  await expect(recommend.getByRole('region', { name: 'Top wards by share', exact: true })).toBeVisible();
+  await expect(page.getByRole('navigation', { name: 'Research journey' }).getByRole('button')).toHaveCount(3);
+  await page.getByRole('button', { name: 'Return to Discover' }).click();
+  await expect(detail.getByText('4,520', { exact: true })).toBeVisible();
+  const stats = discover.getByRole('figure', { name: 'Supplied task-audio coverage gap' });
+  await expect(stats.getByText('52.1%', { exact: true })).toBeVisible();
+  await expect(stats.getByText(/79,940 of 153,480 across 14 tracked/)).toBeVisible();
   expect(errors).toEqual([]);
-  await page.screenshot({ path: info.outputPath('four-acts.png'), fullPage: true });
+  await page.screenshot({ path: info.outputPath('three-acts.png'), fullPage: true });
 });
 
 test('language switches clear playback/results; incomplete and incompatible metrics stay unavailable', async ({ page }) => {
@@ -142,7 +139,7 @@ test('missing polygons and invalid audio retain verified table and saved text', 
   await expect(page.locator('#investigate').getByRole('region', { name: 'Automatic detection transcription' }).getByText('10.6%', { exact: true })).toBeVisible();
 });
 
-for (const asset of ['wards', 'samples', 'experiments', 'recommendations']) {
+for (const asset of ['wards', 'samples', 'experiments']) {
   test(`missing ${asset} data fails explicitly without replacing evidence`, async ({ page }) => {
     await page.route(`**/data/${asset}.v1.json`, route => route.abort());
     if (asset === 'wards') {
@@ -159,10 +156,6 @@ for (const asset of ['wards', 'samples', 'experiments', 'recommendations']) {
       await page.getByRole('button', { name: '03 Demonstrate' }).click();
       await page.locator('#demonstrate').getByLabel('Demo route').selectOption('offline');
       await expect(page.locator('#demonstrate').getByText(/Matching saved experiment evidence is unavailable/)).toBeVisible();
-    }
-    if (asset === 'recommendations') {
-      await page.getByRole('button', { name: '04 Recommend' }).click();
-      await expect(page.locator('#recommend').getByText(/Verified recommendation data is unavailable/)).toBeVisible();
     }
     await page.getByRole('button', { name: '01 Discover' }).click();
     await expect(page.locator('#discover').getByRole('button', { name: /^Ward 10;/ })).toBeVisible();

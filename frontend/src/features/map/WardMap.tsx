@@ -116,11 +116,11 @@ export default function WardMap({ geometry, rows, metric, selectedWard, onSelect
   return <div className="ward-map-frame" data-selected-ward={selectedWard ?? undefined}>
     <div ref={container} className="ward-map-canvas" role="region" aria-label="Mississauga ward census map" />
     <span className="map-instruction">{selectedWard === null ? 'Select a ward' : `Ward ${selectedWard} selected`}</span>
-    <span className="map-coordinate-label" aria-hidden="true">MISSISSAUGA · 11 WARDS / 2021 CENSUS</span>
+    <span className="map-coordinate-label">Mississauga · 2021 census</span>
     <button className="ward-reset" onClick={() => {
       onSelect(null);
       if (bounds.current) map.current?.fitBounds(bounds.current, { padding: [30, 30], animate: false });
-    }}>{selectedWard === null ? 'Reset map view' : 'Clear selection / reset view'}</button>
+    }}>{selectedWard === null ? 'Reset map view' : 'Clear and reset'}</button>
     {targets.map(({ id, element }) => {
       const row = rows.find(row => row.ward_id === id);
       return row ? createPortal(<WardTooltip row={row} context={context} coverage={coverage} id={`ward-map-tooltip-${id}`} />, element, id) : null;

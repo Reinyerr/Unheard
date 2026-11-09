@@ -1,5 +1,15 @@
 # Local four-act demonstration runbook — T-018
 
+## Current three-step walkthrough — 2026-11-09
+
+The app now ends with Demonstrate. Follow Discover → Investigate → Demonstrate
+using the cold-start and Urdu saved-result instructions below. In Discover,
+the citywide coverage figure shows 79,940 of 153,480 home speakers (52.1%) across
+14 tracked categories. After acceptance or referral, **Return to ward map**
+returns to Discover with the previous language, ward and map metric selected.
+The recommendation walkthrough below is historical. The research exports are
+still available.
+
 ## T-021 current navigation — 2026-11-08
 
 The approved redesign now shows one act at a time. Use the persistent **Next** /

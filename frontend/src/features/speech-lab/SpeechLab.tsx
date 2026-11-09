@@ -63,20 +63,18 @@ export default function SpeechLab() {
   const textLanguage = language.dataset_language_code;
   const flags = reviewFlags(evidence?.source.review_flags);
   return <div className="speech-lab">
-    <p><strong>Saved research evidence · no live transcription requests</strong></p>
-
-    <p>{choices.length} selected {language.display_name} clips · {samples.samples.length} total · seed {samples.selection.seed}. {summary ? `Scored automatic n=${summary.n_auto_completed}; guided n=${summary.n_guided_completed}; paired n=${summary.n_paired}.` : 'Summary unavailable.'}</p>
     <label htmlFor="speech-sample">Recording
       <select id="speech-sample" value={sample?.sample_id ?? ''} onChange={event => selectSample(choices.find(row => row.sample_id === event.target.value) ?? null, selection.language_revision)}>
         <option value="">Choose a recording</option>
         {choices.map(row => <option key={row.sample_id} value={row.sample_id}>{row.sample_id} · {row.duration_sec === null ? 'duration unavailable' : `${row.duration_sec.toFixed(2)} s`}</option>)}
       </select>
     </label>
+    <p className="speech-note">Saved results · {choices.length} selected {language.display_name} recordings{summary ? ` · ${summary.n_paired} comparable pairs` : ''}</p>
     {experiments.status === 'loading' ? <EmptyState kind="loading">Loading saved experiment evidence.</EmptyState>
       : experiments.status === 'unavailable' ? <EmptyState kind="unavailable" onRetry={reload}>{experiments.message}</EmptyState>
         : !evidence ? <EmptyState kind="unavailable">Sample identity or selection provenance does not match the experiment artifact. Comparisons are withheld.</EmptyState> : null}
     {sample ? <section key={sample.sample_id} className="speech-record" aria-label={`Selected recording ${sample.sample_id}`}>
-      <h3><bdi>{sample.sample_id}</bdi> · FLEURS ID {sample.fleurs_id}</h3>
+      <h3>FLEURS recording <bdi>{sample.fleurs_id}</bdi></h3>
       <AudioClip key={sample.sample_id} sample={sample} />
       <nav className="transcript-navigation" aria-label="Selected recording text"><a href="#speech-reference">Read reference transcript</a><a href="#speech-comparisons">Compare saved transcriptions</a></nav>
       <h4 id="speech-reference" tabIndex={-1}>Human reference · original supplied text</h4>
@@ -101,7 +99,7 @@ export default function SpeechLab() {
     <details className="speech-sources"><summary>Speech sources, model and metric policy</summary>
       <p>{samples.source.attribution}. <a href="https://huggingface.co/datasets/google/fleurs">FLEURS source</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.</p>
       <p>{samples.source.modifications}</p><p>{samples.source.limitations}</p>
-      <p>Common FLEURS IDs: {samples.selection.ids.join(', ')}.</p>
+      <p>{samples.samples.length} recordings selected with seed {samples.selection.seed}. Common FLEURS IDs: {samples.selection.ids.join(', ')}.</p>
       <p>Manifest exported: {samples.generated_at_utc} · selection SHA-256: <span className="speech-hash">{samples.source.selection_sha256}</span></p>
       {evidence ? <><p>Provider {evidence.model.provider} · model {evidence.model.model_id ?? 'unavailable'} · API {evidence.model.api_version ?? 'unavailable'} · results exported {evidence.generated_at_utc}. Provider model-alias weight revisions are unknown.</p>
         <p>{evidence.source.normalization}</p><p>{evidence.source.cer_units}</p><p>{evidence.source.script_policy}</p><p>{evidence.source.limitations}</p></> : null}

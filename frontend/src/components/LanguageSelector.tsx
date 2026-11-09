@@ -5,9 +5,7 @@ import EmptyState from './EmptyState';
 export default function LanguageSelector() {
   const { census, reload } = useResearch();
   const { selection, selectLanguage, reset, dismissError } = useSelection();
-  return <section id="language-selection" tabIndex={-1} className="global-selection" aria-labelledby="global-selection-title">
-    <div><h2 id="global-selection-title">Explore a language</h2>
-      <p>Language applies across all four acts. Ward selection affects census context only.</p></div>
+  return <section id="language-selection" tabIndex={-1} className="global-selection" aria-label="Explore a language">
     {census.status === 'ready' ? <label htmlFor="global-language">Selected language
       <select id="global-language" value={selection.language_id} onChange={event => selectLanguage(event.target.value)}>
         <option value="all">All tracked languages</option>

@@ -33,9 +33,9 @@ for (const viewport of [{ width: 1366, height: 768 }, { width: 1440, height: 900
     await page.getByLabel('Prerecorded sample').selectOption('urdu-1533');
     await page.getByRole('button', { name: 'Start saved simulation' }).click();
     await expect(page.getByText('State: confirm', { exact: true })).toBeVisible();
-    await page.getByRole('button', { name: 'Next: Recommend' }).click();
-    await expect(page.getByText(/Priorities for future language evaluation/)).toBeVisible();
-    await page.getByRole('button', { name: '← Back' }).click();
+    await page.getByRole('button', { name: 'Return to Discover' }).click();
+    await expect(ward).toHaveClass(/ward-raised/);
+    await page.getByRole('button', { name: '03 Demonstrate' }).click();
     await expect(page.getByText('State: confirm', { exact: true })).toBeVisible();
     await page.getByRole('button', { name: '← Back' }).click();
     await expect(page.getByRole('combobox', { name: 'Recording', exact: true })).toHaveValue('urdu-1533');

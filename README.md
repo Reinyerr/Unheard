@@ -25,7 +25,6 @@ error separately, using a small speech pilot.
 | **Discover** | Explore corrected 2021 census data across Mississauga's 11 wards. Switch between speaker counts and share of the ward's census language base, select a ward to inspect its figures, or use the ward table. The initial map aggregates the eight coverage-gap categories. |
 | **Investigate** | Select a prerecorded FLEURS sample. Listen with native audio controls and a waveform derived from the recording, then compare the reference transcript with saved ElevenLabs Scribe v2 output under automatic detection and language guidance. The lab shows raw transcripts, character error rates, paired differences, and explicit unavailable states. |
 | **Demonstrate** | Review a transcript before accepting it. A rejection offers one retry with a different recording. If the retry fails, the flow suggests seeking human assistance through official channels. This simulation uses prerecorded speech and does not contact any service. |
-| **Recommend** | See which languages to prioritize for future task-request evaluation. The app ranks the eight coverage-gap languages by citywide home-speaker count and independently lists leading wards by count and by share. |
 
 Use **Next**, **Back**, or the numbered steps to navigate. Selections persist
 across steps, and playback pauses when you leave the current step.
@@ -53,7 +52,7 @@ npm --prefix frontend run dev
 ```
 
 Open <http://127.0.0.1:5173>. The checked-in data powers the ward map,
-recommendations, transcript comparisons, and **Browser-only saved results**
+transcript comparisons and **Browser-only saved results**
 without FastAPI, an ElevenLabs key, or the original source pack. In
 **Demonstrate**, select **Browser-only saved results** to use that path. Stop
 Vite with Ctrl+C.
@@ -140,9 +139,9 @@ configuration.
    to accept the transcript. In a separate simulation, choose **Incorrect** and
    retry with sample **1537**. That clip has no saved result, so the app shows a
    referral after the second attempt.
-4. In **Recommend**, see why Urdu ranks first. It has the largest home-speaker
-   count among the eight categories missing supplied task-request audio.
-   Compare ward rankings by speaker count and by share.
+4. Choose **Return to ward map** to see the citywide coverage figure and
+   revisit your selected ward. The repository also includes research exports
+   that rank coverage-gap languages by citywide home-speaker count.
 
 ## Data and methods
 

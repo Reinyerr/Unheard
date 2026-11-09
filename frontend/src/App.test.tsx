@@ -7,6 +7,7 @@ import App from './App';
 beforeEach(() => {
   window.history.replaceState(null, '', '/');
   vi.spyOn(HTMLMediaElement.prototype, 'pause').mockImplementation(() => {});
+  vi.spyOn(window, 'scrollTo').mockImplementation(() => {});
   vi.stubGlobal('fetch', vi.fn(async (url: string) => {
     const name = String(url).match(/data\/([a-z]+)\.v1\.json$/)?.[1];
     if (!name) throw new Error('MOCK unavailable backend/geometry');
@@ -44,8 +45,8 @@ it('preserves ward, metric, selected recording and recovery session across acts 
   fireEvent.change(screen.getByLabelText('Prerecorded sample'), { target: { value: 'urdu-1533' } });
   fireEvent.click(screen.getByRole('button', { name: 'Start saved simulation' }));
   expect(screen.getByText('State: confirm')).toBeVisible();
-  fireEvent.click(screen.getByRole('button', { name: 'Next: Recommend' }));
-  fireEvent.click(screen.getByRole('button', { name: '← Back' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Return to Discover' }));
+  fireEvent.click(screen.getByRole('button', { name: '03 Demonstrate' }));
   expect(screen.getByText('State: confirm')).toBeVisible();
   fireEvent.click(screen.getByRole('button', { name: '← Back' }));
   expect(screen.getByLabelText('Recording')).toHaveValue('urdu-1533');
@@ -63,12 +64,17 @@ it('supports direct fragment entry and internal continuation without exposing in
   fireEvent.change(screen.getByLabelText('Prerecorded sample'), { target: { value: 'urdu-1533' } });
   fireEvent.click(screen.getByRole('button', { name: 'Start saved simulation' }));
   fireEvent.click(screen.getByRole('button', { name: /\(Correct\)/ }));
+  expect(screen.getByText('State: accepted')).toBeVisible();
+  expect(screen.getByRole('link', { name: 'Return to ward map' })).toHaveAttribute('href', '#discover');
+  expect(screen.queryByRole('button', { name: /Recommend/ })).not.toBeInTheDocument();
   await act(async () => {
     window.location.hash = 'recommend';
     window.dispatchEvent(new HashChangeEvent('hashchange'));
   });
-  expect(screen.getByRole('heading', { name: 'Where Should We Test Next?' })).toHaveFocus();
-  expect(screen.getByText(/Priorities for future language evaluation/)).toBeVisible();
+  expect(screen.getByRole('heading', { name: 'Language coverage by ward' })).toHaveFocus();
+  const coverage = within(screen.getByRole('figure', { name: 'Supplied task-audio coverage gap' }));
+  expect(coverage.getByText('52.1%')).toBeVisible();
+  expect(coverage.getByText(/79,940 of 153,480 across 14 tracked/)).toBeVisible();
   expect(screen.queryByRole('button', { name: /\(Correct\)/ })).not.toBeInTheDocument();
 });
 

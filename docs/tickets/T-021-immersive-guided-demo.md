@@ -245,3 +245,26 @@ change. Updated the existing Urdu browser comparison check accordingly.
 User explicitly requested removal of Explore Urdu. Remove its wrapper and unused
 App selection hook; browser/unit walkthroughs select Urdu in the existing global
 dropdown. No contract changes; In review with prior gates retained.
+
+### Three-step visual redesign — 2026-11-09
+
+The approved scope replaces the four-act journey with Discover, Investigate
+and Demonstrate. The former Recommend fragment opens Discover. The coverage
+figure uses the verified census/coverage artifacts. The old recommendation
+component, ranking and exports remain available in the repository. Scope and
+contract details are recorded in [DECISIONS.md](../DECISIONS.md).
+
+Verified with 12 frontend unit tests, the production build and 16 offline
+Chromium cases. The browser run used real local ward data and restored FLEURS
+recordings. It covered keyboard selection, SVG alignment, reduced motion,
+retained selections, saved acceptance/retry/referral, waveform seeking, missing
+inputs and backend disconnection. Reviewed the selected map at 1440 and 390 px
+and adjusted its height and reset label so the sticky footer leaves more room
+for the legend. The browser run preceded those final visual adjustments.
+No live provider calls. Prior reviewer, listening and accessibility sign-off
+gates remain open. Status stays In review.
+
+Verify locally by selecting Urdu, Ward 10 and Share of language base; then
+select 1533 in Investigate, play/seek the recording, and use Browser-only saved
+results in Demonstrate. Accept, return to the map and check Ward 10 remains
+selected. Start another simulation to check the retry/referral path.

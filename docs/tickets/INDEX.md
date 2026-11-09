@@ -1,5 +1,10 @@
 # Ticket index — source of truth for implementation
 
+**T-021 visual redesign (2026-11-09):** Three-step public journey with a
+map-first layout, citywide coverage figure, and a clear end to the recovery
+simulation. Research exports and backend contracts are intact. **In review**
+with prior human sign-off gates retained.
+
 **T-021 Discover follow-up:** removed Explore Urdu at user request; the global
 language dropdown remains the explicit Urdu entry. No dependency/contract change;
 In review with prior gates retained.
